@@ -1,0 +1,19 @@
+.card {
+  @apply w-full h-auto dark:bg-dark_bg_5 bg-card_bg   rounded-md px-2 py-3 dark:text-dark_text_1 border-[.5px];
+}
+
+.card-body {
+  @apply px-4 py-2;
+}
+
+.card-item {
+  @apply w-full h-auto dark:text-dark_text_1 flex flex-between items-center py-1;
+}
+
+.count-card-container {
+  @apply bg-gray-100 dark:bg-dark_bg_2 flex-col-center gap-1 rounded py-4;
+}
+
+.count-icon-container {
+  @apply rounded-full flex-center border dark:border-dark_text_1 border-dark_bg_2  p-3;
+}
