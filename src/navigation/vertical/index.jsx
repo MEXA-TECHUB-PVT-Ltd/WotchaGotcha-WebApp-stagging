@@ -1,4 +1,4 @@
-import { MdDashboard } from "react-icons/md";
+import { MdDashboard, MdVideoCall } from "react-icons/md";
 
 export default [
   {
@@ -6,5 +6,11 @@ export default [
     title: "Dashboard",
     path: "/",
     icon: <MdDashboard size={21} />,
+  },
+  {
+    id: "video-mania",
+    title: "Video Mania",
+    path: "/video-mania",
+    icon: <MdVideoCall size={21} />,
   },
 ];

@@ -30,9 +30,7 @@ const Navbar = () => {
   //** Redux */
   const dispatch = useDispatch();
   const theme = useSelector((state) => state.theme);
-  const isLoading = false;
-  // const { isLoading } = useSelector((state) => state.user);
-  // const { user } = useSelector((state) => state.auth);
+  const { user, isLoading } = useSelector((state) => state.user);
 
   //** Methods */
 
@@ -118,8 +116,12 @@ const Navbar = () => {
       <div className="flex-center gap-2 relative">
         <CiSettings size={23} className="hover:opacity-60" onClick={() => setShowSetting(true)} />
         <div className="flex-center gap-2" onClick={() => setIsActiveDropDown((prev) => !prev)}>
-          <div className={`avatar ${theme.bgColor}`}>A</div>
-          <h1 className="avatar-text">Admin</h1>
+          <div className={`avatar ${theme.bgColor}`}>
+            {user?.username?.charAt(0)?.toUpperCase()}
+          </div>
+          <h1 className="avatar-text">
+            {user?.username?.length > 10 ? `${user?.username?.slice(0, 10)}...` : user?.username}
+          </h1>
         </div>
 
         {/* // ------------------------------------------- Dropdown Menu -------------------------------------------------------------- */}

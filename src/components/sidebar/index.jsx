@@ -4,7 +4,7 @@ import logo from "../../assets/react.svg";
 import SidebarLayout from "../../layouts/sidebar/index.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { CgClose } from "react-icons/cg";
-import { toggleSideBar } from "../../app/features/theme/index.jsx";
+import { toggleSideBar } from "../../app/features/theme";
 
 const Sidebar = () => {
   const isSideBarOpen = useSelector((state) => state.theme.isSideBarOpen);

@@ -23,17 +23,15 @@ const Header = ({
         <SearchBar onChange={onSearch} searchBy={searchBy} />
         <div className="header-buttons">
           {buttonTitle && (
-            <Button
-              title={buttonTitle}
-              icon={buttonIcon}
-              onClick={onAddButtonClick}
+            <Button title={buttonTitle} icon={buttonIcon} onClick={onAddButtonClick} />
+          )}
+          {viewType && (
+            <GridButton
+              onGridView={() => onViewType("GRID")}
+              onListView={() => onViewType("")}
+              grid={viewType === "GRID"}
             />
           )}
-          <GridButton
-            onGridView={() => onViewType("GRID")}
-            onListView={() => onViewType("")}
-            grid={viewType === "GRID"}
-          />
         </div>
       </div>
     </div>
