@@ -1,15 +1,12 @@
 import React from "react";
+import { nameElipse } from "../../utils/common/nameElipse";
 
 const VideoCard = ({ video }) => {
   return (
     <div key={video?.video_id} className="thumbnail-container">
       <img src={video?.thumbnail} alt={video?.name} className="video-thumbnail" />
 
-      <p>
-        {video?.description?.length > 10
-          ? video?.description?.slice(0, 10) + "..."
-          : video?.description}
-      </p>
+      <p>{nameElipse(video?.description, 10)}</p>
     </div>
   );
 };

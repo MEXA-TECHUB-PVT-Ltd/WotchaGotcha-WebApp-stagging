@@ -8,9 +8,17 @@ import {
   handleSearch,
 } from "../../utils/common/fetchDataHelpers";
 import { useDispatch, useSelector } from "react-redux";
-import { getVideoCategories, getVideosByCategory } from "../../app/features/videomania";
-import { use } from "react";
+import {
+  getTopVideo,
+  getVideoCategories,
+  getVideosByCategory,
+} from "../../app/features/videomania";
 import VideoCard from "../../components/card/VideoCard";
+import { Spinner } from "../../components/theme/Loader";
+import videoIcon from "../../assets/videoIcon.svg";
+import { nameElipse } from "../../utils/common/nameElipse";
+import Modal from "../../components/modal/Modal";
+import { AddVideoMania } from "../../services/videomania";
 
 const VideoMania = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -23,12 +31,15 @@ const VideoMania = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [reload, setReload] = useState(false);
   const [videos, setVideos] = useState([]);
+  const [topVideo, setTopVideo] = useState(null);
 
   // ** Redux ---
   const dispatch = useDispatch();
   const { bgColor } = useSelector((state) => state.theme);
   const { token } = useSelector((state) => state.auth);
-  const { categories } = useSelector((state) => state.video_mania);
+  const { categories, isFetching, isVideoFetching, isTopVideoFetching, isLoading } = useSelector(
+    (state) => state.video_mania
+  );
 
   // ** Methods ---
   const onSearch = useCallback(handleSearch(setSearchQuery), [searchQuery]);
@@ -45,6 +56,12 @@ const VideoMania = () => {
 
   useEffect(() => {
     if (activeCategory) {
+      dispatch(getTopVideo({ token, id: activeCategory?.id }))
+        .unwrap()
+        .then((data) => {
+          setTopVideo(data?.topVideo[0]);
+        });
+
       dispatch(getVideosByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
@@ -64,24 +81,53 @@ const VideoMania = () => {
         searchBy={"name"}
       />
 
+      {/* All Categories */}
+
       <div className="flex items-center gap-5">
-        {categories?.AllCategories?.map((category) => (
-          <div
-            key={category.id}
-            className={` ${
-              activeCategory?.name === category?.name
-                ? `${bgColor} text-white`
-                : "border border-gray-300 text-dark_bg_5 dark:text-dark_text_1"
-            } px-2 py-1 rounded-md  cursor-pointer`}
-            onClick={() => setActiveCategory(category)}
-          >
-            {category.name}
-          </div>
-        ))}
+        {isFetching ? (
+          <Spinner />
+        ) : (
+          categories?.AllCategories?.map((category) => (
+            <div
+              key={category.id}
+              className={` ${
+                activeCategory?.name === category?.name
+                  ? `${bgColor} text-white`
+                  : "border border-gray-300 text-dark_bg_5 dark:text-dark_text_1"
+              } px-2 py-1 rounded-md  cursor-pointer`}
+              onClick={() => setActiveCategory(category)}
+            >
+              {category.name}
+            </div>
+          ))
+        )}
       </div>
 
+      {/* Top Video*/}
+      <div className="flex items-center mt-10">
+        {isTopVideoFetching ? (
+          <Spinner />
+        ) : topVideo ? (
+          <div className="flex justify-center items-center gap-5">
+            <div className="border border-gray-200 p-2 rounded-md">
+              <img src={videoIcon} className="w-32 h-28 overflow-hidden" />
+              <div className="text-lg">{nameElipse(topVideo?.name, 12)}</div>
+            </div>
+
+            <div>
+              <div className="text-sm">{topVideo?.description}</div>
+            </div>
+          </div>
+        ) : !topVideo && !isFetching ? (
+          <div className="flex justify-center text-gray-400">No Top Video Found</div>
+        ) : null}
+      </div>
+
+      {/* Sub Categories and thier videos */}
       <div className="mt-10">
-        {videos?.length > 0 &&
+        {isVideoFetching ? (
+          <Spinner />
+        ) : videos?.length > 0 ? (
           videos?.map((video) => (
             <div className="mb-5">
               <div className="heading">{video?.sub_category_name}</div>
@@ -91,8 +137,23 @@ const VideoMania = () => {
                 ))}
               </div>
             </div>
-          ))}
+          ))
+        ) : videos?.length === 0 && !isVideoFetching ? (
+          <div className="flex justify-center text-gray-400">No Videos Found</div>
+        ) : null}
       </div>
+
+      {/* //** Modals  */}
+
+      <Modal isOpen={addModal} onClose={() => setAddModal(false)} title="Add Video Mania">
+        <AddVideoMania
+          setAddModal={setAddModal}
+          isLoading={isLoading}
+          dispatch={dispatch}
+          setReload={setReload}
+          categoryId={activeCategory?.id}
+        />
+      </Modal>
     </Fragment>
   );
 };

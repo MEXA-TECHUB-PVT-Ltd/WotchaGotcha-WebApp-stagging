@@ -75,9 +75,13 @@
 }
 
 .thumbnail-container {
-  @apply w-44 h-32 flex flex-col gap-2 my-5;
+  @apply w-44 h-40 flex flex-col gap-2 my-5;
 }
 
 .video-thumbnail {
-  @apply w-44 h-32 object-cover rounded-lg;
+  @apply w-44 h-40 object-cover rounded-lg border border-gray-200 overflow-hidden;
+}
+
+.capture-container {
+  @apply w-32 h-32 border border-dashed  p-2 rounded-lg flex flex-col gap-1 justify-center items-center text-sm cursor-pointer text-center;
 }
