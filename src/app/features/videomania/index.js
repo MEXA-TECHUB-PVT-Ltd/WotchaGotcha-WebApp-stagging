@@ -1,20 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { client } from "../../../configs/client";
+import { client } from "../../../configs/client.js";
 
 export const getVideoCategories = createAsyncThunk(
   "videoCategory/getAllVideoCategories",
   async ({ token }, { rejectWithValue }) => {
     try {
-      const { data } = await client.get(`/videoCategory/getAllVideoCategories`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          page: 1,
-          limit: 10,
-        },
-      });
+      const { data } = await client.get(
+        `/videoCategory/getAllVideoCategories`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            page: 1,
+            limit: 10,
+          },
+        }
+      );
 
       return data;
     } catch (error) {
@@ -27,11 +30,14 @@ export const getVideoSubCategoryByCategory = createAsyncThunk(
   "video/sub_category/getAllByCategory",
   async ({ token, id }, { rejectWithValue }) => {
     try {
-      const { data } = await client.get(`/video/sub_category/getAllByCategory?category_id=${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await client.get(
+        `/video/sub_category/getAllByCategory?category_id=${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       return data;
     } catch (error) {
@@ -68,6 +74,91 @@ export const getVideosByCategory = createAsyncThunk(
         params: {
           page: 1,
           limit: 10,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const addVideoMania = createAsyncThunk(
+  "/xpi/createXpiVideo",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.post(`/xpi/createXpiVideo`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const getVideoAllLikes = createAsyncThunk(
+  "/xpi/createXpiVideo",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/xpi/getAllLikesByVideo/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const likeUnlikeVideo = createAsyncThunk(
+  "/xpi/likeUnlikeVideo",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.post(`/xpi/likeUnlikeVideo`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const getVideoAllComments = createAsyncThunk(
+  "/xpi/createXpiVideo",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/xpi/getAllCommentsByVideo/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const addCommentOnVideo = createAsyncThunk(
+  "/xpi/sendComment",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.post(`/xpi/sendComment`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -123,6 +214,26 @@ const videoManiaSlice = createSlice({
       })
       .addCase(getTopVideo.rejected, (state, action) => {
         state.isTopVideoFetching = false;
+        state.error = action?.payload;
+      })
+      .addCase(likeUnlikeVideo.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(likeUnlikeVideo.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(likeUnlikeVideo.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action?.payload;
+      })
+      .addCase(addCommentOnVideo.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addCommentOnVideo.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(addCommentOnVideo.rejected, (state, action) => {
+        state.isLoading = false;
         state.error = action?.payload;
       });
   },

@@ -10,34 +10,58 @@ import Form from "../../components/form/Form";
 import { Spinner } from "../../components/theme/Loader";
 import AppTextArea from "../../components/form/AppTextArea";
 
-import { getVideoSubCategoryByCategory } from "../../app/features/videomania";
+import {
+  addVideoMania,
+  getVideoSubCategoryByCategory,
+} from "../../app/features/videomania";
 import { FaUpload } from "react-icons/fa";
 import videoIcon from "../../assets/videoIcon.svg";
 import { Toast } from "../../components/theme/Toast";
+import { uploadImage, uploadVideo } from "../../utils/common/cloudinary";
 
 export const AddVideoMania = ({
   setAddModal,
-  isLoading,
   dispatch,
   setReload,
   categoryId,
 }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { textColor, borderColor } = useSelector((state) => state.theme);
+  const { textColor, borderColor, bgColor } = useSelector(
+    (state) => state.theme
+  );
 
   const videoRef = useRef(null);
   const thumbnailRef = useRef(null);
 
   const [subCategory, setSubCategory] = useState([]);
-
+  const [isLoading, setIsLoading, ] = useState(false)
+  
   const handleAddVideoMania = async (data, { resetForm }) => {
+    setIsLoading(true);
     try {
-      console.log(data);
-      resetForm();
+      const video = await uploadVideo(data.video);
+      if (!video) throw new Error("Failed to upload video.");
+
+      const thumbnail = await uploadImage(data.thumbnail);
+      if (!thumbnail) throw new Error("Failed to upload thumbnail.");
+
+      const payload = { ...data, video, thumbnail };
+      const { statusCode } = await dispatch(
+        addVideoMania({ token, payload })
+      ).unwrap();
+
+      if (statusCode === 201) {
+        Toast("success", "Video mania uploaded successfully");
+        setReload((prev) => !prev);
+        setAddModal(false);
+        resetForm();
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Upload Error:", error);
       Toast("error", error?.message || "Error uploading video mania");
+    }finally{
+      setIsLoading(false);
     }
   };
 
@@ -100,7 +124,16 @@ export const AddVideoMania = ({
                     <FaUpload size={25} className={textColor} />
                   </>
                 ) : (
-                  <img src={videoIcon} alt="Video" className="w-full h-full" />
+                  <div className="py-2">
+                    <p className={`px-2 ${bgColor} rounded-full text-white`}>
+                      Change Video
+                    </p>
+                    <img
+                      src={videoIcon}
+                      alt="Video"
+                      className="w-full h-full"
+                    />
+                  </div>
                 )}
               </div>
 
@@ -125,15 +158,22 @@ export const AddVideoMania = ({
                     <FaUpload size={25} className={textColor} />
                   </>
                 ) : (
-                  <img
-                    src={
-                      values.thumbnail instanceof File
-                        ? URL.createObjectURL(values?.thumbnail)
-                        : values.thumbnail
-                    }
-                    alt="Thumbnail"
-                    className="w-full h-full"
-                  />
+                  <div className="py-2 relative">
+                    <p
+                      className={`px-2 ${bgColor} rounded-full text-white absolute top-0 left-1`}
+                    >
+                      Change Image
+                    </p>
+                    <img
+                      src={
+                        values.thumbnail instanceof File
+                          ? URL.createObjectURL(values?.thumbnail)
+                          : values.thumbnail
+                      }
+                      alt="Thumbnail"
+                      className="w-full h-full"
+                    />
+                  </div>
                 )}
               </div>
             </div>

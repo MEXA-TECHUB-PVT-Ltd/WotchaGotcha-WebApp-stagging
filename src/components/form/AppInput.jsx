@@ -7,10 +7,12 @@ const AppInput = ({
   value,
   name,
   onChange,
+  onEnterPress,
   type = "text",
   icon: BtnIcon,
   onIconClick,
   styles,
+  rounded = "rounded-md",
   ...otherProps
 }) => {
   const theme = useSelector((state) => state.theme);
@@ -27,7 +29,7 @@ const AppInput = ({
         </label>
       )}
       <div
-        className={`flex items-center border rounded-md overflow-hidden focus-within:${theme.borderColor}`}
+        className={`flex items-center border ${rounded} overflow-hidden focus-within:${theme.borderColor}`}
       >
         <input
           type={type}
@@ -36,6 +38,12 @@ const AppInput = ({
           onChange={onChange}
           {...otherProps}
           className={`app-input ${styles}`}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              onEnterPress();
+            }
+          }}
         />
         {BtnIcon && (
           <button

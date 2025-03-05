@@ -9,9 +9,11 @@ export const Spinner = ({ size = "md", className }) => {
   };
 
   return (
-    <div className={`flex justify-center items-center ${className} dark:bg-dark_bg_4 bg-white`}>
+    <div
+      className={`flex justify-center items-center ${className} bg-transparent`}
+    >
       <div
-        className={`animate-spin ${sizeClasses[size]} border-4 border-t-transparent dark:border-t-dark_bg_4  rounded-full dark:border-dark_text_1 border-dark_bg_4 `}
+        className={`animate-spin ${sizeClasses[size]} border-4 border-t-transparent rounded-full`}
         role="status"
       >
         <span className="sr-only">Loading...</span>
