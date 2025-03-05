@@ -75,7 +75,7 @@
 }
 
 .thumbnail-container {
-  @apply w-44 h-40 flex flex-col gap-2 my-5;
+  @apply w-44 h-40 flex flex-col gap-2 my-5 cursor-pointer;
 }
 
 .video-thumbnail {
@@ -84,4 +84,16 @@
 
 .capture-container {
   @apply w-32 h-32 border border-dashed  p-2 rounded-lg flex flex-col gap-1 justify-center items-center text-sm cursor-pointer text-center;
+}
+
+.player {
+  @apply relative w-full h-[75vh] bg-dark_bg_2 rounded-lg overflow-hidden;
+}
+
+.player-buttons-container {
+  @apply flex items-center justify-center gap-10 mt-5;
+}
+
+.player-button {
+  @apply flex items-center gap-1 text-gray-700 dark:text-dark_text_1;
 }
