@@ -97,3 +97,11 @@
 .player-button {
   @apply flex items-center gap-1 text-gray-700 dark:text-dark_text_1;
 }
+
+.p-card-avatar {
+  @apply rounded-full w-10 h-10  border  flex justify-center items-center;
+}
+
+.top-video-card {
+  @apply border border-gray-200 p-2 rounded-md flex flex-col justify-center gap-2 cursor-pointer;
+}

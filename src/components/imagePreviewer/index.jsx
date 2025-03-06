@@ -11,11 +11,11 @@ import {
 import AppInput from "../form/AppInput";
 import ProfileCard from "../card/ProfileCard";
 
-const Player = ({ video, isOpen, onClose, isTop = false }) => {
+const ImagePreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { isLoading } = useSelector((state) => state.video_mania);
+  const { isLoading } = useSelector((state) => state.pictours);
 
   const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -32,7 +32,7 @@ const Player = ({ video, isOpen, onClose, isTop = false }) => {
     try {
       const payload = {
         user_id: user?.id,
-        video_id: video?.video_id,
+        video_id: image?.id,
         comment: commentText,
       };
 
@@ -55,7 +55,7 @@ const Player = ({ video, isOpen, onClose, isTop = false }) => {
   };
 
   const handleLike = async () => {
-    if (!video?.video_id) return;
+    if (!image?.id) return;
 
     setIsLiked((prev) => !prev);
     setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
@@ -63,7 +63,7 @@ const Player = ({ video, isOpen, onClose, isTop = false }) => {
     try {
       const payload = {
         user_id: user?.id,
-        video_id: video?.video_id,
+        video_id: image?.id,
       };
 
       const { statusCode } = await dispatch(
@@ -81,11 +81,11 @@ const Player = ({ video, isOpen, onClose, isTop = false }) => {
   };
 
   const getAllLikes = async () => {
-    if (!video?.video_id) return;
+    if (!image?.id) return;
 
     try {
       const data = await dispatch(
-        getVideoAllLikes({ token, id: video.video_id })
+        getVideoAllLikes({ token, id: image?.id })
       ).unwrap();
 
       setLikes(data?.totalLikes || 0);
@@ -101,11 +101,11 @@ const Player = ({ video, isOpen, onClose, isTop = false }) => {
   };
 
   const getAllComments = async () => {
-    if (!video?.video_id) return;
+    if (!image?.id) return;
 
     try {
       const data = await dispatch(
-        getVideoAllComments({ token, id: video.video_id })
+        getVideoAllComments({ token, id: image?.id })
       ).unwrap();
 
       setTotalComments(data?.totalComments || 0);
@@ -121,14 +121,14 @@ const Player = ({ video, isOpen, onClose, isTop = false }) => {
       getAllLikes();
       getAllComments();
     }
-  }, [video?.video_id]);
+  }, [image?.id]);
 
   return (
     <>
-      <Modal title={video?.name} isOpen={isOpen} onClose={onClose} size="lg">
-        {/* Video Player */}
+      <Modal title={image?.name} isOpen={isOpen} onClose={onClose} size="lg">
+        {/* Image Previewer */}
         <div className="player">
-          <video src={video?.video} controls className="w-full h-full" />
+          <img src={image?.image} className="w-full h-full" />
         </div>
 
         {/* Action Buttons */}
@@ -198,4 +198,4 @@ const Player = ({ video, isOpen, onClose, isTop = false }) => {
   );
 };
 
-export default Player;
+export default ImagePreviewer;

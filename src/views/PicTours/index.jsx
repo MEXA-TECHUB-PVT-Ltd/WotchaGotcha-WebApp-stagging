@@ -1,69 +1,67 @@
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import BreadCrumb from "../../components/breadcrumb";
-import { FaPlayCircle, FaPlus } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import Header from "../../components/header";
 import { handleSearch } from "../../utils/common/fetchDataHelpers";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getTopVideo,
-  getVideoCategories,
-  getVideosByCategory,
-} from "../../app/features/videomania";
+
 import ThumbnailCard from "../../components/card/ThumbnailCard";
 import { Spinner } from "../../components/theme/Loader";
-import { nameElipse } from "../../utils/common/nameElipse";
 import Modal from "../../components/modal/Modal";
-import { AddVideoMania } from "../../services/videomania";
-import Player from "../../components/player";
+import {
+  getPicTourByCategory,
+  getPicTourCategories,
+  getTopPicTour,
+} from "../../app/features/pictours";
+import { AddPicTour } from "../../services/pictours";
+import ImagePreviewer from "../../components/imagePreviewer";
 
-const VideoMania = () => {
+const PicTours = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
-  const [videoModal, setVideoModal] = useState(false);
+  const [picTourModal, setPicTourModal] = useState(false);
   const [reload, setReload] = useState(false);
   const [isTop, setIsTop] = useState(false);
 
-  const [videos, setVideos] = useState([]);
+  const [picTours, setPicTours] = useState([]);
 
-  const [topVideo, setTopVideo] = useState(null);
+  const [topPicTour, setTopPicTour] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [currentVideo, setCurrentVideo] = useState(null);
+  const [currentPicTour, setCurrentPicTour] = useState(null);
 
   // ** Redux ---
   const dispatch = useDispatch();
-  const { bgColor, textColor } = useSelector((state) => state.theme);
+  const { bgColor } = useSelector((state) => state.theme);
   const { token } = useSelector((state) => state.auth);
-  const { categories, isFetching, isVideoFetching, isTopVideoFetching } =
-    useSelector((state) => state.video_mania);
+  const { categories, isFetching, isTopPicTourFetching, isPicTourFetching } =
+    useSelector((state) => state.pictours);
 
   // ** Methods ---
   const onSearch = useCallback(handleSearch(setSearchQuery), [searchQuery]);
 
   useEffect(() => {
-    dispatch(getVideoCategories({ token }))
+    dispatch(getPicTourCategories({ token }))
       .unwrap()
       .then((data) => {
         if (data?.AllCategories?.length > 0) {
-          setActiveCategory(
-            data.AllCategories[data?.AllCategories?.length - 1]
-          );
+          setActiveCategory(data.AllCategories[0]);
         }
       });
   }, []);
 
   useEffect(() => {
     if (activeCategory) {
-      dispatch(getTopVideo({ token, id: activeCategory?.id }))
+      dispatch(getTopPicTour({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
-          setTopVideo(data?.topVideo[0]);
+          setTopPicTour(data?.topTour[0]);
         });
 
-      dispatch(getVideosByCategory({ token, id: activeCategory?.id }))
+      dispatch(getPicTourByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
-          setVideos(data?.data);
+          setPicTours(data?.data);
         });
     }
   }, [activeCategory, reload]);
@@ -71,7 +69,7 @@ const VideoMania = () => {
   return (
     <Fragment>
       <Header
-        title={<BreadCrumb items={[{ label: "Video Mania" }]} />}
+        title={<BreadCrumb items={[{ label: "Pic Tours" }]} />}
         buttonTitle={"Add"}
         buttonIcon={FaPlus}
         onSearch={onSearch}
@@ -92,7 +90,7 @@ const VideoMania = () => {
                 activeCategory?.name === category?.name
                   ? `${bgColor} text-white`
                   : "border border-gray-300 text-dark_bg_5 dark:text-dark_text_1"
-              } px-2 py-1 rounded-md  cursor-pointer min-w-fit `}
+              } px-2 py-1 rounded-md  cursor-pointer min-w-fit`}
               onClick={() => setActiveCategory(category)}
             >
               {category.name}
@@ -101,61 +99,62 @@ const VideoMania = () => {
         )}
       </div>
 
-      {/* Top Video*/}
+      {/* Top PicTour*/}
       <div className="flex items-center mt-10">
-        {isTopVideoFetching ? (
+        {isTopPicTourFetching ? (
           <Spinner />
-        ) : topVideo ? (
-          <div className="flex justify-center items-center gap-5">
-            <div
-              className="top-video-card"
-              onClick={() => {
-                setCurrentVideo(topVideo);
-                setVideoModal(true);
-                setIsTop(true);
-              }}
-            >
-              <FaPlayCircle className={`w-32 h-32 ${textColor}`} />
-              <div className="text-lg">{nameElipse(topVideo?.name, 12)}</div>
-            </div>
+        ) : topPicTour ? (
+          <div
+            className="flex justify-center items-center gap-5"
+            onClick={() => {
+              setCurrentPicTour(topPicTour);
+              setPicTourModal(true);
+              setIsTop(true);
+            }}
+          >
+            <img
+              src={topPicTour?.image}
+              alt={"topPicTour"}
+              className="video-thumbnail"
+            />
 
             <div className="text-sm break-words whitespace-pre-line">
-              {topVideo?.description}
+              {topPicTour?.description}
             </div>
           </div>
-        ) : !topVideo && !isFetching ? (
+        ) : !topPicTour && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Video Found
+            No Top Pic Tour Found
           </div>
         ) : null}
       </div>
 
-      {/* Sub Categories and their videos */}
+      {/* Sub Categories and their Pic */}
       <div className="mt-10">
-        {isVideoFetching ? (
+        {isPicTourFetching ? (
           <Spinner />
-        ) : videos?.length > 0 ? (
-          videos?.map((video) => (
+        ) : picTours?.length > 0 ? (
+          picTours?.map((pictour) => (
             <div className="mb-5">
-              <div className="heading">{video?.sub_category_name}</div>
+              <div className="heading">{pictour?.sub_category_name}</div>
               <div className="video-card-container">
-                {video?.video_result?.Videos?.map((video) => (
+                {pictour?.tour_result?.Tours?.map((pictour) => (
                   <ThumbnailCard
-                    id={video?.id}
-                    image={video?.thumbnail}
-                    title={video?.description}
+                    id={pictour?.id}
+                    image={pictour?.image}
+                    title={pictour?.name}
                     onClick={() => {
-                      setCurrentVideo(video);
-                      setVideoModal(true);
+                      setCurrentPicTour(pictour);
+                      setPicTourModal(true);
                     }}
                   />
                 ))}
               </div>
             </div>
           ))
-        ) : videos?.length === 0 && !isVideoFetching ? (
+        ) : picTours?.length === 0 && !isPicTourFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Videos Found
+            No Pic Tours Found
           </div>
         ) : null}
       </div>
@@ -165,9 +164,9 @@ const VideoMania = () => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add Video Mania"
+        title="Add Pic Tour"
       >
-        <AddVideoMania
+        <AddPicTour
           setAddModal={setAddModal}
           dispatch={dispatch}
           setReload={setReload}
@@ -175,12 +174,12 @@ const VideoMania = () => {
         />
       </Modal>
 
-      {/* //**  Video Modal  */}
-      <Player
-        video={currentVideo}
-        isOpen={videoModal}
+      {/* //**  Image Modal  */}
+      <ImagePreviewer
+        image={currentPicTour}
+        isOpen={picTourModal}
         onClose={() => {
-          setVideoModal(false);
+          setPicTourModal(false);
           setIsTop(false);
         }}
         isTop={isTop}
@@ -189,4 +188,4 @@ const VideoMania = () => {
   );
 };
 
-export default VideoMania;
+export default PicTours;

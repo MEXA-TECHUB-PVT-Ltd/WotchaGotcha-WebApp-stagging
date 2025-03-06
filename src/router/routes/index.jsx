@@ -1,4 +1,5 @@
 import Home from "../../views/Home";
+import PicTours from "../../views/PicTours";
 import VideoMania from "../../views/VideoMania";
 
 export default [
@@ -9,5 +10,9 @@ export default [
   {
     path: "/video-mania",
     element: <VideoMania />,
+  },
+  {
+    path: "/pic-tours",
+    element: <PicTours />,
   },
 ];

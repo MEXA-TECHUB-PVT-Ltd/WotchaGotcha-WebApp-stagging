@@ -10,16 +10,15 @@ import Form from "../../components/form/Form";
 import { Spinner } from "../../components/theme/Loader";
 import AppTextArea from "../../components/form/AppTextArea";
 
-import {
-  addVideoMania,
-  getVideoSubCategoryByCategory,
-} from "../../app/features/videomania";
 import { FaUpload } from "react-icons/fa";
-import videoIcon from "../../assets/videoIcon.svg";
 import { Toast } from "../../components/theme/Toast";
-import { uploadImage, uploadVideo } from "../../utils/common/cloudinary";
+import { uploadImage } from "../../utils/common/cloudinary";
+import {
+  addPicTour,
+  getPicTourSubCategoryByCategory,
+} from "../../app/features/pictours";
 
-export const AddVideoMania = ({
+export const AddPicTour = ({
   setAddModal,
   dispatch,
   setReload,
@@ -31,35 +30,31 @@ export const AddVideoMania = ({
     (state) => state.theme
   );
 
-  const videoRef = useRef(null);
-  const thumbnailRef = useRef(null);
+  const imageRef = useRef(null);
 
   const [subCategory, setSubCategory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleAddVideoMania = async (data, { resetForm }) => {
+  const handleAddPicTour = async (data, { resetForm }) => {
     setIsLoading(true);
     try {
-      const video = await uploadVideo(data.video);
-      if (!video) throw new Error("Failed to upload video.");
+      const image = await uploadImage(data?.image);
+      if (!image) throw new Error("Failed to upload image.");
 
-      const thumbnail = await uploadImage(data.thumbnail);
-      if (!thumbnail) throw new Error("Failed to upload thumbnail.");
-
-      const payload = { ...data, video, thumbnail };
+      const payload = { ...data, image };
       const { statusCode } = await dispatch(
-        addVideoMania({ token, payload })
+        addPicTour({ token, payload })
       ).unwrap();
 
       if (statusCode === 201) {
-        Toast("success", "Video mania uploaded successfully");
+        Toast("success", "Pic Tour uploaded successfully");
         setReload((prev) => !prev);
         setAddModal(false);
         resetForm();
       }
     } catch (error) {
       console.error("Upload Error:", error);
-      Toast("error", error?.message || "Error uploading video mania");
+      Toast("error", error?.message || "Error uploading pic tour");
     } finally {
       setIsLoading(false);
     }
@@ -69,7 +64,7 @@ export const AddVideoMania = ({
     const fetchSubCategories = async () => {
       if (categoryId) {
         const { AllCategories } = await dispatch(
-          getVideoSubCategoryByCategory({ token, id: categoryId })
+          getPicTourSubCategoryByCategory({ token, id: categoryId })
         ).unwrap();
 
         setSubCategory(AllCategories);
@@ -85,76 +80,40 @@ export const AddVideoMania = ({
         initialValues={{
           name: "",
           description: "",
-          video_category: categoryId,
+          pic_category: categoryId,
           sub_category: "",
-          video: "",
-          thumbnail: "",
+          image: "",
           user_id: user?.id,
         }}
         validationSchema={Yup.object().shape({
           name: Yup.string().required("Name is required"),
           description: Yup.string().required("Description is required"),
           sub_category: Yup.string().required("Sub Category is required"),
-          video: Yup.string().required("Video is required"),
-          thumbnail: Yup.string().required("Thumbnail is required"),
+          image: Yup.string().required("Image is required"),
         })}
-        onSubmit={handleAddVideoMania}
+        onSubmit={handleAddPicTour}
       >
         {({ handleSubmit, values, handleChange, setFieldValue }) => (
           <div className="flex-col-start gap-5">
             <div className="flex items-center gap-5">
               <div
                 className={`capture-container ${borderColor}`}
-                onClick={() => videoRef.current.click()}
+                onClick={() => imageRef.current.click()}
               >
                 <input
-                  name="video"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    setFieldValue("video", file);
-                  }}
-                  ref={videoRef}
-                  type="file"
-                  accept="video/*"
-                  hidden
-                />
-                {!values?.video ? (
-                  <>
-                    <p>Upload Video</p>
-                    <FaUpload size={25} className={textColor} />
-                  </>
-                ) : (
-                  <div className="py-2">
-                    <p className={`px-2 ${bgColor} rounded-full text-white`}>
-                      Change Video
-                    </p>
-                    <img
-                      src={videoIcon}
-                      alt="Video"
-                      className="w-full h-full"
-                    />
-                  </div>
-                )}
-              </div>
-
-              <div
-                className={`capture-container ${borderColor}`}
-                onClick={() => thumbnailRef.current.click()}
-              >
-                <input
-                  name="thumbnail"
-                  ref={thumbnailRef}
+                  name="image"
+                  ref={imageRef}
                   type="file"
                   onChange={(e) => {
                     const file = e.target.files[0];
-                    setFieldValue("thumbnail", file);
+                    setFieldValue("image", file);
                   }}
                   accept="image/*"
                   hidden
                 />
-                {!values?.thumbnail ? (
+                {!values?.image ? (
                   <>
-                    <p>Upload Tumbnail</p>
+                    <p>Upload Image</p>
                     <FaUpload size={25} className={textColor} />
                   </>
                 ) : (
@@ -166,11 +125,11 @@ export const AddVideoMania = ({
                     </p>
                     <img
                       src={
-                        values.thumbnail instanceof File
-                          ? URL.createObjectURL(values?.thumbnail)
-                          : values.thumbnail
+                        values.image instanceof File
+                          ? URL.createObjectURL(values?.image)
+                          : values.image
                       }
-                      alt="Thumbnail"
+                      alt="Image"
                       className="w-full h-full"
                     />
                   </div>
@@ -220,29 +179,8 @@ export const AddVideoMania = ({
           </div>
         )}
       </Form>
-
-      {/* <Modal
-        isOpen={uplaodVideoModal}
-        onClose={() => setUplaodVideoModal(false)}
-        title="Upload Video"
-      >
-        <div className="flex items-center justify-center gap-8 mb-8 ">
-          <div className={`capture-container ${borderColor}`}>
-            <p>Use Camera</p>
-            <FaCamera size={25} className={textColor} />
-          </div>
-
-          <div
-            className={`capture-container ${borderColor}`}
-            onClick={handleSelectVideo}
-          >
-            <p>Browse Files</p>
-            <FaCompactDisc size={25} className={textColor} />
-          </div>
-        </div>
-      </Modal> */}
     </>
   );
 };
-export const EditVideoMania = async () => {};
-export const DeleteVideoMania = async () => {};
+export const EditPicTour = async () => {};
+export const DeletePicTour = async () => {};

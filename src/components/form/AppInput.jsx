@@ -48,10 +48,10 @@ const AppInput = ({
         {BtnIcon && (
           <button
             type="button"
-            className="flex items-center justify-center px-4 py-2 text-white border-none outline-none "
+            className="flex items-center justify-center px-4 py-2 text-white border-none outline-none"
             onClick={onIconClick}
           >
-            <BtnIcon className="text-lg text-gray-500" />
+            <BtnIcon className={`text-lg text-gray-500 ${theme.textColor}`} />
           </button>
         )}
       </div>

@@ -28,7 +28,9 @@ const Modal = ({ title, onClose, isOpen, size = "sm", children }) => {
       isOpen={isOpen}
       onRequestClose={onClose}
       style={customStyles}
-      className={`${theme === "dark" && "dark"} fixed h-auto w-[95%] ${
+      className={`${
+        theme === "dark" && "dark"
+      } fixed h-auto max-h-[98vh] w-[95%] ${
         size === "sm"
           ? "md:w-[35%]"
           : size === "md"
@@ -36,7 +38,7 @@ const Modal = ({ title, onClose, isOpen, size = "sm", children }) => {
           : size === "lg"
           ? "md:w-[97%] md:h-[99vh]"
           : "md:w-[35%]"
-      }  bg-white dark:bg-dark_bg_4 shadow-sm outline-none rounded p-3 dark:text-dark_text_1 overflow-hidden `}
+      }  bg-white dark:bg-dark_bg_4 shadow-sm outline-none rounded p-3 dark:text-dark_text_1 overflow-hidden`}
     >
       <div className="flex-between cursor-pointer">
         <h1 className="font-semibold">{title}</h1>
@@ -47,7 +49,7 @@ const Modal = ({ title, onClose, isOpen, size = "sm", children }) => {
           <IoClose />
         </p>
       </div>
-      <div className="mt-10">{children}</div>
+      <div className="mt-8 flex-1 max-h-[85vh] overflow-auto">{children}</div>
     </AppModal>
   );
 };
