@@ -8,6 +8,7 @@ import {
   getTopVideo,
   getVideoCategories,
   getVideosByCategory,
+  searchVideoMania,
 } from "../../app/features/videomania";
 import ThumbnailCard from "../../components/card/ThumbnailCard";
 import { Spinner } from "../../components/theme/Loader";
@@ -34,8 +35,13 @@ const VideoMania = () => {
   const dispatch = useDispatch();
   const { bgColor, textColor } = useSelector((state) => state.theme);
   const { token } = useSelector((state) => state.auth);
-  const { categories, isFetching, isVideoFetching, isTopVideoFetching } =
-    useSelector((state) => state.video_mania);
+  const {
+    categories,
+    isFetching,
+    isVideoFetching,
+    isTopVideoFetching,
+    isSearching,
+  } = useSelector((state) => state.video_mania);
 
   // ** Methods ---
   const onSearch = useCallback(handleSearch(setSearchQuery), [searchQuery]);
@@ -53,20 +59,38 @@ const VideoMania = () => {
   }, []);
 
   useEffect(() => {
-    if (activeCategory) {
-      dispatch(getTopVideo({ token, id: activeCategory?.id }))
-        .unwrap()
-        .then((data) => {
-          setTopVideo(data?.topVideo[0]);
-        });
+    if (!activeCategory) return;
 
+    dispatch(getTopVideo({ token, id: activeCategory?.id }))
+      .unwrap()
+      .then((data) => {
+        setTopVideo(data?.topVideo[0]);
+      });
+  }, [activeCategory]);
+
+  useEffect(() => {
+    if (!activeCategory) return;
+
+    let timeout;
+
+    if (searchQuery?.trim()?.length > 0) {
+      timeout = setTimeout(() => {
+        dispatch(searchVideoMania({ token, searchQuery }))
+          .unwrap()
+          .then((data) => {
+            setVideos(data?.Videos);
+          });
+      }, 300);
+    } else {
       dispatch(getVideosByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
           setVideos(data?.data);
         });
     }
-  }, [activeCategory, reload]);
+
+    return () => clearTimeout(timeout);
+  }, [activeCategory, reload, searchQuery]);
 
   return (
     <Fragment>
@@ -81,25 +105,27 @@ const VideoMania = () => {
 
       {/* All Categories */}
 
-      <div className="flex items-center gap-5 overflow-x-auto flex-1 scrollbar-hidden">
-        {isFetching ? (
-          <Spinner />
-        ) : (
-          categories?.AllCategories?.map((category) => (
-            <div
-              key={category.id}
-              className={` ${
-                activeCategory?.name === category?.name
-                  ? `${bgColor} text-white`
-                  : "border border-gray-300 text-dark_bg_5 dark:text-dark_text_1"
-              } px-2 py-1 rounded-md  cursor-pointer min-w-fit `}
-              onClick={() => setActiveCategory(category)}
-            >
-              {category.name}
-            </div>
-          ))
-        )}
-      </div>
+      {!searchQuery?.trim()?.length > 0 && (
+        <div className="flex items-center gap-5 overflow-x-auto flex-1 scrollbar-hidden">
+          {isFetching ? (
+            <Spinner />
+          ) : (
+            categories?.AllCategories?.map((category) => (
+              <div
+                key={category.id}
+                className={` ${
+                  activeCategory?.name === category?.name
+                    ? `${bgColor} text-white`
+                    : "border border-gray-300 text-dark_bg_5 dark:text-dark_text_1"
+                } px-2 py-1 rounded-md  cursor-pointer min-w-fit `}
+                onClick={() => setActiveCategory(category)}
+              >
+                {category.name}
+              </div>
+            ))
+          )}
+        </div>
+      )}
 
       {/* Top Video*/}
       <div className="flex items-center mt-10">
@@ -131,35 +157,64 @@ const VideoMania = () => {
       </div>
 
       {/* Sub Categories and their videos */}
-      <div className="mt-10">
-        {isVideoFetching ? (
-          <Spinner />
-        ) : videos?.length > 0 ? (
-          videos?.map((video) => (
+      {searchQuery?.trim()?.length > 0 ? (
+        <div className="mt-10">
+          {isSearching ? (
+            <Spinner />
+          ) : videos?.length > 0 ? (
             <div className="mb-5">
-              <div className="heading">{video?.sub_category_name}</div>
-              <div className="video-card-container">
-                {video?.video_result?.Videos?.map((video) => (
+              <div className="cards-container">
+                {videos?.map((v) => (
                   <ThumbnailCard
-                    id={video?.id}
-                    image={video?.thumbnail}
-                    title={video?.description}
+                    key={v?.video_id}
+                    id={v?.video_id}
+                    image={v?.thumbnail}
+                    title={v?.description}
                     onClick={() => {
-                      setCurrentVideo(video);
+                      setCurrentVideo(v);
                       setVideoModal(true);
                     }}
                   />
                 ))}
               </div>
             </div>
-          ))
-        ) : videos?.length === 0 && !isVideoFetching ? (
-          <div className="flex justify-center text-gray-400">
-            No Videos Found
-          </div>
-        ) : null}
-      </div>
-
+          ) : videos?.length === 0 && !isSearching ? (
+            <div className="flex justify-center text-gray-400">
+              No Videos Found
+            </div>
+          ) : null}
+        </div>
+      ) : (
+        <div className="mt-10">
+          {isVideoFetching ? (
+            <Spinner />
+          ) : videos?.length > 0 ? (
+            videos?.map((video) => (
+              <div className="mb-5">
+                <div className="heading">{video?.sub_category_name}</div>
+                <div className="cards-container">
+                  {video?.video_result?.Videos?.map((v) => (
+                    <ThumbnailCard
+                      key={v?.video_id}
+                      id={v?.video_id}
+                      image={v?.thumbnail}
+                      title={v?.description}
+                      onClick={() => {
+                        setCurrentVideo(v);
+                        setVideoModal(true);
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))
+          ) : videos?.length === 0 && !isVideoFetching ? (
+            <div className="flex justify-center text-gray-400">
+              No Videos Found
+            </div>
+          ) : null}
+        </div>
+      )}
       {/* //** Modals  */}
 
       <Modal

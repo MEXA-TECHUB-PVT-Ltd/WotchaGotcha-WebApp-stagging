@@ -125,7 +125,17 @@ const Player = ({ video, isOpen, onClose, isTop = false }) => {
 
   return (
     <>
-      <Modal title={video?.name} isOpen={isOpen} onClose={onClose} size="lg">
+      <Modal
+        title={
+          <ProfileCard
+            image={video?.userimage || video?.user_image}
+            title={video?.username}
+          />
+        }
+        isOpen={isOpen}
+        onClose={onClose}
+        size="lg"
+      >
         {/* Video Player */}
         <div className="player">
           <video src={video?.video} controls className="w-full h-full" />
@@ -133,10 +143,10 @@ const Player = ({ video, isOpen, onClose, isTop = false }) => {
 
         {/* Action Buttons */}
         {!isTop && (
-          <div className="player-buttons-container">
+          <div className="action-buttons-container">
             <button
               onClick={handleLike}
-              className="player-button"
+              className="action-button"
               disabled={isLoading}
             >
               <IoHeart className={`w-6 h-6 ${isLiked ? "text-red-500" : ""}`} />{" "}
@@ -144,13 +154,13 @@ const Player = ({ video, isOpen, onClose, isTop = false }) => {
             </button>
 
             <button
-              className="player-button"
+              className="action-button"
               onClick={() => setIsModalOpen(true)}
             >
               <IoChatbubbleEllipses className="w-6 h-6" /> Comment
             </button>
             {totalComments > 0 && (
-              <button className="player-button">
+              <button className="action-button">
                 {totalComments === 1
                   ? `${totalComments} comment`
                   : `${totalComments} comments`}

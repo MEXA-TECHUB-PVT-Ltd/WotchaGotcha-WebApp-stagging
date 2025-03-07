@@ -72,7 +72,7 @@ export const getPicTourByCategory = createAsyncThunk(
           },
           params: {
             page: 1,
-            limit: 10,
+            limit: 100,
           },
         }
       );
@@ -101,11 +101,11 @@ export const addPicTour = createAsyncThunk(
   }
 );
 
-export const getVideoAllLikes = createAsyncThunk(
-  "/xpi/createXpiVideo",
+export const getPicTourLikes = createAsyncThunk(
+  "/picTour/getAllLikesByPicTour",
   async ({ token, id }, { rejectWithValue }) => {
     try {
-      const { data } = await client.get(`/xpi/getAllLikesByVideo/${id}`, {
+      const { data } = await client.get(`/picTour/getAllLikesByPicTour/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -118,15 +118,19 @@ export const getVideoAllLikes = createAsyncThunk(
   }
 );
 
-export const likeUnlikeVideo = createAsyncThunk(
-  "/xpi/likeUnlikeVideo",
+export const likeUnlikePicTour = createAsyncThunk(
+  "/picTour/likeUnlikePicTour",
   async ({ token, payload }, { rejectWithValue }) => {
     try {
-      const { data } = await client.post(`/xpi/likeUnlikeVideo`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await client.post(
+        `/picTour/likeUnlikePicTour`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       return data;
     } catch (error) {
@@ -135,11 +139,31 @@ export const likeUnlikeVideo = createAsyncThunk(
   }
 );
 
-export const getVideoAllComments = createAsyncThunk(
-  "/xpi/createXpiVideo",
+export const getPicTourComments = createAsyncThunk(
+  "/picTour/getAllCommentsByPicTour",
   async ({ token, id }, { rejectWithValue }) => {
     try {
-      const { data } = await client.get(`/xpi/getAllCommentsByVideo/${id}`, {
+      const { data } = await client.get(
+        `/picTour/getAllCommentsByPicTour/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const addCommentOnPicTour = createAsyncThunk(
+  "/picTour/sendComment",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.post(`/picTour/sendComment`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -152,15 +176,18 @@ export const getVideoAllComments = createAsyncThunk(
   }
 );
 
-export const addCommentOnVideo = createAsyncThunk(
-  "/xpi/sendComment",
-  async ({ token, payload }, { rejectWithValue }) => {
+export const searchPicTour = createAsyncThunk(
+  "picTour/searchTour",
+  async ({ token, searchQuery }, { rejectWithValue }) => {
     try {
-      const { data } = await client.post(`/xpi/sendComment`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await client.get(
+        `/picTour/searchTour?name=${searchQuery}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       return data;
     } catch (error) {
@@ -177,6 +204,7 @@ const picTourSlice = createSlice({
     isFetching: false,
     isPicTourFetching: false,
     isTopPicTourFetching: false,
+    isSearhing: false,
     error: null,
     categories: null,
   },
@@ -216,24 +244,34 @@ const picTourSlice = createSlice({
         state.isTopPicTourFetching = false;
         state.error = action?.payload;
       })
-      .addCase(likeUnlikeVideo.pending, (state) => {
+      .addCase(likeUnlikePicTour.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(likeUnlikeVideo.fulfilled, (state, action) => {
+      .addCase(likeUnlikePicTour.fulfilled, (state, action) => {
         state.isLoading = false;
       })
-      .addCase(likeUnlikeVideo.rejected, (state, action) => {
+      .addCase(likeUnlikePicTour.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action?.payload;
       })
-      .addCase(addCommentOnVideo.pending, (state) => {
+      .addCase(addCommentOnPicTour.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(addCommentOnVideo.fulfilled, (state, action) => {
+      .addCase(addCommentOnPicTour.fulfilled, (state, action) => {
         state.isLoading = false;
       })
-      .addCase(addCommentOnVideo.rejected, (state, action) => {
+      .addCase(addCommentOnPicTour.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action?.payload;
+      })
+      .addCase(searchPicTour.pending, (state) => {
+        state.isSearhing = true;
+      })
+      .addCase(searchPicTour.fulfilled, (state, action) => {
+        state.isSearhing = false;
+      })
+      .addCase(searchPicTour.rejected, (state, action) => {
+        state.isSearhing = false;
         state.error = action?.payload;
       });
   },

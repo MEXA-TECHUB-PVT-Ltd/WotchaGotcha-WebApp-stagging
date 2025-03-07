@@ -12,9 +12,9 @@ import {
   getPicTourByCategory,
   getPicTourCategories,
   getTopPicTour,
+  searchPicTour,
 } from "../../app/features/pictours";
-import { AddPicTour } from "../../services/pictours";
-import ImagePreviewer from "../../components/imagePreviewer";
+import ImagePreviewer, { AddPicTour } from "../../services/pictours";
 
 const PicTours = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,37 +34,77 @@ const PicTours = () => {
   const dispatch = useDispatch();
   const { bgColor } = useSelector((state) => state.theme);
   const { token } = useSelector((state) => state.auth);
-  const { categories, isFetching, isTopPicTourFetching, isPicTourFetching } =
-    useSelector((state) => state.pictours);
+  const {
+    categories,
+    isFetching,
+    isTopPicTourFetching,
+    isPicTourFetching,
+    isSearching,
+  } = useSelector((state) => state.pictours);
 
   // ** Methods ---
   const onSearch = useCallback(handleSearch(setSearchQuery), [searchQuery]);
+
+  // ** Hooks ---
 
   useEffect(() => {
     dispatch(getPicTourCategories({ token }))
       .unwrap()
       .then((data) => {
         if (data?.AllCategories?.length > 0) {
-          setActiveCategory(data.AllCategories[0]);
+          setActiveCategory(data?.AllCategories[0]);
         }
+      })
+      .catch((error) => {
+        console.error(error);
       });
   }, []);
 
   useEffect(() => {
-    if (activeCategory) {
-      dispatch(getTopPicTour({ token, id: activeCategory?.id }))
-        .unwrap()
-        .then((data) => {
-          setTopPicTour(data?.topTour[0]);
-        });
+    if (!activeCategory) return;
+    dispatch(getTopPicTour({ token, id: activeCategory?.id }))
+      .unwrap()
+      .then((data) => {
+        setTopPicTour(data?.topTour[0]);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [activeCategory]);
 
+  useEffect(() => {
+    if (!activeCategory) return;
+
+    let timeout;
+    if (searchQuery?.trim()?.length > 0) {
+      timeout = setTimeout(() => {
+        dispatch(searchPicTour({ token, searchQuery }))
+          .unwrap()
+          .then((data) => {
+            setPicTours(
+              data?.Tours?.map((tour) => ({
+                ...tour,
+                tour_id: tour?.pic_tour_id,
+              })) || []
+            );
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }, 300);
+    } else {
       dispatch(getPicTourByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
           setPicTours(data?.data);
+        })
+        .catch((error) => {
+          console.error(error);
         });
     }
-  }, [activeCategory, reload]);
+
+    return () => clearTimeout(timeout);
+  }, [activeCategory, reload, searchQuery]);
 
   return (
     <Fragment>
@@ -79,25 +119,27 @@ const PicTours = () => {
 
       {/* All Categories */}
 
-      <div className="flex items-center gap-5 overflow-x-auto flex-1 scrollbar-hidden">
-        {isFetching ? (
-          <Spinner />
-        ) : (
-          categories?.AllCategories?.map((category) => (
-            <div
-              key={category.id}
-              className={` ${
-                activeCategory?.name === category?.name
-                  ? `${bgColor} text-white`
-                  : "border border-gray-300 text-dark_bg_5 dark:text-dark_text_1"
-              } px-2 py-1 rounded-md  cursor-pointer min-w-fit`}
-              onClick={() => setActiveCategory(category)}
-            >
-              {category.name}
-            </div>
-          ))
-        )}
-      </div>
+      {!searchQuery?.trim()?.length > 0 && (
+        <div className="flex items-center gap-5 overflow-x-auto flex-1 scrollbar-hidden">
+          {isFetching ? (
+            <Spinner />
+          ) : (
+            categories?.AllCategories?.map((category) => (
+              <div
+                key={category.id}
+                className={` ${
+                  activeCategory?.name === category?.name
+                    ? `${bgColor} text-white`
+                    : "border border-gray-300 text-dark_bg_5 dark:text-dark_text_1"
+                } px-2 py-1 rounded-md  cursor-pointer min-w-fit`}
+                onClick={() => setActiveCategory(category)}
+              >
+                {category.name}
+              </div>
+            ))
+          )}
+        </div>
+      )}
 
       {/* Top PicTour*/}
       <div className="flex items-center mt-10">
@@ -113,6 +155,7 @@ const PicTours = () => {
             }}
           >
             <img
+              style={{ imageRendering: "-webkit-optimize-contrast" }}
               src={topPicTour?.image}
               alt={"topPicTour"}
               className="video-thumbnail"
@@ -130,34 +173,64 @@ const PicTours = () => {
       </div>
 
       {/* Sub Categories and their Pic */}
-      <div className="mt-10">
-        {isPicTourFetching ? (
-          <Spinner />
-        ) : picTours?.length > 0 ? (
-          picTours?.map((pictour) => (
+      {searchQuery?.trim()?.length > 0 ? (
+        <div className="mt-10">
+          {isSearching ? (
+            <Spinner />
+          ) : picTours?.length > 0 ? (
             <div className="mb-5">
-              <div className="heading">{pictour?.sub_category_name}</div>
-              <div className="video-card-container">
-                {pictour?.tour_result?.Tours?.map((pictour) => (
+              <div className="cards-container">
+                {picTours?.map((pic) => (
                   <ThumbnailCard
-                    id={pictour?.id}
-                    image={pictour?.image}
-                    title={pictour?.name}
+                    key={pic?.tour_id}
+                    id={pic?.tour_id}
+                    image={pic?.image}
+                    title={pic?.name}
                     onClick={() => {
-                      setCurrentPicTour(pictour);
+                      setCurrentPicTour(pic);
                       setPicTourModal(true);
                     }}
                   />
                 ))}
               </div>
             </div>
-          ))
-        ) : picTours?.length === 0 && !isPicTourFetching ? (
-          <div className="flex justify-center text-gray-400">
-            No Pic Tours Found
-          </div>
-        ) : null}
-      </div>
+          ) : picTours?.Tours?.length === 0 && !isSearching ? (
+            <div className="flex justify-center text-gray-400">
+              No Pic Tours Found
+            </div>
+          ) : null}
+        </div>
+      ) : (
+        <div className="mt-10">
+          {isPicTourFetching ? (
+            <Spinner />
+          ) : picTours?.length > 0 ? (
+            picTours?.map((pictour) => (
+              <div className="mb-5" key={pictour?.id}>
+                <div className="heading">{pictour?.sub_category_name}</div>
+                <div className="cards-container">
+                  {pictour?.tour_result?.Tours?.map((pic) => (
+                    <ThumbnailCard
+                      key={pic?.tour_id}
+                      id={pic?.tour_id}
+                      image={pic?.image}
+                      title={pic?.name}
+                      onClick={() => {
+                        setCurrentPicTour(pic);
+                        setPicTourModal(true);
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))
+          ) : picTours?.length === 0 && !isPicTourFetching ? (
+            <div className="flex justify-center text-gray-400">
+              No Pic Tours Found
+            </div>
+          ) : null}
+        </div>
+      )}
 
       {/* //** Modals  */}
 

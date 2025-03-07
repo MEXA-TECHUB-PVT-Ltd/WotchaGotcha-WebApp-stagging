@@ -5,13 +5,15 @@ const ProfileCard = ({ title, subTitle, image }) => {
   const { borderColor } = useSelector((state) => state.theme);
 
   return (
-    <div className="flex items-start gap-4">
+    <div className={`flex  ${subTitle ? "items-start" : "items-center"} gap-4`}>
       <div>
         {image ? (
           <img
+            style={{ imageRendering: "-webkit-optimize-contrast" }}
             className={`p-card-avatar ${borderColor} object-cover`}
             src={image}
             alt="User Avatar"
+          
           />
         ) : title ? (
           <div className={`p-card-avatar ${borderColor} text-gray-500`}>

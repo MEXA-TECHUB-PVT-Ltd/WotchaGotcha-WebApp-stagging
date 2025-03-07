@@ -129,6 +129,7 @@ export const AddVideoMania = ({
                       Change Video
                     </p>
                     <img
+                      style={{ imageRendering: "-webkit-optimize-contrast" }}
                       src={videoIcon}
                       alt="Video"
                       className="w-full h-full"
@@ -165,6 +166,7 @@ export const AddVideoMania = ({
                       Change Image
                     </p>
                     <img
+                      style={{ imageRendering: "-webkit-optimize-contrast" }}
                       src={
                         values.thumbnail instanceof File
                           ? URL.createObjectURL(values?.thumbnail)

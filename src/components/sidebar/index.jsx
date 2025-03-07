@@ -48,7 +48,11 @@ const Sidebar = () => {
       >
         <div className="row mb-5 flex-between">
           <div className="flex-center gap-2">
-            <img src={logo} alt="Logo" />
+            <img
+              style={{ imageRendering: "-webkit-optimize-contrast" }}
+              src={logo}
+              alt="Logo"
+            />
             <h1 className="logo-text">Wotcha Gotcha</h1>
           </div>
           <CgClose onClick={handleToggleSidebar} size={20} />
