@@ -40,11 +40,20 @@ const Register = () => {
         <div>
           <div className="flex justify-start items-center gap-2">
             <p className="w-20 h-20">
-              <img src={logo} alt="" className="logo" />
+              <img
+                style={{ imageRendering: "-webkit-optimize-contrast" }}
+                src={logo}
+                alt=""
+                className="logo"
+              />
             </p>
             <h1 className="logo-text">Wotcha Gotcha</h1>
           </div>
-          <img src={logo} className="w-full h-[70vh]" />
+          <img
+            style={{ imageRendering: "-webkit-optimize-contrast" }}
+            src={logo}
+            className="w-full h-[70vh]"
+          />
         </div>
       </div>
 
@@ -58,14 +67,19 @@ const Register = () => {
         }}
         validationSchema={Yup.object().shape({
           username: Yup.string().required("username is required"),
-          email: Yup.string().email("Inavalid email address").required("Email is Required"),
+          email: Yup.string()
+            .email("Inavalid email address")
+            .required("Email is Required"),
           password: Yup.string()
             .required("Password is required")
             .min(8, "Password must be at least 8 characters")
             .max(20, "Password cannot exceed 20 characters")
             .matches(/[a-zA-Z]/, "Password must contain at least one letter")
             .matches(/[0-9]/, "Password must contain at least one number")
-            .matches(/[\W_]/, "Password must contain at least one special character"),
+            .matches(
+              /[\W_]/,
+              "Password must contain at least one special character"
+            ),
           confirmPassword: Yup.string()
             .required("Please confirm your password")
             .oneOf([Yup.ref("password"), null], "Passwords must match"),
@@ -137,8 +151,12 @@ const Register = () => {
               spinner={isLoading ? <Spinner size="sm" /> : null}
             />
 
-            <Link to={"/"} className={`mt-2 text-light_text_1 dark:text-dark_text_1 `}>
-              Already have an account? <span className="text-blue-500 underline">Sign-In</span>
+            <Link
+              to={"/"}
+              className={`mt-2 text-light_text_1 dark:text-dark_text_1 `}
+            >
+              Already have an account?{" "}
+              <span className="text-blue-500 underline">Sign-In</span>
             </Link>
           </div>
         )}

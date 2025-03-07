@@ -9,8 +9,9 @@ import {
   likeUnlikeVideo,
 } from "../../app/features/videomania";
 import AppInput from "../form/AppInput";
+import ProfileCard from "../card/ProfileCard";
 
-const Player = ({ video, isOpen, onClose }) => {
+const Player = ({ video, isOpen, onClose, isTop = false }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
@@ -25,12 +26,17 @@ const Player = ({ video, isOpen, onClose }) => {
 
   const handleComment = async () => {
     if (!commentText.trim()) return;
+
+    const previousComments = [...comments];
+
     try {
       const payload = {
         user_id: user?.id,
         video_id: video?.video_id,
         comment: commentText,
       };
+
+      setComments((prev) => [...prev, commentText]);
 
       const { statusCode } = await dispatch(
         addCommentOnVideo({ payload, token })
@@ -39,8 +45,11 @@ const Player = ({ video, isOpen, onClose }) => {
       if (statusCode === 201) {
         setCommentText("");
         await getAllComments();
+      } else {
+        setComments(previousComments);
       }
     } catch (error) {
+      setComments(previousComments);
       console.log(error);
     }
   };
@@ -108,43 +117,57 @@ const Player = ({ video, isOpen, onClose }) => {
   };
 
   useEffect(() => {
-    getAllLikes();
-    getAllComments();
-  }, [video?.video_id, dispatch]);
+    if (!isTop) {
+      getAllLikes();
+      getAllComments();
+    }
+  }, [video?.video_id]);
 
   return (
     <>
-      <Modal title={video?.name} isOpen={isOpen} onClose={onClose} size="lg">
+      <Modal
+        title={
+          <ProfileCard
+            image={video?.userimage || video?.user_image}
+            title={video?.username}
+          />
+        }
+        isOpen={isOpen}
+        onClose={onClose}
+        size="lg"
+      >
         {/* Video Player */}
         <div className="player">
           <video src={video?.video} controls className="w-full h-full" />
         </div>
 
         {/* Action Buttons */}
-        <div className="player-buttons-container">
-          <button
-            onClick={handleLike}
-            className="player-button"
-            disabled={isLoading}
-          >
-            <IoHeart className={`w-6 h-6 ${isLiked ? "text-red-500" : ""}`} />{" "}
-            {likes}
-          </button>
-
-          <button
-            className="player-button"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <IoChatbubbleEllipses className="w-6 h-6" /> Comment
-          </button>
-          {totalComments > 0 && (
-            <button className="player-button">
-              {totalComments === 1
-                ? `${totalComments} comment`
-                : `${totalComments} comments`}
+        {!isTop && (
+          <div className="action-buttons-container">
+            <button
+              onClick={handleLike}
+              className="action-button"
+              disabled={isLoading}
+            >
+              <IoHeart className={`w-6 h-6 ${isLiked ? "text-red-500" : ""}`} />{" "}
+              {likes}
             </button>
-          )}
-        </div>
+
+            <button
+              className="action-button"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <IoChatbubbleEllipses className="w-6 h-6" /> Comment
+            </button>
+            {totalComments > 0 && (
+              <button className="action-button">
+                {totalComments === 1
+                  ? `${totalComments} comment`
+                  : `${totalComments} comments`}
+              </button>
+            )}
+          </div>
+        )}
       </Modal>
 
       <Modal
@@ -152,9 +175,16 @@ const Player = ({ video, isOpen, onClose }) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       >
-        <div>
+        <div className="flex flex-col max-h-[70vh] flex-1 overflow-y-auto overflow-x-hidden space-y-3 p-3">
           {comments?.length > 0 ? (
-            comments?.map((comment) => <div> {comment?.comment} </div>)
+            comments?.map((comment, index) => (
+              <ProfileCard
+                key={index}
+                image={comment?.userimage}
+                title={comment?.username}
+                subTitle={comment?.comment}
+              />
+            ))
           ) : (
             <p className="flex justify-center text-gray-400">
               No Comments Found
@@ -166,6 +196,7 @@ const Player = ({ video, isOpen, onClose }) => {
           <AppInput
             placeholder="comment here..."
             rounded="rounded-full"
+            value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             icon={IoSend}
             onIconClick={handleComment}

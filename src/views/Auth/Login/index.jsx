@@ -37,11 +37,20 @@ const Login = () => {
         <div>
           <div className="flex justify-start items-center gap-2">
             <p className="w-20 h-20">
-              <img src={logo} alt="" className="logo" />
+              <img
+                style={{ imageRendering: "-webkit-optimize-contrast" }}
+                src={logo}
+                alt=""
+                className="logo"
+              />
             </p>
             <h1 className="logo-text">Wotcha Gotcha</h1>
           </div>
-          <img src={logo} className="w-full h-[70vh]" />
+          <img
+            style={{ imageRendering: "-webkit-optimize-contrast" }}
+            src={logo}
+            className="w-full h-[70vh]"
+          />
         </div>
       </div>
 
@@ -52,7 +61,9 @@ const Login = () => {
           role: "user",
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email("Inavalid email address").required("Email is Required"),
+          email: Yup.string()
+            .email("Inavalid email address")
+            .required("Email is Required"),
           password: Yup.string().required("Password is Required"),
         })}
         onSubmit={handleLogin}
@@ -89,7 +100,10 @@ const Login = () => {
               <ErrorMessage name={"password"} />
             </div>
 
-            <Link to={"/forgot-password"} className={`forget-pass ${textColor}`}>
+            <Link
+              to={"/forgot-password"}
+              className={`forget-pass ${textColor}`}
+            >
               Forgot Password?
             </Link>
 
@@ -100,8 +114,12 @@ const Login = () => {
               spinner={isLoading ? <Spinner size="sm" /> : null}
             />
 
-            <Link to={"/sign-up"} className={`mt-2 text-light_text_1 dark:text-dark_text_1 `}>
-              Don't have an account? <span className="text-blue-500 underline">Sign-Up</span>
+            <Link
+              to={"/sign-up"}
+              className={`mt-2 text-light_text_1 dark:text-dark_text_1 `}
+            >
+              Don't have an account?{" "}
+              <span className="text-blue-500 underline">Sign-Up</span>
             </Link>
           </div>
         )}

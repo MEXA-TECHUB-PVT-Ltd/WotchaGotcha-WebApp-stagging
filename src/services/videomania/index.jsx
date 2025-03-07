@@ -35,8 +35,8 @@ export const AddVideoMania = ({
   const thumbnailRef = useRef(null);
 
   const [subCategory, setSubCategory] = useState([]);
-  const [isLoading, setIsLoading, ] = useState(false)
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleAddVideoMania = async (data, { resetForm }) => {
     setIsLoading(true);
     try {
@@ -60,7 +60,7 @@ export const AddVideoMania = ({
     } catch (error) {
       console.error("Upload Error:", error);
       Toast("error", error?.message || "Error uploading video mania");
-    }finally{
+    } finally {
       setIsLoading(false);
     }
   };
@@ -129,6 +129,7 @@ export const AddVideoMania = ({
                       Change Video
                     </p>
                     <img
+                      style={{ imageRendering: "-webkit-optimize-contrast" }}
                       src={videoIcon}
                       alt="Video"
                       className="w-full h-full"
@@ -165,6 +166,7 @@ export const AddVideoMania = ({
                       Change Image
                     </p>
                     <img
+                      style={{ imageRendering: "-webkit-optimize-contrast" }}
                       src={
                         values.thumbnail instanceof File
                           ? URL.createObjectURL(values?.thumbnail)

@@ -70,7 +70,7 @@
   @apply cursor-pointer font-bold text-lg text-light_text_1 dark:text-dark_text_1;
 }
 
-.video-card-container {
+.cards-container {
   @apply mb-2 grid gap-2 md:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5;
 }
 
@@ -90,10 +90,22 @@
   @apply relative w-full h-[75vh] bg-dark_bg_2 rounded-lg overflow-hidden;
 }
 
-.player-buttons-container {
+.action-buttons-container {
   @apply flex items-center justify-center gap-10 mt-5;
 }
 
-.player-button {
+.action-button {
   @apply flex items-center gap-1 text-gray-700 dark:text-dark_text_1;
+}
+
+.p-card-avatar {
+  @apply rounded-full w-10 h-10  border  flex justify-center items-center;
+}
+
+.top-video-card {
+  @apply border border-gray-200 p-2 rounded-md flex flex-col justify-center gap-2 cursor-pointer;
+}
+
+.previewer {
+  @apply relative w-full h-[75vh] overflow-hidden;
 }

@@ -73,7 +73,7 @@ export const getVideosByCategory = createAsyncThunk(
         },
         params: {
           page: 1,
-          limit: 10,
+          limit: 100,
         },
       });
 
@@ -169,14 +169,35 @@ export const addCommentOnVideo = createAsyncThunk(
   }
 );
 
+export const searchVideoMania = createAsyncThunk(
+  "xpi/searchVideo",
+  async ({ token, searchQuery }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(
+        `/xpi/searchVideo?name=${searchQuery}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 const videoManiaSlice = createSlice({
-  name: "user",
+  name: "videomania",
 
   initialState: {
     isLoading: false,
     isFetching: false,
     isVideoFetching: false,
     isTopVideoFetching: false,
+    isSearching: false,
     error: null,
     categories: null,
   },
@@ -234,6 +255,16 @@ const videoManiaSlice = createSlice({
       })
       .addCase(addCommentOnVideo.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action?.payload;
+      })
+      .addCase(searchVideoMania.pending, (state) => {
+        state.isSearching = true;
+      })
+      .addCase(searchVideoMania.fulfilled, (state, action) => {
+        state.isSearching = false;
+      })
+      .addCase(searchVideoMania.rejected, (state, action) => {
+        state.isSearching = false;
         state.error = action?.payload;
       });
   },

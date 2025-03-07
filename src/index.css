@@ -36,6 +36,15 @@ input[type="number"] {
   appearance: textfield;
 }
 
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none !important;
+}
+
+.scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none !important;
+}
+
 .full {
   @apply h-screen w-screen flex flex-row overflow-hidden;
 }
