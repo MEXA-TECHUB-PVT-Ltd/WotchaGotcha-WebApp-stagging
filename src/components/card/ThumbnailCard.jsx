@@ -1,7 +1,7 @@
 import React from "react";
 import { nameElipse } from "../../utils/common/nameElipse";
 
-const ThumbnailCard = ({ id, image, title, onClick }) => {
+const ThumbnailCard = ({ image, title, onClick }) => {
   return (
     <div className="thumbnail-container" onClick={onClick}>
       <img
