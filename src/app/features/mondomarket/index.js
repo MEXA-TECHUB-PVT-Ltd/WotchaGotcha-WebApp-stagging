@@ -82,11 +82,11 @@ export const getMondoByCategory = createAsyncThunk(
   }
 );
 
-export const addVideoMania = createAsyncThunk(
-  "/xpi/createXpiVideo",
+export const bookMarkItem = createAsyncThunk(
+  "item/saveItem",
   async ({ token, payload }, { rejectWithValue }) => {
     try {
-      const { data } = await client.post(`/xpi/createXpiVideo`, payload, {
+      const { data } = await client.post(`/item/saveItem`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -99,28 +99,11 @@ export const addVideoMania = createAsyncThunk(
   }
 );
 
-export const getVideoAllLikes = createAsyncThunk(
-  "/xpi/createXpiVideo",
-  async ({ token, id }, { rejectWithValue }) => {
-    try {
-      const { data } = await client.get(`/xpi/getAllLikesByVideo/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error);
-    }
-  }
-);
-
-export const likeUnlikeVideo = createAsyncThunk(
-  "/xpi/likeUnlikeVideo",
+export const removeBookMarkItem = createAsyncThunk(
+  "item/unSaveItem",
   async ({ token, payload }, { rejectWithValue }) => {
     try {
-      const { data } = await client.post(`/xpi/likeUnlikeVideo`, payload, {
+      const { data } = await client.post(`/item/unSaveItem`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -133,28 +116,11 @@ export const likeUnlikeVideo = createAsyncThunk(
   }
 );
 
-export const getVideoAllComments = createAsyncThunk(
-  "/xpi/createXpiVideo",
-  async ({ token, id }, { rejectWithValue }) => {
-    try {
-      const { data } = await client.get(`/xpi/getAllCommentsByVideo/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error);
-    }
-  }
-);
-
-export const addCommentOnVideo = createAsyncThunk(
-  "/xpi/sendComment",
+export const sendOffer = createAsyncThunk(
+  "item/sendOffer",
   async ({ token, payload }, { rejectWithValue }) => {
     try {
-      const { data } = await client.post(`/xpi/sendComment`, payload, {
+      const { data } = await client.post(`/item/sendOffer`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -167,12 +133,13 @@ export const addCommentOnVideo = createAsyncThunk(
   }
 );
 
-export const searchVideoMania = createAsyncThunk(
-  "xpi/searchVideo",
+export const searchMondoItem = createAsyncThunk(
+  "item/searchItems",
   async ({ token, searchQuery }, { rejectWithValue }) => {
     try {
       const { data } = await client.get(
-        `/xpi/searchVideo?name=${searchQuery}`,
+        `/item/searchItems?name=${searchQuery}`,
+
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -188,7 +155,7 @@ export const searchVideoMania = createAsyncThunk(
 );
 
 const mondoMarketSlice = createSlice({
-  name: "videomania",
+  name: "mondomarket",
 
   initialState: {
     isLoading: false,
@@ -233,33 +200,23 @@ const mondoMarketSlice = createSlice({
         state.isTopFetching = false;
         state.error = action?.payload;
       })
-      .addCase(likeUnlikeVideo.pending, (state) => {
+      .addCase(sendOffer.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(likeUnlikeVideo.fulfilled, (state, action) => {
+      .addCase(sendOffer.fulfilled, (state, action) => {
         state.isLoading = false;
       })
-      .addCase(likeUnlikeVideo.rejected, (state, action) => {
+      .addCase(sendOffer.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action?.payload;
       })
-      .addCase(addCommentOnVideo.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(addCommentOnVideo.fulfilled, (state, action) => {
-        state.isLoading = false;
-      })
-      .addCase(addCommentOnVideo.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action?.payload;
-      })
-      .addCase(searchVideoMania.pending, (state) => {
+      .addCase(searchMondoItem.pending, (state) => {
         state.isSearching = true;
       })
-      .addCase(searchVideoMania.fulfilled, (state, action) => {
+      .addCase(searchMondoItem.fulfilled, (state, action) => {
         state.isSearching = false;
       })
-      .addCase(searchVideoMania.rejected, (state, action) => {
+      .addCase(searchMondoItem.rejected, (state, action) => {
         state.isSearching = false;
         state.error = action?.payload;
       });
