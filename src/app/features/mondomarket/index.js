@@ -154,6 +154,23 @@ export const searchMondoItem = createAsyncThunk(
   }
 );
 
+export const addMondoMarketItem = createAsyncThunk(
+  "item/sellItem",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.post(`/item/sellItem`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 const mondoMarketSlice = createSlice({
   name: "mondomarket",
 

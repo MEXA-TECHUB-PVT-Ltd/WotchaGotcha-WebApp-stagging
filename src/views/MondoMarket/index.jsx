@@ -15,7 +15,8 @@ import {
   searchMondoItem,
 } from "../../app/features/mondomarket";
 
-import { MondoDetailsViewer } from "../../services/mondomarket";
+import { AddMondoItem, MondoDetailsViewer } from "../../services/mondomarket";
+import Modal from "../../components/modal/Modal";
 
 const MondoMarket = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,11 +41,11 @@ const MondoMarket = () => {
     useSelector((state) => state.mondomarket);
 
   const regions = [
-    { id: 1, name: "Africa" },
-    { id: 2, name: "Europe" },
-    { id: 3, name: "Americas" },
-    { id: 4, name: "Asia" },
-    { id: 5, name: "Middle East" },
+    { id: "Africa", name: "Africa" },
+    { id: "Europe", name: "Europe" },
+    { id: "Americas", name: "Americas" },
+    { id: "Asia", name: "Asia" },
+    { id: "Middle East", name: "Middle East" },
   ];
 
   // ** Methods ---
@@ -125,7 +126,7 @@ const MondoMarket = () => {
     }
 
     return () => clearTimeout(timeout);
-  }, [mondoCategories, activeRegion, searchQuery]);
+  }, [mondoCategories, activeRegion, searchQuery, reload]);
 
   return (
     <Fragment>
@@ -254,6 +255,18 @@ const MondoMarket = () => {
       )}
 
       {/* //** Modals  */}
+      <Modal
+        isOpen={addModal}
+        onClose={() => setAddModal(false)}
+        title={"Add Item"}
+      >
+        <AddMondoItem
+          setAddModal={setAddModal}
+          setReload={setReload}
+          dispatch={dispatch}
+          regions={regions}
+        />
+      </Modal>
 
       {/* //**  Images Modal  */}
 
