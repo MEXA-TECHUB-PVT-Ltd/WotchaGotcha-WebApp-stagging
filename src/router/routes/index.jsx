@@ -1,3 +1,4 @@
+import Cinematic from "../../views/Cinematic";
 import Home from "../../views/Home";
 import MondoMarket from "../../views/MondoMarket";
 import PicTours from "../../views/PicTours";
@@ -19,5 +20,9 @@ export default [
   {
     path: "/mondo-market",
     element: <MondoMarket />,
+  },
+  {
+    path: "/cinematic",
+    element: <Cinematic />,
   },
 ];
