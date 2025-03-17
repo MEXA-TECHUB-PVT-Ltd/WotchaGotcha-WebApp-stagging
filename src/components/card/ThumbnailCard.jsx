@@ -7,7 +7,7 @@ const ThumbnailCard = ({ image, title, onClick }) => {
       <img
         style={{ imageRendering: "-webkit-optimize-contrast" }}
         src={image}
-        alt={"img"}
+        alt={"thumbnail"}
         className="video-thumbnail"
       />
 

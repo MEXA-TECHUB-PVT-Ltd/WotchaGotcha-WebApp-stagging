@@ -6,6 +6,8 @@ import VideoMania from "./features/videomania";
 import picTourSlice from "./features/pictours";
 import mondoMarketSlice from "./features/mondomarket";
 import cinematicSlice from "./features/cinematic";
+import fanStarZoneSlice from "./features/fanstarzone";
+import kidVidsSlice from "./features/kidvids";
 
 const rootReducer = combineReducers({
   theme: themeSlice,
@@ -15,6 +17,8 @@ const rootReducer = combineReducers({
   pictours: picTourSlice,
   mondomarket: mondoMarketSlice,
   cinematics: cinematicSlice,
+  fanstarzone: fanStarZoneSlice,
+  kidvids: kidVidsSlice,
 });
 
 export default rootReducer;

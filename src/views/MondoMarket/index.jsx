@@ -35,7 +35,7 @@ const MondoMarket = () => {
 
   // ** Redux ---
   const dispatch = useDispatch();
-  const { bgColor, textColor } = useSelector((state) => state.theme);
+  const { bgColor } = useSelector((state) => state.theme);
   const { token } = useSelector((state) => state.auth);
   const { isFetching, isTopFetching, isMondoFetching, isSearching } =
     useSelector((state) => state.mondomarket);

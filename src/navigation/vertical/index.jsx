@@ -1,3 +1,5 @@
+import { FaUsers } from "react-icons/fa";
+import { FaChildren } from "react-icons/fa6";
 import {
   MdDashboard,
   MdImage,
@@ -36,5 +38,17 @@ export default [
     title: "Cinematic",
     path: "/cinematic",
     icon: <MdMovie size={22} />,
+  },
+  {
+    id: "fanstarzone",
+    title: "Fan Star Zone",
+    path: "/fan-star-zone",
+    icon: <FaUsers size={22} />,
+  },
+  {
+    id: "kidvids",
+    title: "Kid-Vids",
+    path: "/kid-vids",
+    icon: <FaChildren size={22} />,
   },
 ];
