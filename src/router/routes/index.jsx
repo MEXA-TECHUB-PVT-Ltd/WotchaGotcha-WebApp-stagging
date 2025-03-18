@@ -1,5 +1,7 @@
 import Cinematic from "../../views/Cinematic";
+import FanStarZone from "../../views/FanStarZone";
 import Home from "../../views/Home";
+import KidVids from "../../views/KidVids";
 import MondoMarket from "../../views/MondoMarket";
 import PicTours from "../../views/PicTours";
 import VideoMania from "../../views/VideoMania";
@@ -24,5 +26,13 @@ export default [
   {
     path: "/cinematic",
     element: <Cinematic />,
+  },
+  {
+    path: "/fan-star-zone",
+    element: <FanStarZone />,
+  },
+  {
+    path: "/kid-vids",
+    element: <KidVids />,
   },
 ];
