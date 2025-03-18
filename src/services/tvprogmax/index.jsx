@@ -1,31 +1,32 @@
-import React, { useEffect, useRef, useState } from "react";
-import { IoHeart, IoChatbubbleEllipses, IoSend } from "react-icons/io5";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
-import AppInput from "../../components/form/AppInput";
 import ProfileCard from "../../components/card/ProfileCard";
 import Modal from "../../components/modal/Modal";
-import {
-  addCinematic,
-  addCommentOnCinematic,
-  getCinematicComments,
-  getCinematicLikes,
-  getCinematicSubCategoriesByCategory,
-  likeUnlikeCinematic,
-} from "../../app/features/cinematic";
-import { Toast } from "../../components/theme/Toast";
+import { IoChatbubbleEllipses, IoHeart, IoSend } from "react-icons/io5";
+import AppInput from "../../components/form/AppInput";
+import { uploadImage, uploadVideo } from "../../utils/common/cloudinary";
 import Form from "../../components/form/Form";
-import { FaCopy, FaUpload } from "react-icons/fa";
 import ErrorMessage from "../../components/form/ErrorMessage";
+import Button from "../../components/form/Button";
 import AppSelect from "../../components/form/AppSelect";
 import AppTextArea from "../../components/form/AppTextArea";
-import Button from "../../components/form/Button";
-import { Spinner } from "../../components/theme/Loader";
-import { uploadImage, uploadVideo } from "../../utils/common/cloudinary";
+import { FaCopy, FaUpload } from "react-icons/fa";
 import videoIcon from "../../assets/videoIcon.svg";
+import { Spinner } from "../../components/theme/Loader";
+import { Toast } from "../../components/theme/Toast";
+
+import {
+  addCommentOnTvProgmax,
+  addTvProgmax,
+  getTvProgmaxComments,
+  getTvProgmaxLikes,
+  getTvProgmaxSubCategoriesByCategory,
+  likeUnlikeTvProgmax,
+} from "../../app/features/tvprogmax";
 import { copyLink } from "../../utils/copyLink";
 
-export const AddCinematic = ({
+export const AddTvProgmax = ({
   setAddModal,
   dispatch,
   setReload,
@@ -43,7 +44,7 @@ export const AddCinematic = ({
   const [subCategory, setSubCategory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleAddCinematic = async (data, { resetForm }) => {
+  const handleAddTvProgmax = async (data, { resetForm }) => {
     setIsLoading(true);
     try {
       const video = await uploadVideo(data.video);
@@ -54,7 +55,7 @@ export const AddCinematic = ({
 
       const payload = { ...data, video, thumbnail };
       const { statusCode } = await dispatch(
-        addCinematic({ token, payload })
+        addTvProgmax({ token, payload })
       ).unwrap();
 
       if (statusCode === 201) {
@@ -75,7 +76,7 @@ export const AddCinematic = ({
     const fetchSubCategories = async () => {
       if (categoryId) {
         const { AllCategories } = await dispatch(
-          getCinematicSubCategoriesByCategory({ token, id: categoryId })
+          getTvProgmaxSubCategoriesByCategory({ token, id: categoryId })
         ).unwrap();
 
         setSubCategory(AllCategories);
@@ -104,7 +105,7 @@ export const AddCinematic = ({
           video: Yup.string().required("Video is required"),
           thumbnail: Yup.string().required("Thumbnail is required"),
         })}
-        onSubmit={handleAddCinematic}
+        onSubmit={handleAddTvProgmax}
       >
         {({ handleSubmit, values, handleChange, setFieldValue }) => (
           <div className="flex-col-start gap-5">
@@ -232,10 +233,10 @@ export const AddCinematic = ({
   );
 };
 
-export const CinematicPlayer = ({ video, isOpen, onClose, dispatch }) => {
+export const TvProgmaxPlayer = ({ video, isOpen, onClose, dispatch }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { isLoading } = useSelector((state) => state.cinematics);
+  const { isLoading } = useSelector((state) => state.tvProgmax);
   const { textColor } = useSelector((state) => state.theme);
 
   const [likes, setLikes] = useState(0);
@@ -260,7 +261,7 @@ export const CinematicPlayer = ({ video, isOpen, onClose, dispatch }) => {
       setComments((prev) => [...prev, commentText]);
 
       const { statusCode } = await dispatch(
-        addCommentOnCinematic({ payload, token })
+        addCommentOnTvProgmax({ payload, token })
       ).unwrap();
 
       if (statusCode === 201) {
@@ -288,7 +289,7 @@ export const CinematicPlayer = ({ video, isOpen, onClose, dispatch }) => {
       };
 
       const { statusCode } = await dispatch(
-        likeUnlikeCinematic({ payload, token })
+        likeUnlikeTvProgmax({ payload, token })
       ).unwrap();
 
       if (statusCode === 201) {
@@ -306,7 +307,7 @@ export const CinematicPlayer = ({ video, isOpen, onClose, dispatch }) => {
 
     try {
       const data = await dispatch(
-        getCinematicLikes({ token, id: video.video_id })
+        getTvProgmaxLikes({ token, id: video.video_id })
       ).unwrap();
 
       setLikes(data?.likes || 0);
@@ -326,7 +327,7 @@ export const CinematicPlayer = ({ video, isOpen, onClose, dispatch }) => {
 
     try {
       const data = await dispatch(
-        getCinematicComments({ token, id: video.video_id })
+        getTvProgmaxComments({ token, id: video.video_id })
       ).unwrap();
 
       setTotalComments(data?.totalComments || 0);

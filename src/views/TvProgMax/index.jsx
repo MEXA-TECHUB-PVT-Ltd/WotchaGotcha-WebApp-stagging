@@ -9,14 +9,14 @@ import { Spinner } from "../../components/theme/Loader";
 import { nameElipse } from "../../utils/common/nameElipse";
 import Modal from "../../components/modal/Modal";
 import {
-  getKidVidsByCategory,
-  getKidVidsCategories,
-  kidVidsTopVideo,
-  searchKidVids,
-} from "../../app/features/kidvids";
-import { AddKidVids, KidVidsPlayer } from "../../services/kidvids";
+  getTvProgmaxCategories,
+  getTvProgmaxByCategory,
+  searchTvProgmax,
+  tvProgmaxTopVideo,
+} from "../../app/features/tvprogmax";
+import { AddTvProgmax, TvProgmaxPlayer } from "../../services/tvprogmax";
 
-const KidVids = () => {
+const TvProgMax = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -39,13 +39,13 @@ const KidVids = () => {
     isVideoFetching,
     isTopVideoFetching,
     isSearching,
-  } = useSelector((state) => state.kidvids);
+  } = useSelector((state) => state.tvProgmax);
 
   // ** Methods ---
   const onSearch = useCallback(handleSearch(setSearchQuery), [searchQuery]);
 
   useEffect(() => {
-    dispatch(getKidVidsCategories({ token }))
+    dispatch(getTvProgmaxCategories({ token }))
       .unwrap()
       .then((data) => {
         if (data?.AllCategories?.length > 0) {
@@ -55,7 +55,7 @@ const KidVids = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(kidVidsTopVideo({ token }))
+    dispatch(tvProgmaxTopVideo({ token }))
       .unwrap()
       .then((data) => {
         setTopVideo(data?.data);
@@ -69,14 +69,14 @@ const KidVids = () => {
 
     if (searchQuery?.trim()?.length > 0) {
       timeout = setTimeout(() => {
-        dispatch(searchKidVids({ token, searchQuery }))
+        dispatch(searchTvProgmax({ token, searchQuery }))
           .unwrap()
           .then((data) => {
             setVideos(data?.videos);
           });
       }, 300);
     } else {
-      dispatch(getKidVidsByCategory({ token, id: activeCategory?.id }))
+      dispatch(getTvProgmaxByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
           setVideos(data?.data);
@@ -89,7 +89,7 @@ const KidVids = () => {
   return (
     <Fragment>
       <Header
-        title={<BreadCrumb items={[{ label: "Kid-Vids" }]} />}
+        title={<BreadCrumb items={[{ label: "Tv ProgMax" }]} />}
         buttonTitle={"Add"}
         buttonIcon={FaPlus}
         onSearch={onSearch}
@@ -219,7 +219,7 @@ const KidVids = () => {
         onClose={() => setAddModal(false)}
         title="Add Video"
       >
-        <AddKidVids
+        <AddTvProgmax
           setAddModal={setAddModal}
           dispatch={dispatch}
           setReload={setReload}
@@ -228,7 +228,7 @@ const KidVids = () => {
       </Modal>
 
       {/* //**  Video Modal  */}
-      <KidVidsPlayer
+      <TvProgmaxPlayer
         video={currentVideo}
         isOpen={videoModal}
         onClose={() => {
@@ -240,4 +240,4 @@ const KidVids = () => {
   );
 };
 
-export default KidVids;
+export default TvProgMax;

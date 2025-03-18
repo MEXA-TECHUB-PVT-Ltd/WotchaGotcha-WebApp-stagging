@@ -10,7 +10,7 @@ import Form from "../../components/form/Form";
 import { Spinner } from "../../components/theme/Loader";
 import AppTextArea from "../../components/form/AppTextArea";
 
-import { FaUpload } from "react-icons/fa";
+import { FaCopy, FaUpload } from "react-icons/fa";
 import { Toast } from "../../components/theme/Toast";
 import { uploadImage } from "../../utils/common/cloudinary";
 import {
@@ -24,6 +24,7 @@ import {
 import Modal from "../../components/modal/Modal";
 import { IoChatbubbleEllipses, IoHeart, IoSend } from "react-icons/io5";
 import ProfileCard from "../../components/card/ProfileCard";
+import { copyLink } from "../../utils/copyLink";
 
 export const AddPicTour = ({
   setAddModal,
@@ -198,6 +199,7 @@ const ImagePreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
   const { isLoading } = useSelector((state) => state.pictours);
+  const { textColor } = useSelector((state) => state.theme);
 
   const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -352,6 +354,13 @@ const ImagePreviewer = ({ image, isOpen, onClose, isTop = false }) => {
                   : `${totalComments} comments`}
               </button>
             )}
+            <button
+              onClick={() => copyLink(image?.image)}
+              className={`action-button hover:${textColor}`}
+              disabled={isLoading}
+            >
+              <FaCopy className={`w-6 h-6`} /> Copy Link
+            </button>
           </div>
         )}
       </Modal>

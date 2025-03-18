@@ -8,15 +8,19 @@ import ThumbnailCard from "../../components/card/ThumbnailCard";
 import { Spinner } from "../../components/theme/Loader";
 import { nameElipse } from "../../utils/common/nameElipse";
 import Modal from "../../components/modal/Modal";
+import { AddTvProgmax, TvProgmaxPlayer } from "../../services/tvprogmax";
 import {
-  getKidVidsByCategory,
-  getKidVidsCategories,
-  kidVidsTopVideo,
-  searchKidVids,
-} from "../../app/features/kidvids";
-import { AddKidVids, KidVidsPlayer } from "../../services/kidvids";
+  getLearningHobbiesByCategory,
+  getLearningHobbiesCategories,
+  learningHobbiesTopVideo,
+  searchLearningHobbies,
+} from "../../app/features/learningandhobbies";
+import {
+  AddLearningHobbies,
+  LearningHobbiesPlayer,
+} from "../../services/learninghobbies";
 
-const KidVids = () => {
+const LearningAndHobbies = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -39,13 +43,13 @@ const KidVids = () => {
     isVideoFetching,
     isTopVideoFetching,
     isSearching,
-  } = useSelector((state) => state.kidvids);
+  } = useSelector((state) => state.learningandhobbies);
 
   // ** Methods ---
   const onSearch = useCallback(handleSearch(setSearchQuery), [searchQuery]);
 
   useEffect(() => {
-    dispatch(getKidVidsCategories({ token }))
+    dispatch(getLearningHobbiesCategories({ token }))
       .unwrap()
       .then((data) => {
         if (data?.AllCategories?.length > 0) {
@@ -55,7 +59,7 @@ const KidVids = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(kidVidsTopVideo({ token }))
+    dispatch(learningHobbiesTopVideo({ token }))
       .unwrap()
       .then((data) => {
         setTopVideo(data?.data);
@@ -69,14 +73,14 @@ const KidVids = () => {
 
     if (searchQuery?.trim()?.length > 0) {
       timeout = setTimeout(() => {
-        dispatch(searchKidVids({ token, searchQuery }))
+        dispatch(searchLearningHobbies({ token, searchQuery }))
           .unwrap()
           .then((data) => {
             setVideos(data?.videos);
           });
       }, 300);
     } else {
-      dispatch(getKidVidsByCategory({ token, id: activeCategory?.id }))
+      dispatch(getLearningHobbiesByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
           setVideos(data?.data);
@@ -89,7 +93,7 @@ const KidVids = () => {
   return (
     <Fragment>
       <Header
-        title={<BreadCrumb items={[{ label: "Kid-Vids" }]} />}
+        title={<BreadCrumb items={[{ label: "Learning and Hobbies" }]} />}
         buttonTitle={"Add"}
         buttonIcon={FaPlus}
         onSearch={onSearch}
@@ -219,7 +223,7 @@ const KidVids = () => {
         onClose={() => setAddModal(false)}
         title="Add Video"
       >
-        <AddKidVids
+        <AddLearningHobbies
           setAddModal={setAddModal}
           dispatch={dispatch}
           setReload={setReload}
@@ -228,7 +232,7 @@ const KidVids = () => {
       </Modal>
 
       {/* //**  Video Modal  */}
-      <KidVidsPlayer
+      <LearningHobbiesPlayer
         video={currentVideo}
         isOpen={videoModal}
         onClose={() => {
@@ -240,4 +244,4 @@ const KidVids = () => {
   );
 };
 
-export default KidVids;
+export default LearningAndHobbies;
