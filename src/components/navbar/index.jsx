@@ -1,6 +1,10 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setThemeColor, toggleSideBar, toggleTheme } from "../../app/features/theme";
+import {
+  setThemeColor,
+  toggleSideBar,
+  toggleTheme,
+} from "../../app/features/theme";
 import { FaBars, FaEye, FaEyeSlash, FaRegMoon } from "react-icons/fa";
 import { MdOutlineLightMode } from "react-icons/md";
 import { CiSettings } from "react-icons/ci";
@@ -108,19 +112,40 @@ const Navbar = () => {
           onClick={handleToggleSidebar}
         />
         {theme.mode === "light" ? (
-          <FaRegMoon onClick={handleToggleTheme} className="text-light_text_1" size={20} />
+          <FaRegMoon
+            onClick={handleToggleTheme}
+            className="text-light_text_1"
+            size={20}
+          />
         ) : (
-          <MdOutlineLightMode onClick={handleToggleTheme} color="white" size={20} />
+          <MdOutlineLightMode
+            onClick={handleToggleTheme}
+            color="white"
+            size={20}
+          />
         )}
       </div>
       <div className="flex-center gap-2 relative">
-        <CiSettings size={23} className="hover:opacity-60" onClick={() => setShowSetting(true)} />
-        <div className="flex-center gap-2" onClick={() => setIsActiveDropDown((prev) => !prev)}>
-          <div className={`avatar ${theme.bgColor}`}>
-            {user?.username?.charAt(0)?.toUpperCase()}
+        <CiSettings
+          size={23}
+          className="hover:opacity-60"
+          onClick={() => setShowSetting(true)}
+        />
+        <div
+          className="flex-center gap-2"
+          onClick={() => setIsActiveDropDown((prev) => !prev)}
+        >
+          <div className={`avatar ${theme.bgColor} overflow-hidden`}>
+            {user?.image ? (
+              <img src={user?.image} className="w-full h-full object-cover" />
+            ) : (
+              user?.username?.charAt(0)?.toUpperCase()
+            )}
           </div>
           <h1 className="avatar-text">
-            {user?.username?.length > 10 ? `${user?.username?.slice(0, 10)}...` : user?.username}
+            {user?.username?.length > 10
+              ? `${user?.username?.slice(0, 10)}...`
+              : user?.username}
           </h1>
         </div>
 
@@ -146,16 +171,33 @@ const Navbar = () => {
 
       {/* //** Modals  */}
 
-      <Modal isOpen={showSetting} onClose={() => setShowSetting(false)} title="Settings">
+      <Modal
+        isOpen={showSetting}
+        onClose={() => setShowSetting(false)}
+        title="Settings"
+      >
         <h1 className="sub-heading">Theme Color</h1>
         <div className="theme-color">
-          <ColorCard color={"bg-yellow-500"} onClick={() => handleThemeColor("yellow-500")} />
-          <ColorCard color={"bg-blue-500"} onClick={() => handleThemeColor("blue-500")} />
-          <ColorCard color={"bg-green-500"} onClick={() => handleThemeColor("green-500")} />
+          <ColorCard
+            color={"bg-yellow-500"}
+            onClick={() => handleThemeColor("yellow-500")}
+          />
+          <ColorCard
+            color={"bg-blue-500"}
+            onClick={() => handleThemeColor("blue-500")}
+          />
+          <ColorCard
+            color={"bg-green-500"}
+            onClick={() => handleThemeColor("green-500")}
+          />
         </div>
       </Modal>
 
-      <Modal isOpen={passwordModal} onClose={() => setPasswordModal(false)} title="Change Password">
+      <Modal
+        isOpen={passwordModal}
+        onClose={() => setPasswordModal(false)}
+        title="Change Password"
+      >
         <Form
           initialValues={{
             // email: user?.email,
