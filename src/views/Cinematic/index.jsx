@@ -4,25 +4,24 @@ import { FaPlayCircle, FaPlus } from "react-icons/fa";
 import Header from "../../components/header";
 import { handleSearch } from "../../utils/common/fetchDataHelpers";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getTopVideo,
-  getVideoCategories,
-  getVideosByCategory,
-  searchVideoMania,
-} from "../../app/features/videomania";
 import ThumbnailCard from "../../components/card/ThumbnailCard";
 import { Spinner } from "../../components/theme/Loader";
 import { nameElipse } from "../../utils/common/nameElipse";
 import Modal from "../../components/modal/Modal";
-import { AddVideoMania, VideoManiaPlayer } from "../../services/videomania";
+import {
+  cinematicTopVideo,
+  getCinematicByCategory,
+  getCinematicCategories,
+  searchCinematic,
+} from "../../app/features/cinematic";
+import { AddCinematic, CinematicPlayer } from "../../services/cinematic";
 
-const VideoMania = () => {
+const Cinematic = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
   const [videoModal, setVideoModal] = useState(false);
   const [reload, setReload] = useState(false);
-  const [isTop, setIsTop] = useState(false);
 
   const [videos, setVideos] = useState([]);
 
@@ -40,32 +39,28 @@ const VideoMania = () => {
     isVideoFetching,
     isTopVideoFetching,
     isSearching,
-  } = useSelector((state) => state.video_mania);
+  } = useSelector((state) => state.cinematics);
 
   // ** Methods ---
   const onSearch = useCallback(handleSearch(setSearchQuery), [searchQuery]);
 
   useEffect(() => {
-    dispatch(getVideoCategories({ token }))
+    dispatch(getCinematicCategories({ token }))
       .unwrap()
       .then((data) => {
         if (data?.AllCategories?.length > 0) {
-          setActiveCategory(
-            data.AllCategories[data?.AllCategories?.length - 1]
-          );
+          setActiveCategory(data.AllCategories[0]);
         }
       });
   }, []);
 
   useEffect(() => {
-    if (!activeCategory) return;
-
-    dispatch(getTopVideo({ token, id: activeCategory?.id }))
+    dispatch(cinematicTopVideo({ token }))
       .unwrap()
       .then((data) => {
-        setTopVideo(data?.topVideo[0]);
+        setTopVideo(data?.data);
       });
-  }, [activeCategory]);
+  }, []);
 
   useEffect(() => {
     if (!activeCategory) return;
@@ -74,14 +69,14 @@ const VideoMania = () => {
 
     if (searchQuery?.trim()?.length > 0) {
       timeout = setTimeout(() => {
-        dispatch(searchVideoMania({ token, searchQuery }))
+        dispatch(searchCinematic({ token, searchQuery }))
           .unwrap()
           .then((data) => {
-            setVideos(data?.Videos);
+            setVideos(data?.videos);
           });
       }, 300);
     } else {
-      dispatch(getVideosByCategory({ token, id: activeCategory?.id }))
+      dispatch(getCinematicByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
           setVideos(data?.data);
@@ -94,7 +89,7 @@ const VideoMania = () => {
   return (
     <Fragment>
       <Header
-        title={<BreadCrumb items={[{ label: "Video Mania" }]} />}
+        title={<BreadCrumb items={[{ label: "Cinematics" }]} />}
         buttonTitle={"Add"}
         buttonIcon={FaPlus}
         onSearch={onSearch}
@@ -137,7 +132,6 @@ const VideoMania = () => {
               onClick={() => {
                 setCurrentVideo(topVideo);
                 setVideoModal(true);
-                setIsTop(true);
               }}
             >
               <FaPlayCircle className={`w-32 h-32 ${textColor}`} />
@@ -191,17 +185,23 @@ const VideoMania = () => {
               <div className="mb-5">
                 <div className="heading">{video?.sub_category_name}</div>
                 <div className="cards-container">
-                  {video?.video_result?.Videos?.map((v) => (
-                    <ThumbnailCard
-                      key={v?.video_id}
-                      image={v?.thumbnail}
-                      title={v?.description}
-                      onClick={() => {
-                        setCurrentVideo(v);
-                        setVideoModal(true);
-                      }}
-                    />
-                  ))}
+                  {video?.video_result?.videos?.length > 0 ? (
+                    video?.video_result?.videos?.map((v) => (
+                      <ThumbnailCard
+                        key={v?.video_id}
+                        image={v?.thumbnail}
+                        title={v?.description}
+                        onClick={() => {
+                          setCurrentVideo(v);
+                          setVideoModal(true);
+                        }}
+                      />
+                    ))
+                  ) : (
+                    <div className="flex justify-center text-gray-400 my-10">
+                      No Videos Found
+                    </div>
+                  )}
                 </div>
               </div>
             ))
@@ -219,7 +219,7 @@ const VideoMania = () => {
         onClose={() => setAddModal(false)}
         title="Add Video Mania"
       >
-        <AddVideoMania
+        <AddCinematic
           setAddModal={setAddModal}
           dispatch={dispatch}
           setReload={setReload}
@@ -228,18 +228,16 @@ const VideoMania = () => {
       </Modal>
 
       {/* //**  Video Modal  */}
-      <VideoManiaPlayer
+      <CinematicPlayer
         video={currentVideo}
         isOpen={videoModal}
         onClose={() => {
           setVideoModal(false);
-          setIsTop(false);
         }}
-        isTop={isTop}
         dispatch={dispatch}
       />
     </Fragment>
   );
 };
 
-export default VideoMania;
+export default Cinematic;

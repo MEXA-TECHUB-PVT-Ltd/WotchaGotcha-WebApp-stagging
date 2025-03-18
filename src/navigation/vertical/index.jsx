@@ -1,6 +1,7 @@
 import {
   MdDashboard,
   MdImage,
+  MdMovie,
   MdStorefront,
   MdVideoCall,
 } from "react-icons/md";
@@ -29,5 +30,11 @@ export default [
     title: "Mondo Market",
     path: "/mondo-market",
     icon: <MdStorefront size={22} />,
+  },
+  {
+    id: "cinematic",
+    title: "Cinematic",
+    path: "/cinematic",
+    icon: <MdMovie size={22} />,
   },
 ];

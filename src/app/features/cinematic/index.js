@@ -2,72 +2,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { client } from "../../../configs/client.js";
 
-export const getVideoCategories = createAsyncThunk(
-  "videoCategory/getAllVideoCategories",
+export const getCinematicCategories = createAsyncThunk(
+  "/cinematics/category/getAll",
   async ({ token }, { rejectWithValue }) => {
     try {
-      const { data } = await client.get(
-        `/videoCategory/getAllVideoCategories`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            page: 1,
-            limit: 1000,
-          },
-        }
-      );
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error);
-    }
-  }
-);
-
-export const getVideoSubCategoryByCategory = createAsyncThunk(
-  "video/sub_category/getAllByCategory",
-  async ({ token, id }, { rejectWithValue }) => {
-    try {
-      const { data } = await client.get(
-        `/video/sub_category/getAllByCategory?category_id=${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error);
-    }
-  }
-);
-
-export const getTopVideo = createAsyncThunk(
-  "/top/app/top_video",
-  async ({ token, id }, { rejectWithValue }) => {
-    try {
-      const { data } = await client.get(`/top/app/top_video/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error);
-    }
-  }
-);
-
-export const getVideosByCategory = createAsyncThunk(
-  "videoCategory/getAllVideosBycategory",
-  async ({ token, id }, { rejectWithValue }) => {
-    try {
-      const { data } = await client.get(`/xpi/getAllVideosBycategory/${id}`, {
+      const { data } = await client.get(`/cinematics/category/getAll`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -84,97 +23,12 @@ export const getVideosByCategory = createAsyncThunk(
   }
 );
 
-export const addVideoMania = createAsyncThunk(
-  "/xpi/createXpiVideo",
-  async ({ token, payload }, { rejectWithValue }) => {
-    try {
-      const { data } = await client.post(`/xpi/createXpiVideo`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error);
-    }
-  }
-);
-
-export const getVideoAllLikes = createAsyncThunk(
-  "/xpi/createXpiVideo",
+export const getCinematicSubCategoriesByCategory = createAsyncThunk(
+  "cinematics/sub_category/getAllByCategory",
   async ({ token, id }, { rejectWithValue }) => {
-    try {
-      const { data } = await client.get(`/xpi/getAllLikesByVideo/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error);
-    }
-  }
-);
-
-export const likeUnlikeVideo = createAsyncThunk(
-  "/xpi/likeUnlikeVideo",
-  async ({ token, payload }, { rejectWithValue }) => {
-    try {
-      const { data } = await client.post(`/xpi/likeUnlikeVideo`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error);
-    }
-  }
-);
-
-export const getVideoAllComments = createAsyncThunk(
-  "/xpi/createXpiVideo",
-  async ({ token, id }, { rejectWithValue }) => {
-    try {
-      const { data } = await client.get(`/xpi/getAllCommentsByVideo/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error);
-    }
-  }
-);
-
-export const addCommentOnVideo = createAsyncThunk(
-  "/xpi/sendComment",
-  async ({ token, payload }, { rejectWithValue }) => {
-    try {
-      const { data } = await client.post(`/xpi/sendComment`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error);
-    }
-  }
-);
-
-export const searchVideoMania = createAsyncThunk(
-  "xpi/searchVideo",
-  async ({ token, searchQuery }, { rejectWithValue }) => {
     try {
       const { data } = await client.get(
-        `/xpi/searchVideo?name=${searchQuery}`,
+        `/cinematics/sub_category/getAllByCategory?category_id=${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -189,8 +43,159 @@ export const searchVideoMania = createAsyncThunk(
   }
 );
 
-const videoManiaSlice = createSlice({
-  name: "videomania",
+export const cinematicTopVideo = createAsyncThunk(
+  "cinematics/getTopVideo",
+  async ({ token }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/cinematics/getTopVideo`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const getCinematicByCategory = createAsyncThunk(
+  "cinematics/getByCategory/",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/cinematics/getByCategory/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page: 1,
+          limit: 1000,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const addCinematic = createAsyncThunk(
+  "/cinematics/create",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.post(`/cinematics/create`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const getCinematicLikes = createAsyncThunk(
+  "/cinematics/all-likes",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/cinematics/all-likes/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const likeUnlikeCinematic = createAsyncThunk(
+  "/cinematics/toggleLikeVideo",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.post(
+        `/cinematics/toggleLikeVideo`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const getCinematicComments = createAsyncThunk(
+  "/cinematics/getComments",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/cinematics/getComments/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page: 1,
+          limit: 100000,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const addCommentOnCinematic = createAsyncThunk(
+  "/cinematics/addComment",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.post(`/cinematics/addComment`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const searchCinematic = createAsyncThunk(
+  "cinematics/searchByTitle?query",
+  async ({ token, searchQuery }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(
+        `/cinematics/searchByTitle?query=${searchQuery}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+const cinematicSlice = createSlice({
+  name: "cinematic",
 
   initialState: {
     isLoading: false,
@@ -206,68 +211,68 @@ const videoManiaSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(getVideoCategories.pending, (state) => {
+      .addCase(getCinematicCategories.pending, (state) => {
         state.isFetching = true;
       })
-      .addCase(getVideoCategories.fulfilled, (state, action) => {
+      .addCase(getCinematicCategories.fulfilled, (state, action) => {
         state.isFetching = false;
         state.categories = action?.payload;
       })
-      .addCase(getVideoCategories.rejected, (state, action) => {
+      .addCase(getCinematicCategories.rejected, (state, action) => {
         state.isFetching = false;
         state.error = action?.payload;
       })
-      .addCase(getVideosByCategory.pending, (state) => {
+      .addCase(getCinematicByCategory.pending, (state) => {
         state.isVideoFetching = true;
       })
-      .addCase(getVideosByCategory.fulfilled, (state, action) => {
+      .addCase(getCinematicByCategory.fulfilled, (state, action) => {
         state.isVideoFetching = false;
       })
-      .addCase(getVideosByCategory.rejected, (state, action) => {
+      .addCase(getCinematicByCategory.rejected, (state, action) => {
         state.isVideoFetching = false;
         state.error = action?.payload;
       })
-      .addCase(getTopVideo.pending, (state) => {
+      .addCase(cinematicTopVideo.pending, (state) => {
         state.isTopVideoFetching = true;
       })
-      .addCase(getTopVideo.fulfilled, (state, action) => {
+      .addCase(cinematicTopVideo.fulfilled, (state, action) => {
         state.isTopVideoFetching = false;
       })
-      .addCase(getTopVideo.rejected, (state, action) => {
+      .addCase(cinematicTopVideo.rejected, (state, action) => {
         state.isTopVideoFetching = false;
         state.error = action?.payload;
       })
-      .addCase(likeUnlikeVideo.pending, (state) => {
+      .addCase(likeUnlikeCinematic.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(likeUnlikeVideo.fulfilled, (state, action) => {
+      .addCase(likeUnlikeCinematic.fulfilled, (state, action) => {
         state.isLoading = false;
       })
-      .addCase(likeUnlikeVideo.rejected, (state, action) => {
+      .addCase(likeUnlikeCinematic.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action?.payload;
       })
-      .addCase(addCommentOnVideo.pending, (state) => {
+      .addCase(addCommentOnCinematic.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(addCommentOnVideo.fulfilled, (state, action) => {
+      .addCase(addCommentOnCinematic.fulfilled, (state, action) => {
         state.isLoading = false;
       })
-      .addCase(addCommentOnVideo.rejected, (state, action) => {
+      .addCase(addCommentOnCinematic.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action?.payload;
       })
-      .addCase(searchVideoMania.pending, (state) => {
+      .addCase(searchCinematic.pending, (state) => {
         state.isSearching = true;
       })
-      .addCase(searchVideoMania.fulfilled, (state, action) => {
+      .addCase(searchCinematic.fulfilled, (state, action) => {
         state.isSearching = false;
       })
-      .addCase(searchVideoMania.rejected, (state, action) => {
+      .addCase(searchCinematic.rejected, (state, action) => {
         state.isSearching = false;
         state.error = action?.payload;
       });
   },
 });
 
-export default videoManiaSlice.reducer;
+export default cinematicSlice.reducer;
