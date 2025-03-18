@@ -4,6 +4,7 @@ import authSlice from "./features/auth";
 import userSlice from "./features/user";
 import VideoMania from "./features/videomania";
 import picTourSlice from "./features/pictours";
+import mondoMarketSlice from "./features/mondomarket";
 
 const rootReducer = combineReducers({
   theme: themeSlice,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   user: userSlice,
   video_mania: VideoMania,
   pictours: picTourSlice,
+  mondomarket: mondoMarketSlice,
 });
 
 export default rootReducer;

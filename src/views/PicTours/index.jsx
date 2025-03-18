@@ -183,7 +183,6 @@ const PicTours = () => {
                 {picTours?.map((pic) => (
                   <ThumbnailCard
                     key={pic?.tour_id}
-                    id={pic?.tour_id}
                     image={pic?.image}
                     title={pic?.name}
                     onClick={() => {
@@ -212,7 +211,6 @@ const PicTours = () => {
                   {pictour?.tour_result?.Tours?.map((pic) => (
                     <ThumbnailCard
                       key={pic?.tour_id}
-                      id={pic?.tour_id}
                       image={pic?.image}
                       title={pic?.name}
                       onClick={() => {

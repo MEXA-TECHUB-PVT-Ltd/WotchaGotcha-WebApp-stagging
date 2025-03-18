@@ -167,7 +167,6 @@ const VideoMania = () => {
                 {videos?.map((v) => (
                   <ThumbnailCard
                     key={v?.video_id}
-                    id={v?.video_id}
                     image={v?.thumbnail}
                     title={v?.description}
                     onClick={() => {
@@ -196,7 +195,6 @@ const VideoMania = () => {
                   {video?.video_result?.Videos?.map((v) => (
                     <ThumbnailCard
                       key={v?.video_id}
-                      id={v?.video_id}
                       image={v?.thumbnail}
                       title={v?.description}
                       onClick={() => {
