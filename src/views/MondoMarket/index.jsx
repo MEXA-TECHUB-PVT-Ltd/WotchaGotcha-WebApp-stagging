@@ -1,19 +1,21 @@
 import React, { Fragment, useCallback, useEffect, useState } from "react";
-import BreadCrumb from "../../components/breadcrumb";
 import { FaPlus } from "react-icons/fa";
-import Header from "../../components/header";
-import { handleSearch } from "../../utils/common/fetchDataHelpers";
 import { useDispatch, useSelector } from "react-redux";
 
+import BreadCrumb from "../../components/breadcrumb";
+import Header from "../../components/header";
+import { handleSearch } from "../../utils/common/fetchDataHelpers";
 import ThumbnailCard from "../../components/card/ThumbnailCard";
 import { Spinner } from "../../components/theme/Loader";
-import Modal from "../../components/modal/Modal";
-import ImagePreviewer, { AddPicTour } from "../../services/pictours";
+
 import {
   getMondoByCategory,
   getMondoMarketCategories,
   getTopMondoMarket,
+  searchMondoItem,
 } from "../../app/features/mondomarket";
+
+import { MondoDetailsViewer } from "../../services/mondomarket";
 
 const MondoMarket = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -32,7 +34,7 @@ const MondoMarket = () => {
 
   // ** Redux ---
   const dispatch = useDispatch();
-  const { bgColor } = useSelector((state) => state.theme);
+  const { bgColor, textColor } = useSelector((state) => state.theme);
   const { token } = useSelector((state) => state.auth);
   const { isFetching, isTopFetching, isMondoFetching, isSearching } =
     useSelector((state) => state.mondomarket);
@@ -60,9 +62,16 @@ const MondoMarket = () => {
         ).unwrap()
       );
 
-      const result = await Promise.all(mondoItems);
+      const results = await Promise.all(mondoItems);
 
-      setItems(result[0]?.AllItems || []);
+      const categorizedData = mondoCategories?.map((category) => ({
+        ...category,
+        items: results
+          .flatMap((res) => res.AllItems || [])
+          .filter((item) => item?.item_category === category?.id),
+      }));
+
+      setItems(categorizedData);
     } catch (error) {
       console.log(error);
     }
@@ -97,10 +106,26 @@ const MondoMarket = () => {
   }, []);
 
   useEffect(() => {
-    if (!activeRegion) return;
+    let timeout;
+    if (mondoCategories.length > 0 && activeRegion) {
+      if (searchQuery?.trim()?.length > 0) {
+        timeout = setTimeout(() => {
+          dispatch(searchMondoItem({ token, searchQuery }))
+            .unwrap()
+            .then((data) => {
+              setItems(data?.letters || []);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }, 300);
+      } else {
+        getItemsByCategory();
+      }
+    }
 
-    getItemsByCategory();
-  }, [activeRegion]);
+    return () => clearTimeout(timeout);
+  }, [mondoCategories, activeRegion, searchQuery]);
 
   return (
     <Fragment>
@@ -163,63 +188,80 @@ const MondoMarket = () => {
 
       {/* Sub Categories and their Data */}
 
-      <div className="mt-10">
-        {isFetching ? (
-          <Spinner />
-        ) : mondoCategories?.length > 0 ? (
-          mondoCategories?.map((mondo) => (
-            <div className="mb-5" key={mondo?.id}>
-              <div className="heading">{mondo?.name}</div>
+      {searchQuery?.trim()?.length > 0 ? (
+        <div className="mt-10">
+          {isSearching ? (
+            <Spinner />
+          ) : items?.length > 0 ? (
+            <div className="mb-5">
               <div className="cards-container">
-                {isMondoFetching ? (
-                  <Spinner />
-                ) : (
-                  items?.map((item) => (
-                    <ThumbnailCard
-                      key={item?.tour_id}
-                      image={item?.images[0]?.image}
-                      title={item?.title}
-                      onClick={() => {
-                        setCurrentMondo(item);
-                        setMondoModal(true);
-                      }}
-                    />
-                  ))
-                )}
+                {items?.map((item) => (
+                  <ThumbnailCard
+                    key={item.id}
+                    image={item.images?.[0]?.image || ""}
+                    title={item.title}
+                    onClick={() => {
+                      setCurrentMondo(item);
+                      setMondoModal(true);
+                    }}
+                  />
+                ))}
               </div>
             </div>
-          ))
-        ) : mondoCategories?.length === 0 && !isFetching ? (
-          <div className="flex justify-center text-gray-400">
-            No Items Found
-          </div>
-        ) : null}
-      </div>
+          ) : items?.length === 0 && !isSearching ? (
+            <div className="flex justify-center text-gray-400">
+              No Items Found
+            </div>
+          ) : null}
+        </div>
+      ) : (
+        <div className="mt-10">
+          {isFetching ? (
+            <Spinner />
+          ) : items?.length > 0 ? (
+            items?.map((mondo) => {
+              return (
+                <div className="mb-5" key={mondo.id}>
+                  <div className="heading">{mondo.name}</div>
+                  <div className="cards-container">
+                    {isMondoFetching ? (
+                      <Spinner />
+                    ) : mondo?.items?.length > 0 ? (
+                      mondo?.items?.map((item) => (
+                        <ThumbnailCard
+                          key={item.id}
+                          image={item.images?.[0]?.image || ""}
+                          title={item.title}
+                          onClick={() => {
+                            setCurrentMondo(item);
+                            setMondoModal(true);
+                          }}
+                        />
+                      ))
+                    ) : (
+                      <div className="text-gray-400">No Items Found</div>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="flex justify-center text-gray-400">
+              No Items Found
+            </div>
+          )}
+        </div>
+      )}
 
       {/* //** Modals  */}
 
-      <Modal
-        isOpen={addModal}
-        onClose={() => setAddModal(false)}
-        title="Add Pic Tour"
-      >
-        <AddPicTour
-          setAddModal={setAddModal}
-          dispatch={dispatch}
-          setReload={setReload}
-          categoryId={activeRegion?.id}
-        />
-      </Modal>
+      {/* //**  Images Modal  */}
 
-      {/* //**  Image Modal  */}
-      <ImagePreviewer
-        image={currentMondo}
+      <MondoDetailsViewer
+        mondo={currentMondo}
         isOpen={mondoModal}
-        onClose={() => {
-          setMondoModal(false);
-          setIsTop(false);
-        }}
-        isTop={isTop}
+        onClose={() => setMondoModal(false)}
+        token={token}
       />
     </Fragment>
   );

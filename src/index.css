@@ -45,6 +45,15 @@ input[type="number"] {
   scrollbar-width: none !important;
 }
 
+/* Active dot */
+.swiper-pagination-bullet-active {
+  @apply bg-yellow-500;
+}
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  @apply hidden;
+}
+
 .full {
   @apply h-screen w-screen flex flex-row overflow-hidden;
 }
