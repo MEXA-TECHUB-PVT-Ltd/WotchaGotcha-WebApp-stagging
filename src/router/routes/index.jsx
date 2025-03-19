@@ -5,6 +5,8 @@ import KidVids from "../../views/KidVids";
 import MondoMarket from "../../views/MondoMarket";
 import PicTours from "../../views/PicTours";
 import VideoMania from "../../views/VideoMania";
+import TvProgMax from "../../views/TvProgMax";
+import LearningAndHobbies from "../../views/LearningAndHobbies";
 
 export default [
   {
@@ -34,5 +36,13 @@ export default [
   {
     path: "/kid-vids",
     element: <KidVids />,
+  },
+  {
+    path: "/tv-progmax",
+    element: <TvProgMax />,
+  },
+  {
+    path: "/learning-and-hobbies",
+    element: <LearningAndHobbies />,
   },
 ];

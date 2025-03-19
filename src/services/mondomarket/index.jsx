@@ -35,8 +35,6 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
   const { token } = useSelector((state) => state.auth);
   const { textColor, borderColor } = useSelector((state) => state.theme);
 
-  console.log(user);
-
   const conditions = [
     { id: "new", name: "New" },
     { id: "used_Like_new", name: "Used - Like New" },

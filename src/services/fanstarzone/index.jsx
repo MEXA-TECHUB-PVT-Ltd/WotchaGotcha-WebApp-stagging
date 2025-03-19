@@ -19,10 +19,11 @@ import ErrorMessage from "../../components/form/ErrorMessage";
 import Button from "../../components/form/Button";
 import AppSelect from "../../components/form/AppSelect";
 import AppTextArea from "../../components/form/AppTextArea";
-import { FaUpload } from "react-icons/fa";
+import { FaCopy, FaUpload } from "react-icons/fa";
 import videoIcon from "../../assets/videoIcon.svg";
 import { Spinner } from "../../components/theme/Loader";
 import { Toast } from "../../components/theme/Toast";
+import { copyLink } from "../../utils/copyLink";
 
 export const AddFanStar = ({
   setAddModal,
@@ -234,7 +235,8 @@ export const AddFanStar = ({
 export const FanStarPlayer = ({ video, isOpen, onClose, dispatch }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { isLoading } = useSelector((state) => state.video_mania);
+  const { isLoading } = useSelector((state) => state.fanstarzone);
+  const { textColor } = useSelector((state) => state.theme);
 
   const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -383,6 +385,13 @@ export const FanStarPlayer = ({ video, isOpen, onClose, dispatch }) => {
                 : `${totalComments} comments`}
             </button>
           )}
+          <button
+            onClick={() => copyLink(video?.video)}
+            className={`action-button hover:${textColor}`}
+            disabled={isLoading}
+          >
+            <FaCopy className={`w-6 h-6`} /> Copy Link
+          </button>
         </div>
       </Modal>
 

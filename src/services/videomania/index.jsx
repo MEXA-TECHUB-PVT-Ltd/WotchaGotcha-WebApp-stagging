@@ -18,13 +18,14 @@ import {
   getVideoSubCategoryByCategory,
   likeUnlikeVideo,
 } from "../../app/features/videomania";
-import { FaUpload } from "react-icons/fa";
+import { FaCopy, FaUpload } from "react-icons/fa";
 import videoIcon from "../../assets/videoIcon.svg";
 import { Toast } from "../../components/theme/Toast";
 import { uploadImage, uploadVideo } from "../../utils/common/cloudinary";
 import ProfileCard from "../../components/card/ProfileCard";
 import Modal from "../../components/modal/Modal";
 import { IoChatbubbleEllipses, IoHeart, IoSend } from "react-icons/io5";
+import { copyLink } from "../../utils/copyLink";
 
 export const AddVideoMania = ({
   setAddModal,
@@ -266,6 +267,7 @@ export const VideoManiaPlayer = ({
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
   const { isLoading } = useSelector((state) => state.video_mania);
+  const { textColor } = useSelector((state) => state.theme);
 
   const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -416,6 +418,13 @@ export const VideoManiaPlayer = ({
                   : `${totalComments} comments`}
               </button>
             )}
+            <button
+              onClick={() => copyLink(video?.video)}
+              className={`action-button hover:${textColor}`}
+              disabled={isLoading}
+            >
+              <FaCopy className={`w-6 h-6`} /> Copy Link
+            </button>
           </div>
         )}
       </Modal>

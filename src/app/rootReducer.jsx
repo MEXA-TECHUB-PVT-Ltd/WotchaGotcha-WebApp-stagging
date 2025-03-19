@@ -8,6 +8,8 @@ import mondoMarketSlice from "./features/mondomarket";
 import cinematicSlice from "./features/cinematic";
 import fanStarZoneSlice from "./features/fanstarzone";
 import kidVidsSlice from "./features/kidvids";
+import tvProgmaxSlice from "./features/tvprogmax";
+import learningAndHobbiesSlice from "./features/learningandhobbies";
 
 const rootReducer = combineReducers({
   theme: themeSlice,
@@ -19,6 +21,8 @@ const rootReducer = combineReducers({
   cinematics: cinematicSlice,
   fanstarzone: fanStarZoneSlice,
   kidvids: kidVidsSlice,
+  tvProgmax: tvProgmaxSlice,
+  learningandhobbies: learningAndHobbiesSlice,
 });
 
 export default rootReducer;
