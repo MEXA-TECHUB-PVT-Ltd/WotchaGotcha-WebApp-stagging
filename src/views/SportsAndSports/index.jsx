@@ -9,14 +9,14 @@ import ThumbnailCard from "../../components/card/ThumbnailCard";
 import { Spinner } from "../../components/theme/Loader";
 import Modal from "../../components/modal/Modal";
 import {
-  getPicTourByCategory,
-  getPicTourCategories,
-  getTopPicTour,
-  searchPicTour,
-} from "../../app/features/pictours";
-import ImagePreviewer, { AddPicTour } from "../../services/pictours";
+  getSportsAndSportsByCategory,
+  getSportsAndSportsCategories,
+  getTopSportsAndSports,
+  searchSportsAndSports,
+} from "../../app/features/sportsandsports";
+import { AddSports, SportsPreviewer } from "../../services/sports";
 
-const PicTours = () => {
+const SportsAndSports = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -24,9 +24,9 @@ const PicTours = () => {
   const [reload, setReload] = useState(false);
   const [isTop, setIsTop] = useState(false);
 
-  const [picTours, setPicTours] = useState([]);
+  const [sports, setSports] = useState([]);
 
-  const [topPicTour, setTopPicTour] = useState(null);
+  const [topSports, setTopSports] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
   const [currentPicTour, setCurrentPicTour] = useState(null);
 
@@ -37,10 +37,10 @@ const PicTours = () => {
   const {
     categories,
     isFetching,
-    isTopPicTourFetching,
-    isPicTourFetching,
+    isTopSportsFetching,
+    isSportsFetching,
     isSearching,
-  } = useSelector((state) => state.pictours);
+  } = useSelector((state) => state.sportsandsports);
 
   // ** Methods ---
   const onSearch = useCallback(handleSearch(setSearchQuery), [searchQuery]);
@@ -48,7 +48,7 @@ const PicTours = () => {
   // ** Hooks ---
 
   useEffect(() => {
-    dispatch(getPicTourCategories({ token }))
+    dispatch(getSportsAndSportsCategories({ token }))
       .unwrap()
       .then((data) => {
         if (data?.AllCategories?.length > 0) {
@@ -61,16 +61,15 @@ const PicTours = () => {
   }, []);
 
   useEffect(() => {
-    if (!activeCategory) return;
-    dispatch(getTopPicTour({ token, id: activeCategory?.id }))
+    dispatch(getTopSportsAndSports({ token }))
       .unwrap()
       .then((data) => {
-        setTopPicTour(data?.topTour[0]);
+        setTopSports(data?.data);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, [activeCategory]);
+  }, []);
 
   useEffect(() => {
     if (!activeCategory) return;
@@ -78,25 +77,20 @@ const PicTours = () => {
     let timeout;
     if (searchQuery?.trim()?.length > 0) {
       timeout = setTimeout(() => {
-        dispatch(searchPicTour({ token, searchQuery }))
+        dispatch(searchSportsAndSports({ token, searchQuery }))
           .unwrap()
           .then((data) => {
-            setPicTours(
-              data?.Tours?.map((tour) => ({
-                ...tour,
-                tour_id: tour?.pic_tour_id,
-              })) || []
-            );
+            setSports(data?.sports);
           })
           .catch((error) => {
             console.error(error);
           });
       }, 300);
     } else {
-      dispatch(getPicTourByCategory({ token, id: activeCategory?.id }))
+      dispatch(getSportsAndSportsByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
-          setPicTours(data?.data);
+          setSports(data?.data);
         })
         .catch((error) => {
           console.error(error);
@@ -109,7 +103,7 @@ const PicTours = () => {
   return (
     <Fragment>
       <Header
-        title={<BreadCrumb items={[{ label: "Pic Tours" }]} />}
+        title={<BreadCrumb items={[{ label: "Sports & Sports" }]} />}
         buttonTitle={"Add"}
         buttonIcon={FaPlus}
         onSearch={onSearch}
@@ -143,31 +137,31 @@ const PicTours = () => {
 
       {/* Top PicTour*/}
       <div className="flex items-center mt-10">
-        {isTopPicTourFetching ? (
+        {isTopSportsFetching ? (
           <Spinner />
-        ) : topPicTour ? (
+        ) : topSports ? (
           <div
             className="flex justify-center items-center gap-5"
             onClick={() => {
-              setCurrentPicTour(topPicTour);
+              setCurrentPicTour(topSports);
               setPicTourModal(true);
               setIsTop(true);
             }}
           >
             <img
               style={{ imageRendering: "-webkit-optimize-contrast" }}
-              src={topPicTour?.image}
-              alt={"topPicTour"}
+              src={topSports?.image}
+              alt={"topSports"}
               className="video-thumbnail"
             />
 
             <div className="text-sm break-words whitespace-pre-line">
-              {topPicTour?.description}
+              {topSports?.description}
             </div>
           </div>
-        ) : !topPicTour && !isFetching ? (
+        ) : !topSports && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Pic Tour Found
+            No Top Sports Found
           </div>
         ) : null}
       </div>
@@ -177,12 +171,12 @@ const PicTours = () => {
         <div className="mt-10">
           {isSearching ? (
             <Spinner />
-          ) : picTours?.length > 0 ? (
+          ) : sports?.length > 0 ? (
             <div className="mb-5">
               <div className="cards-container">
-                {picTours?.map((pic) => (
+                {sports?.map((pic) => (
                   <ThumbnailCard
-                    key={pic?.tour_id}
+                    key={pic?.sports_id}
                     image={pic?.image}
                     title={pic?.name}
                     onClick={() => {
@@ -193,7 +187,7 @@ const PicTours = () => {
                 ))}
               </div>
             </div>
-          ) : picTours?.Tours?.length === 0 && !isSearching ? (
+          ) : sports?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
               No Data Found
             </div>
@@ -201,17 +195,17 @@ const PicTours = () => {
         </div>
       ) : (
         <div className="mt-10">
-          {isPicTourFetching ? (
+          {isSportsFetching ? (
             <Spinner />
-          ) : picTours?.length > 0 ? (
-            picTours?.map((pictour) => (
-              <div className="mb-5" key={pictour?.id}>
-                <div className="heading">{pictour?.sub_category_name}</div>
+          ) : sports?.length > 0 ? (
+            sports?.map((sport) => (
+              <div className="mb-5" key={sport?.id}>
+                <div className="heading">{sport?.sub_category_name}</div>
                 <div className="cards-container">
-                  {pictour?.tour_result?.Tours?.length > 0 ? (
-                    pictour?.tour_result?.Tours?.map((pic) => (
+                  {sport?.Sport_result?.Sports?.length > 0 ? (
+                    sport?.Sport_result?.Sports?.map((pic) => (
                       <ThumbnailCard
-                        key={pic?.tour_id}
+                        key={pic?.sports_id}
                         image={pic?.image}
                         title={pic?.name}
                         onClick={() => {
@@ -228,7 +222,7 @@ const PicTours = () => {
                 </div>
               </div>
             ))
-          ) : picTours?.length === 0 && !isPicTourFetching ? (
+          ) : sports?.length === 0 && !isSportsFetching ? (
             <div className="flex justify-center text-gray-400">
               No Data Found
             </div>
@@ -241,9 +235,9 @@ const PicTours = () => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add Pic Tour"
+        title="Add Sports"
       >
-        <AddPicTour
+        <AddSports
           setAddModal={setAddModal}
           dispatch={dispatch}
           setReload={setReload}
@@ -252,7 +246,7 @@ const PicTours = () => {
       </Modal>
 
       {/* //**  Image Modal  */}
-      <ImagePreviewer
+      <SportsPreviewer
         image={currentPicTour}
         isOpen={picTourModal}
         onClose={() => {
@@ -265,4 +259,4 @@ const PicTours = () => {
   );
 };
 
-export default PicTours;
+export default SportsAndSports;

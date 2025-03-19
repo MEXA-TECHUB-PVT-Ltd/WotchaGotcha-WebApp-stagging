@@ -171,6 +171,40 @@ export const addMondoMarketItem = createAsyncThunk(
   }
 );
 
+export const toggleAlert = createAsyncThunk(
+  "item/toggleAlert",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.post(`/item/toggleAlert`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const checkAlert = createAsyncThunk(
+  "item/checkAlert",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.post(`/item/checkAlert`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 const mondoMarketSlice = createSlice({
   name: "mondomarket",
 
@@ -235,6 +269,16 @@ const mondoMarketSlice = createSlice({
       })
       .addCase(searchMondoItem.rejected, (state, action) => {
         state.isSearching = false;
+        state.error = action?.payload;
+      })
+      .addCase(toggleAlert.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(toggleAlert.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(toggleAlert.rejected, (state, action) => {
+        state.isLoading = false;
         state.error = action?.payload;
       });
   },

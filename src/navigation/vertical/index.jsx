@@ -1,4 +1,4 @@
-import { FaTv, FaUsers, FaBook } from "react-icons/fa";
+import { FaTv, FaUsers, FaBook, FaGamepad } from "react-icons/fa";
 import { FaChildren } from "react-icons/fa6";
 import {
   MdDashboard,
@@ -62,5 +62,11 @@ export default [
     title: "Learning and Hobbies",
     path: "/learning-and-hobbies",
     icon: <FaBook size={22} />,
+  },
+  {
+    id: "sportsandsports",
+    title: "Sports & Sports",
+    path: "/sports-&-sports",
+    icon: <FaGamepad size={22} />,
   },
 ];
