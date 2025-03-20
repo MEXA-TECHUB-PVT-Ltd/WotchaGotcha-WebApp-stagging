@@ -8,27 +8,28 @@ import { useDispatch, useSelector } from "react-redux";
 import ThumbnailCard from "../../components/card/ThumbnailCard";
 import { Spinner } from "../../components/theme/Loader";
 import Modal from "../../components/modal/Modal";
-import {
-  getPicTourByCategory,
-  getPicTourCategories,
-  getTopPicTour,
-  searchPicTour,
-} from "../../app/features/pictours";
-import { AddPicTour, PicTourPreviewer } from "../../services/pictours";
 
-const PicTours = () => {
+import {
+  getOnNewsByCategory,
+  getOnNewsCategories,
+  getTopOnNews,
+  searchOnNews,
+} from "../../app/features/onnews";
+import { AddNews, NewsPreviewer } from "../../services/news";
+
+const OnNews = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
-  const [picTourModal, setPicTourModal] = useState(false);
+  const [newsModal, setNewsModal] = useState(false);
   const [reload, setReload] = useState(false);
   const [isTop, setIsTop] = useState(false);
 
-  const [picTours, setPicTours] = useState([]);
+  const [news, setNews] = useState([]);
 
-  const [topPicTour, setTopPicTour] = useState(null);
+  const [topNews, setTopNews] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [currentPicTour, setCurrentPicTour] = useState(null);
+  const [currentNews, setCurrentNews] = useState(null);
 
   // ** Redux ---
   const dispatch = useDispatch();
@@ -37,10 +38,10 @@ const PicTours = () => {
   const {
     categories,
     isFetching,
-    isTopPicTourFetching,
-    isPicTourFetching,
+    isNewsFetching,
+    isTopNewsFetching,
     isSearching,
-  } = useSelector((state) => state.pictours);
+  } = useSelector((state) => state.onnews);
 
   // ** Methods ---
   const onSearch = useCallback(handleSearch(setSearchQuery), [searchQuery]);
@@ -48,7 +49,7 @@ const PicTours = () => {
   // ** Hooks ---
 
   useEffect(() => {
-    dispatch(getPicTourCategories({ token }))
+    dispatch(getOnNewsCategories({ token }))
       .unwrap()
       .then((data) => {
         if (data?.AllCategories?.length > 0) {
@@ -61,16 +62,15 @@ const PicTours = () => {
   }, []);
 
   useEffect(() => {
-    if (!activeCategory) return;
-    dispatch(getTopPicTour({ token, id: activeCategory?.id }))
+    dispatch(getTopOnNews({ token }))
       .unwrap()
       .then((data) => {
-        setTopPicTour(data?.topTour[0]);
+        setTopNews(data?.data);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, [activeCategory]);
+  }, []);
 
   useEffect(() => {
     if (!activeCategory) return;
@@ -78,25 +78,20 @@ const PicTours = () => {
     let timeout;
     if (searchQuery?.trim()?.length > 0) {
       timeout = setTimeout(() => {
-        dispatch(searchPicTour({ token, searchQuery }))
+        dispatch(searchOnNews({ token, searchQuery }))
           .unwrap()
           .then((data) => {
-            setPicTours(
-              data?.Tours?.map((tour) => ({
-                ...tour,
-                tour_id: tour?.pic_tour_id,
-              })) || []
-            );
+            setNews(data?.News);
           })
           .catch((error) => {
             console.error(error);
           });
       }, 300);
     } else {
-      dispatch(getPicTourByCategory({ token, id: activeCategory?.id }))
+      dispatch(getOnNewsByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
-          setPicTours(data?.data);
+          setNews(data?.data);
         })
         .catch((error) => {
           console.error(error);
@@ -109,7 +104,7 @@ const PicTours = () => {
   return (
     <Fragment>
       <Header
-        title={<BreadCrumb items={[{ label: "Pic Tours" }]} />}
+        title={<BreadCrumb items={[{ label: "On News" }]} />}
         buttonTitle={"Add"}
         buttonIcon={FaPlus}
         onSearch={onSearch}
@@ -120,7 +115,7 @@ const PicTours = () => {
       {/* All Categories */}
 
       {!searchQuery?.trim()?.length > 0 && (
-        <div className="flex items-center gap-5 overflow-x-auto flex-1 scrollbar-hidden">
+        <div className="flex flex-1 gap-5 items-center overflow-x-auto scrollbar-hidden">
           {isFetching ? (
             <Spinner />
           ) : (
@@ -143,31 +138,31 @@ const PicTours = () => {
 
       {/* Top PicTour*/}
       <div className="flex items-center mt-10">
-        {isTopPicTourFetching ? (
+        {isTopNewsFetching ? (
           <Spinner />
-        ) : topPicTour ? (
+        ) : topNews ? (
           <div
-            className="flex justify-center items-center gap-5"
+            className="flex justify-center gap-5 items-center"
             onClick={() => {
-              setCurrentPicTour(topPicTour);
-              setPicTourModal(true);
+              setCurrentNews(topNews);
+              setNewsModal(true);
               setIsTop(true);
             }}
           >
             <img
               style={{ imageRendering: "-webkit-optimize-contrast" }}
-              src={topPicTour?.image}
-              alt={"topPicTour"}
+              src={topNews?.image}
+              alt={"topNews"}
               className="video-thumbnail"
             />
 
             <div className="text-sm break-words whitespace-pre-line">
-              {topPicTour?.description}
+              {topNews?.description}
             </div>
           </div>
-        ) : !topPicTour && !isFetching ? (
+        ) : !topNews && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Pic Tour Found
+            No Top News Found
           </div>
         ) : null}
       </div>
@@ -177,23 +172,23 @@ const PicTours = () => {
         <div className="mt-10">
           {isSearching ? (
             <Spinner />
-          ) : picTours?.length > 0 ? (
+          ) : news?.length > 0 ? (
             <div className="mb-5">
               <div className="cards-container">
-                {picTours?.map((pic) => (
+                {news?.map((pic) => (
                   <ThumbnailCard
-                    key={pic?.tour_id}
+                    key={pic?.news_id}
                     image={pic?.image}
-                    title={pic?.name}
+                    title={pic?.username}
                     onClick={() => {
-                      setCurrentPicTour(pic);
-                      setPicTourModal(true);
+                      setCurrentNews(pic);
+                      setNewsModal(true);
                     }}
                   />
                 ))}
               </div>
             </div>
-          ) : picTours?.Tours?.length === 0 && !isSearching ? (
+          ) : news?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
               No Data Found
             </div>
@@ -201,22 +196,24 @@ const PicTours = () => {
         </div>
       ) : (
         <div className="mt-10">
-          {isPicTourFetching ? (
+          {isNewsFetching ? (
             <Spinner />
-          ) : picTours?.length > 0 ? (
-            picTours?.map((pictour) => (
-              <div className="mb-5" key={pictour?.id}>
-                <div className="heading">{pictour?.sub_category_name}</div>
+          ) : news?.length > 0 ? (
+            news?.map((news) => (
+              <div className="mb-5" key={news?.id}>
+                <div className="heading">
+                  {news?.sub_category_name || "Others"}
+                </div>
                 <div className="cards-container">
-                  {pictour?.tour_result?.Tours?.length > 0 ? (
-                    pictour?.tour_result?.Tours?.map((pic) => (
+                  {news?.news_result?.News?.length > 0 ? (
+                    news?.news_result?.News?.map((pic) => (
                       <ThumbnailCard
-                        key={pic?.tour_id}
+                        key={pic?.news_id}
                         image={pic?.image}
-                        title={pic?.name}
+                        title={pic?.username}
                         onClick={() => {
-                          setCurrentPicTour(pic);
-                          setPicTourModal(true);
+                          setCurrentNews(pic);
+                          setNewsModal(true);
                         }}
                       />
                     ))
@@ -228,7 +225,7 @@ const PicTours = () => {
                 </div>
               </div>
             ))
-          ) : picTours?.length === 0 && !isPicTourFetching ? (
+          ) : news?.length === 0 && !isNewsFetching ? (
             <div className="flex justify-center text-gray-400">
               No Data Found
             </div>
@@ -241,9 +238,9 @@ const PicTours = () => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add Pic Tour"
+        title="Add News"
       >
-        <AddPicTour
+        <AddNews
           setAddModal={setAddModal}
           dispatch={dispatch}
           setReload={setReload}
@@ -252,11 +249,11 @@ const PicTours = () => {
       </Modal>
 
       {/* //**  Image Modal  */}
-      <PicTourPreviewer
-        image={currentPicTour}
-        isOpen={picTourModal}
+      <NewsPreviewer
+        image={currentNews}
+        isOpen={newsModal}
         onClose={() => {
-          setPicTourModal(false);
+          setNewsModal(false);
           setIsTop(false);
         }}
         isTop={isTop}
@@ -265,4 +262,4 @@ const PicTours = () => {
   );
 };
 
-export default PicTours;
+export default OnNews;

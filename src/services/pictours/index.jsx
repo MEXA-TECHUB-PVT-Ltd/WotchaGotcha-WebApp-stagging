@@ -25,6 +25,7 @@ import Modal from "../../components/modal/Modal";
 import { IoChatbubbleEllipses, IoHeart, IoSend } from "react-icons/io5";
 import ProfileCard from "../../components/card/ProfileCard";
 import { copyLink } from "../../utils/copyLink";
+import ImagePreviewer from "../../components/previewers/ImagePreviewer";
 
 export const AddPicTour = ({
   setAddModal,
@@ -103,7 +104,7 @@ export const AddPicTour = ({
       >
         {({ handleSubmit, values, handleChange, setFieldValue }) => (
           <div className="flex-col-start gap-5">
-            <div className="flex items-center gap-5">
+            <div className="flex gap-5 items-center">
               <div
                 className={`capture-container ${borderColor}`}
                 onClick={() => imageRef.current.click()}
@@ -139,7 +140,7 @@ export const AddPicTour = ({
                           : values.image
                       }
                       alt="Image"
-                      className="w-full h-full"
+                      className="h-full w-full"
                     />
                   </div>
                 )}
@@ -194,19 +195,17 @@ export const AddPicTour = ({
 export const EditPicTour = async () => {};
 export const DeletePicTour = async () => {};
 
-const ImagePreviewer = ({ image, isOpen, onClose, isTop = false }) => {
+export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
   const { isLoading } = useSelector((state) => state.pictours);
-  const { textColor } = useSelector((state) => state.theme);
 
   const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState([]);
   const [totalComments, setTotalComments] = useState(0);
   const [commentText, setCommentText] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleComment = async () => {
     if (!commentText.trim()) return;
@@ -308,99 +307,26 @@ const ImagePreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   }, [image?.tour_id]);
 
   return (
-    <>
-      <Modal
-        title={
-          <ProfileCard
-            image={image?.user_image || image?.userimage}
-            title={image?.username}
-          />
-        }
-        isOpen={isOpen}
-        onClose={onClose}
-        size="lg"
-      >
-        {/* Image Previewer */}
-        <div className="previewer">
-          <img
-            style={{ imageRendering: "-webkit-optimize-contrast" }}
-            src={image?.image}
-            className="w-full h-full object-contain"
-          />
-        </div>
-
-        {/* Action Buttons */}
-        {!isTop && (
-          <div className="action-buttons-container">
-            <button
-              onClick={handleLike}
-              className="action-button"
-              disabled={isLoading}
-            >
-              <IoHeart className={`w-6 h-6 ${isLiked ? "text-red-500" : ""}`} />{" "}
-              {likes}
-            </button>
-
-            <button
-              className="action-button"
-              onClick={() => setIsModalOpen(true)}
-            >
-              <IoChatbubbleEllipses className="w-6 h-6" /> Comment
-            </button>
-            {totalComments > 0 && (
-              <button className="action-button">
-                {totalComments === 1
-                  ? `${totalComments} comment`
-                  : `${totalComments} comments`}
-              </button>
-            )}
-            <button
-              onClick={() => copyLink(image?.image)}
-              className={`action-button hover:${textColor}`}
-              disabled={isLoading}
-            >
-              <FaCopy className={`w-6 h-6`} /> Copy Link
-            </button>
-          </div>
-        )}
-      </Modal>
-
-      <Modal
-        title="Comments"
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      >
-        <div className="flex flex-col max-h-[70vh] flex-1 overflow-y-auto overflow-x-hidden space-y-3 p-3">
-          {comments?.length > 0 ? (
-            comments?.map((comment, index) => (
-              <ProfileCard
-                key={index}
-                image={comment?.userimage}
-                title={comment?.username}
-                subTitle={comment?.comment}
-              />
-            ))
-          ) : (
-            <p className="flex justify-center text-gray-400">
-              No Comments Found
-            </p>
-          )}
-        </div>
-
-        <div>
-          <AppInput
-            placeholder="comment here..."
-            rounded="rounded-full"
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-            icon={IoSend}
-            onIconClick={handleComment}
-            onEnterPress={handleComment}
-          />
-        </div>
-      </Modal>
-    </>
+    <ImagePreviewer
+      {...{
+        image: image?.image,
+        isOpen,
+        onClose,
+        isTop,
+        likes,
+        isLoading,
+        isLiked,
+        commentText,
+        setCommentText,
+        totalComments,
+      }}
+      comments={comments}
+      OnLike={handleLike}
+      OnCopy={() => copyLink(image?.image)}
+      onComment={handleComment}
+      description={image?.description}
+      userImage={image?.user_image || image?.userimage}
+      userName={image?.username}
+    />
   );
 };
-
-export default ImagePreviewer;

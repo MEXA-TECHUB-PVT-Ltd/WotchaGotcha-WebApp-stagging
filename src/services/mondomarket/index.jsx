@@ -129,7 +129,7 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
       >
         {({ handleSubmit, values, handleChange }) => (
           <div className="flex-col-start gap-5">
-            <div className="flex items-center gap-5 flex-wrap">
+            <div className="flex flex-wrap gap-5 items-center">
               {images.map((image, index) => (
                 <div
                   key={index}
@@ -138,10 +138,10 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
                   <img
                     src={URL.createObjectURL(image)}
                     alt="Preview"
-                    className="w-full h-full"
+                    className="h-full w-full"
                   />
                   <button
-                    className="absolute top-0 right-0 w-5 h-5 bg-red-500 text-white p-1 rounded-full flex items-center justify-center"
+                    className="flex bg-red-500 h-5 justify-center p-1 rounded-full text-white w-5 absolute items-center right-0 top-0"
                     onClick={() =>
                       setImages(images.filter((_, i) => i !== index))
                     }
@@ -406,14 +406,14 @@ export const MondoDetailsViewer = ({
             clickable: true,
           }}
           modules={[Navigation, A11y, Autoplay, Pagination]}
-          className="w-full h-[75vh]"
+          className="h-[75vh] w-full"
         >
           {mondo?.images?.map((image, index) => (
             <SwiperSlide key={index}>
               <img
                 src={image?.image}
                 alt={"Mondo Image"}
-                className="w-full h-full object-contain"
+                className="h-full w-full object-contain"
                 style={{
                   imageRendering: "-webkit-optimize-contrast",
                 }}
@@ -426,25 +426,29 @@ export const MondoDetailsViewer = ({
 
         <div className="flex flex-col gap-5 px-2 py-5">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{mondo?.title}</h1>
-            <p className="text-sm text-gray-500 mt-1">
+            <h1 className="text-3xl text-dark_bg_5 dark:text-dark_text_1 font-bold">
+              {mondo?.title}
+            </h1>
+            <p className="text-gray-500 text-sm dark:text-dark_text_1 mt-1">
               {mondo?.item_category_name}
             </p>
             <p className={`text-lg font-semibold ${textColor} mt-3`}>
               ${mondo?.price}
             </p>
             {mondo?.location && (
-              <p className="text-gray-500 mt-2 flex items-center gap-3">
+              <p className="flex text-gray-500 dark:text-dark_text_1 gap-3 items-center mt-2">
                 <FaLocationDot className={`${textColor}`} size={20} />{" "}
                 {mondo?.location}
               </p>
             )}
-            <p className="text-gray-700 mt-4">{mondo?.description}</p>
+            <p className="text-gray-700 dark:text-dark_text_1 mt-4">
+              {mondo?.description}
+            </p>
           </div>
 
           <ProfileCard image={mondo?.userimage} title={mondo?.username} />
 
-          <div className="flex items-center justify-center gap-10 mb-5 mt-8 cursor-pointer">
+          <div className="flex justify-center cursor-pointer gap-10 items-center mb-5 mt-8">
             <div
               className="flex flex-col justify-center items-center"
               onClick={() => setOfferModal(true)}
@@ -488,13 +492,13 @@ export const MondoDetailsViewer = ({
           <img
             src={mondo?.images[0]?.image}
             alt="img"
-            className="w-28 h-28 rounded overflow-hidden"
+            className="h-28 rounded w-28 overflow-hidden"
             style={{
               imageRendering: "-webkit-optimize-contrast",
             }}
           />
           <div>
-            <p className="text-lg font-semibold text-gray-700">
+            <p className="text-dark_bg_5 text-lg dark:text-dark_text_1 font-semibold">
               {mondo?.title}
             </p>
             <p className={`text-base ${textColor}`}>

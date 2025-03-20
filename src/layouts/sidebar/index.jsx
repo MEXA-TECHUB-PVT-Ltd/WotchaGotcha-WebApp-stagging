@@ -9,7 +9,7 @@ const SidebarLayout = () => {
   const location = useLocation();
 
   return (
-    <div className="h-[90vh] overflow-y-auto pr-1">
+    <div className="max-h-[90vh] overflow-y-auto pb-5 pr-1">
       {routes.map((item, i) => {
         const isActive = location.pathname === item.path;
 

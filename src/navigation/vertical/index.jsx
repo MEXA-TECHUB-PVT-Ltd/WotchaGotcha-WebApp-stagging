@@ -1,5 +1,5 @@
-import { FaTv, FaUsers, FaBook, FaGamepad } from "react-icons/fa";
-import { FaChildren } from "react-icons/fa6";
+import { FaTv, FaUsers, FaBook, FaGamepad, FaNewspaper } from "react-icons/fa";
+import { FaChildren, FaQ } from "react-icons/fa6";
 import {
   MdDashboard,
   MdImage,
@@ -68,5 +68,17 @@ export default [
     title: "Sports & Sports",
     path: "/sports-&-sports",
     icon: <FaGamepad size={22} />,
+  },
+  {
+    id: "onnews",
+    title: "On News",
+    path: "/on-news",
+    icon: <FaNewspaper size={22} />,
+  },
+  {
+    id: "qafi",
+    title: "Qafi",
+    path: "/qafi",
+    icon: <FaQ size={22} />,
   },
 ];

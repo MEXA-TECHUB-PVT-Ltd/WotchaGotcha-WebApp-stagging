@@ -8,7 +8,8 @@ import VideoMania from "../../views/VideoMania";
 import TvProgMax from "../../views/TvProgMax";
 import LearningAndHobbies from "../../views/LearningAndHobbies";
 import SportsAndSports from "../../views/SportsAndSports";
-
+import OnNews from "../../views/OnNews";
+import Qafi from "../../views/Qafi";
 export default [
   {
     path: "/",
@@ -49,5 +50,13 @@ export default [
   {
     path: "/sports-&-sports",
     element: <SportsAndSports />,
+  },
+  {
+    path: "/on-news",
+    element: <OnNews />,
+  },
+  {
+    path: "/qafi",
+    element: <Qafi />,
   },
 ];

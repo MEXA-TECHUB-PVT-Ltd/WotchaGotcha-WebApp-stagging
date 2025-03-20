@@ -15,24 +15,24 @@ const AppSelect = ({
   const theme = useSelector((state) => state.theme);
 
   return (
-    <div className="text-light_text_1 dark:text-dark_text_1 w-full">
+    <div className="text-light_text_1 w-full dark:text-dark_text_1">
       {label && (
         <label
           htmlFor={name}
-          className="block text-sm font-normal text-light_text_1 dark:text-dark_text_1 mb-1 tracking-wide"
+          className="text-light_text_1 text-sm block dark:text-dark_text_1 font-normal mb-1 tracking-wide"
         >
           {label}
         </label>
       )}
       <div
-        className={`flex items-center border rounded-md overflow-hidden focus-within:${theme.borderColor}`}
+        className={`flex items-center pr-3 border rounded-md overflow-hidden focus-within:${theme.borderColor}`}
       >
         <select
           name={name}
           value={value}
           onChange={onChange}
           {...otherProps}
-          className={`app-select w-full px-4 py-2 bg-light_background dark:bg-dark_background border-none outline-none text-light_text_1 dark:text-dark_text_1 ${styles}`}
+          className={`app-select ${styles}`}
         >
           {/* Placeholder or default option */}
           <option value="" disabled>
