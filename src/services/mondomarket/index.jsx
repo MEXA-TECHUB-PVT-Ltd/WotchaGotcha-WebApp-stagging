@@ -1,5 +1,10 @@
 import { FaLocationDot } from "react-icons/fa6";
-import { MdBookmark, MdLocalOffer, MdNotifications } from "react-icons/md";
+import {
+  MdBookmark,
+  MdLocalOffer,
+  MdNotifications,
+  MdNotificationsActive,
+} from "react-icons/md";
 import ProfileCard from "../../components/card/ProfileCard";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
@@ -15,9 +20,11 @@ import { Toast } from "../../components/theme/Toast";
 import {
   addMondoMarketItem,
   bookMarkItem,
+  checkAlert,
   getMondoMarketCategories,
   removeBookMarkItem,
   sendOffer,
+  toggleAlert,
 } from "../../app/features/mondomarket";
 import { useEffect, useRef, useState } from "react";
 import AppInput from "../../components/form/AppInput";
@@ -264,15 +271,17 @@ export const MondoDetailsViewer = ({
   const dispatch = useDispatch();
   const { textColor } = useSelector((state) => state.theme);
   const { isLoading } = useSelector((state) => state.mondomarket);
+  const { user } = useSelector((state) => state.user);
 
   const [offerModal, setOfferModal] = useState(false);
   const [amount, setAmount] = useState("");
+  const [alertSetteled, setAlertSetteled] = useState(false);
 
   const handleBookmarkItem = async () => {
     try {
       const payload = {
         item_id: mondo?.id,
-        user_id: mondo?.user_id,
+        user_id: user?.id,
       };
 
       const { statusCode, message } = await dispatch(
@@ -294,7 +303,7 @@ export const MondoDetailsViewer = ({
     try {
       const payload = {
         item_id: mondo?.id,
-        user_id: mondo?.user_id,
+        user_id: user?.id,
       };
 
       const { statusCode, message } = await dispatch(
@@ -322,7 +331,7 @@ export const MondoDetailsViewer = ({
       const payload = {
         item_id: mondo?.id,
         price: amount,
-        sender_id: mondo?.user_id,
+        sender_id: user?.id,
       };
 
       const { statusCode, message } = await dispatch(
@@ -339,6 +348,46 @@ export const MondoDetailsViewer = ({
       console.error(error);
     }
   };
+
+  const handleToggleAlert = async () => {
+    try {
+      const payload = {
+        user_id: user?.id,
+        category_id: mondo?.item_category,
+      };
+
+      const { statusCode, message } = await dispatch(
+        toggleAlert({ token, payload })
+      ).unwrap();
+
+      if (statusCode === 201) {
+        Toast("success", message);
+        checkAlertStatus();
+      }
+    } catch (error) {
+      Toast("error", error?.message);
+      console.error(error);
+    }
+  };
+
+  const checkAlertStatus = async () => {
+    const payload = {
+      user_id: user?.id,
+      category_id: mondo?.item_category,
+    };
+
+    const { alert } = await dispatch(checkAlert({ token, payload })).unwrap();
+
+    if (alert) {
+      setAlertSetteled(true);
+    } else {
+      setAlertSetteled(false);
+    }
+  };
+
+  useEffect(() => {
+    checkAlertStatus();
+  }, []);
 
   return (
     <>
@@ -405,12 +454,14 @@ export const MondoDetailsViewer = ({
             </div>
             <div
               className="flex flex-col justify-center items-center"
-              onClick={() =>
-                Toast("success", "You will get notified to the relevant feed")
-              }
+              onClick={isLoading ? null : handleToggleAlert}
             >
-              <MdNotifications size={30} className={`${textColor}`} />
-              <div>Alert</div>
+              {alertSetteled ? (
+                <MdNotificationsActive size={30} className={`${textColor}`} />
+              ) : (
+                <MdNotifications size={30} className={`${textColor}`} />
+              )}
+              <div>{alertSetteled ? "Remove Alert" : "Set Alert"}</div>
             </div>
 
             <div

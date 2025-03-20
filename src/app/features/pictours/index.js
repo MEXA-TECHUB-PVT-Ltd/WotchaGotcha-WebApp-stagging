@@ -12,7 +12,7 @@ export const getPicTourCategories = createAsyncThunk(
         },
         params: {
           page: 1,
-          limit: 10,
+          limit: 1000,
         },
       });
 
@@ -72,7 +72,7 @@ export const getPicTourByCategory = createAsyncThunk(
           },
           params: {
             page: 1,
-            limit: 100,
+            limit: 1000,
           },
         }
       );

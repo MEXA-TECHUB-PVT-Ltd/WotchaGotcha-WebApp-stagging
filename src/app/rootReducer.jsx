@@ -10,7 +10,7 @@ import fanStarZoneSlice from "./features/fanstarzone";
 import kidVidsSlice from "./features/kidvids";
 import tvProgmaxSlice from "./features/tvprogmax";
 import learningAndHobbiesSlice from "./features/learningandhobbies";
-
+import sportsAndSportsSlice from "./features/sportsandsports";
 const rootReducer = combineReducers({
   theme: themeSlice,
   auth: authSlice,
@@ -23,6 +23,7 @@ const rootReducer = combineReducers({
   kidvids: kidVidsSlice,
   tvProgmax: tvProgmaxSlice,
   learningandhobbies: learningAndHobbiesSlice,
+  sportsandsports: sportsAndSportsSlice,
 });
 
 export default rootReducer;

@@ -7,6 +7,7 @@ import PicTours from "../../views/PicTours";
 import VideoMania from "../../views/VideoMania";
 import TvProgMax from "../../views/TvProgMax";
 import LearningAndHobbies from "../../views/LearningAndHobbies";
+import SportsAndSports from "../../views/SportsAndSports";
 
 export default [
   {
@@ -44,5 +45,9 @@ export default [
   {
     path: "/learning-and-hobbies",
     element: <LearningAndHobbies />,
+  },
+  {
+    path: "/sports-&-sports",
+    element: <SportsAndSports />,
   },
 ];
