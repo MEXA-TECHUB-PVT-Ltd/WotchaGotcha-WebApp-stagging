@@ -19,6 +19,7 @@ import { Spinner } from "../theme/Loader";
 import { Toast } from "../theme/Toast";
 import Button from "../form/Button";
 import { logoutUser } from "../../app/features/auth";
+import { colors } from "../../configs/colors";
 
 const Navbar = () => {
   //** States */
@@ -127,7 +128,7 @@ const Navbar = () => {
       </div>
       <div className="flex-center gap-2 relative">
         <CiSettings
-          size={23}
+          size={30}
           className="hover:opacity-60"
           onClick={() => setShowSetting(true)}
         />
@@ -176,20 +177,15 @@ const Navbar = () => {
         onClose={() => setShowSetting(false)}
         title="Settings"
       >
-        <h1 className="sub-heading">Theme Color</h1>
+        <h1 className="sub-heading">Theme Colors</h1>
         <div className="theme-color">
-          <ColorCard
-            color={"bg-yellow-500"}
-            onClick={() => handleThemeColor("yellow-500")}
-          />
-          <ColorCard
-            color={"bg-blue-500"}
-            onClick={() => handleThemeColor("blue-500")}
-          />
-          <ColorCard
-            color={"bg-green-500"}
-            onClick={() => handleThemeColor("green-500")}
-          />
+          {colors.map((color, i) => (
+            <ColorCard
+              key={i}
+              color={color.color}
+              onClick={() => handleThemeColor(color.value)}
+            />
+          ))}
         </div>
       </Modal>
 

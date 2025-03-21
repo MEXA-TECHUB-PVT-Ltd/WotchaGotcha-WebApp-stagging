@@ -18,7 +18,7 @@ import {
   getVideoSubCategoryByCategory,
   likeUnlikeVideo,
 } from "../../app/features/videomania";
-import { FaCopy, FaUpload } from "react-icons/fa";
+import { FaCopy, FaPlusCircle } from "react-icons/fa";
 import videoIcon from "../../assets/videoIcon.svg";
 import { Toast } from "../../components/theme/Toast";
 import { uploadImage, uploadVideo } from "../../utils/common/cloudinary";
@@ -128,8 +128,8 @@ export const AddVideoMania = ({
                 />
                 {!values?.video ? (
                   <>
+                    <FaPlusCircle size={25} className={textColor} />
                     <p>Upload Video</p>
-                    <FaUpload size={25} className={textColor} />
                   </>
                 ) : (
                   <div className="py-2">
@@ -147,7 +147,7 @@ export const AddVideoMania = ({
               </div>
 
               <div
-                className={`capture-container ${borderColor}`}
+                className={`relative capture-container ${borderColor}`}
                 onClick={() => thumbnailRef.current.click()}
               >
                 <input
@@ -163,13 +163,13 @@ export const AddVideoMania = ({
                 />
                 {!values?.thumbnail ? (
                   <>
-                    <p>Upload Tumbnail</p>
-                    <FaUpload size={25} className={textColor} />
+                    <FaPlusCircle size={25} className={textColor} />
+                    <p>Video Tumbnail</p>
                   </>
                 ) : (
-                  <div className="py-2 relative">
+                  <>
                     <p
-                      className={`px-2 ${bgColor} rounded-full text-white absolute top-0 left-1`}
+                      className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
                     >
                       Change Image
                     </p>
@@ -183,7 +183,7 @@ export const AddVideoMania = ({
                       alt="Thumbnail"
                       className="w-full h-full"
                     />
-                  </div>
+                  </>
                 )}
               </div>
             </div>

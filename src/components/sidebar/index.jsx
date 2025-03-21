@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import logo from "../../assets/react.svg";
+import logo from "../../assets/logo.svg";
 import SidebarLayout from "../../layouts/sidebar/index.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { CgClose } from "react-icons/cg";
@@ -52,10 +52,10 @@ const Sidebar = () => {
               style={{ imageRendering: "-webkit-optimize-contrast" }}
               src={logo}
               alt="Logo"
+              className="w-50 h-auto"
             />
-            <h1 className="logo-text">Wotcha Gotcha</h1>
           </div>
-          <CgClose onClick={handleToggleSidebar} size={20} />
+          <CgClose onClick={handleToggleSidebar} size={25} />
         </div>
         <SidebarLayout />
       </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import AppInput from "../../../components/form/AppInput";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Button from "../../../components/form/Button";
-import logo from "../../../assets/logo.png";
+import logo from "../../../assets/logo.svg";
 import { useDispatch, useSelector } from "react-redux";
 import Form from "../../../components/form/Form";
 import * as Yup from "yup";
@@ -36,15 +36,12 @@ const Login = () => {
       <div className="logo-container">
         <div>
           <div className="flex justify-start items-center gap-2">
-            <p className="w-20 h-20">
-              <img
-                style={{ imageRendering: "-webkit-optimize-contrast" }}
-                src={logo}
-                alt=""
-                className="logo"
-              />
-            </p>
-            <h1 className="logo-text">Wotcha Gotcha</h1>
+            <img
+              style={{ imageRendering: "-webkit-optimize-contrast" }}
+              src={logo}
+              alt=""
+              className="w-50 h-auto"
+            />
           </div>
           <img
             style={{ imageRendering: "-webkit-optimize-contrast" }}
@@ -119,7 +116,7 @@ const Login = () => {
               className={`mt-2 text-light_text_1 dark:text-dark_text_1 `}
             >
               Don't have an account?{" "}
-              <span className="text-blue-500 underline">Sign-Up</span>
+              <span className="text-blue-500 underline">Sign Up</span>
             </Link>
           </div>
         )}

@@ -1,5 +1,12 @@
-import { FaTv, FaUsers, FaBook, FaGamepad, FaNewspaper } from "react-icons/fa";
-import { FaChildren, FaQ } from "react-icons/fa6";
+import {
+  FaTv,
+  FaUsers,
+  FaBook,
+  FaGamepad,
+  FaNewspaper,
+  FaEnvelopeOpen,
+} from "react-icons/fa";
+import { FaChildren, FaFaceSmile, FaQ } from "react-icons/fa6";
 import {
   MdDashboard,
   MdImage,
@@ -77,8 +84,20 @@ export default [
   },
   {
     id: "qafi",
-    title: "Qafi",
+    title: "QAFI",
     path: "/qafi",
     icon: <FaQ size={22} />,
+  },
+  {
+    id: "ebic",
+    title: "EBIC",
+    path: "/ebic",
+    icon: <FaFaceSmile size={22} />,
+  },
+  {
+    id: "openletters",
+    title: "Open Letters",
+    path: "/open-letters",
+    icon: <FaEnvelopeOpen size={22} />,
   },
 ];

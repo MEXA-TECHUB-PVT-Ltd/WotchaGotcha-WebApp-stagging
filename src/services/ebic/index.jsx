@@ -1,66 +1,59 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 
-import AppInput from "../../components/form/AppInput";
 import AppSelect from "../../components/form/AppSelect";
 import Button from "../../components/form/Button";
 import ErrorMessage from "../../components/form/ErrorMessage";
 import Form from "../../components/form/Form";
 import { Spinner } from "../../components/theme/Loader";
 import AppTextArea from "../../components/form/AppTextArea";
-import { FaPlusCircle } from "react-icons/fa";
+
 import { Toast } from "../../components/theme/Toast";
-import { uploadImage } from "../../utils/common/cloudinary";
-import {
-  addCommentOnPicTour,
-  addPicTour,
-  getPicTourComments,
-  getPicTourLikes,
-  getPicTourSubCategoryByCategory,
-  likeUnlikePicTour,
-} from "../../app/features/pictours";
 
 import { copyLink } from "../../utils/copyLink";
-import ImagePreviewer from "../../components/previewers/ImagePreviewer";
 
-export const AddPicTour = ({
-  setAddModal,
-  dispatch,
-  setReload,
-  categoryId,
-}) => {
+import {
+  addCommentOnEbic,
+  getEbicComments,
+  getEbicLikes,
+  likeUnlikeEbic,
+  addEbic,
+  getEbicSubCategoryByCategory,
+} from "../../app/features/ebic";
+import ImagePreviewer from "../../components/previewers/ImagePreviewer";
+import Modal from "../../components/modal/Modal";
+import { FaRegSmile } from "react-icons/fa";
+
+export const AddEbic = ({ setAddModal, dispatch, setReload, categoryId }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { textColor, borderColor, bgColor } = useSelector(
+  const { mode, borderColor, bgColor, textColor } = useSelector(
     (state) => state.theme
   );
 
-  const imageRef = useRef(null);
-
   const [subCategory, setSubCategory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEmojiModalOpen, setIsEmojiModalOpen] = useState(false);
 
-  const handleAddPicTour = async (data, { resetForm }) => {
+  const handleAddEbic = async (data, { resetForm }) => {
     setIsLoading(true);
     try {
-      const image = await uploadImage(data?.image);
-      if (!image) throw new Error("Failed to upload image.");
-
-      const payload = { ...data, image };
       const { statusCode } = await dispatch(
-        addPicTour({ token, payload })
+        addEbic({ token, payload: data })
       ).unwrap();
 
       if (statusCode === 201) {
-        Toast("success", "Pic Tour uploaded successfully");
+        Toast("success", "Ebic uploaded successfully");
         setReload((prev) => !prev);
         setAddModal(false);
         resetForm();
       }
     } catch (error) {
       console.error("Upload Error:", error);
-      Toast("error", error?.message || "Error uploading pic tour");
+      Toast("error", error?.message || "Error uploading ebic");
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +63,7 @@ export const AddPicTour = ({
     const fetchSubCategories = async () => {
       if (categoryId) {
         const { AllCategories } = await dispatch(
-          getPicTourSubCategoryByCategory({ token, id: categoryId })
+          getEbicSubCategoryByCategory({ token, id: categoryId })
         ).unwrap();
 
         setSubCategory(AllCategories);
@@ -84,74 +77,52 @@ export const AddPicTour = ({
     <>
       <Form
         initialValues={{
-          name: "",
           description: "",
-          pic_category: categoryId,
+          category: categoryId,
           sub_category: "",
           image: "",
           user_id: user?.id,
         }}
         validationSchema={Yup.object().shape({
-          name: Yup.string().required("Name is required"),
-          description: Yup.string().required("Description is required"),
+          description: Yup.string().required("Ebic is required"),
           sub_category: Yup.string().required("Sub Category is required"),
           image: Yup.string().required("Image is required"),
         })}
-        onSubmit={handleAddPicTour}
+        onSubmit={handleAddEbic}
       >
         {({ handleSubmit, values, handleChange, setFieldValue }) => (
           <div className="flex-col-start gap-5">
-            <div className="flex gap-5 items-center">
-              <div
-                className={`relative capture-container ${borderColor}`}
-                onClick={() => imageRef.current.click()}
-              >
-                <input
-                  name="image"
-                  ref={imageRef}
-                  type="file"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    setFieldValue("image", file);
-                  }}
-                  accept="image/*"
-                  hidden
-                />
-                {!values?.image ? (
-                  <>
-                    <FaPlusCircle size={25} className={textColor} />
-                    <p>Upload Image</p>
-                  </>
-                ) : (
-                  <>
-                    <div
-                      className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
-                    >
-                      Change Image
-                    </div>
-                    <img
-                      style={{ imageRendering: "-webkit-optimize-contrast" }}
-                      src={
-                        values.image instanceof File
-                          ? URL.createObjectURL(values?.image)
-                          : values.image
-                      }
-                      alt="Image"
-                      className="h-full w-full"
-                    />
-                  </>
-                )}
-              </div>
+            <div
+              className={`relative capture-container ${borderColor}`}
+              onClick={() => setIsEmojiModalOpen(true)}
+            >
+              {values.image ? (
+                <>
+                  <div
+                    className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
+                  >
+                    Change Emoji
+                  </div>
+                  <span className="text-6xl cursor-pointer">
+                    {values.image}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <FaRegSmile size={30} className={textColor} />
+                  <p>Select an Emoji</p>
+                </>
+              )}
             </div>
 
             <div className="input-container">
-              <AppInput
-                label={"Name"}
-                name="name"
-                value={values.name}
+              <AppTextArea
+                label={"Ebic"}
+                name="description"
+                value={values.description}
                 onChange={handleChange}
               />
-              <ErrorMessage name="name" />
+              <ErrorMessage name="description" />
             </div>
 
             <div className="input-container">
@@ -165,16 +136,6 @@ export const AddPicTour = ({
               <ErrorMessage name="sub_category" />
             </div>
 
-            <div className="input-container">
-              <AppTextArea
-                label={"Description"}
-                name="description"
-                value={values.description}
-                onChange={handleChange}
-              />
-              <ErrorMessage name="description" />
-            </div>
-
             <div className="btn-container">
               <Button
                 title={"Add"}
@@ -183,20 +144,35 @@ export const AddPicTour = ({
                 spinner={isLoading ? <Spinner size="sm" /> : null}
               />
             </div>
+
+            <Modal
+              isOpen={isEmojiModalOpen}
+              onClose={() => setIsEmojiModalOpen(false)}
+            >
+              <Picker
+                data={data}
+                onEmojiSelect={(emoji) => {
+                  setFieldValue("image", emoji.native);
+                  setIsEmojiModalOpen(false);
+                }}
+                perLine={window.screen.width > 768 ? 13 : 8}
+                emojiSize={24}
+                previewPosition="none"
+                theme={`${mode === "dark" ? "dark" : "light"}`}
+              />
+            </Modal>
           </div>
         )}
       </Form>
     </>
   );
 };
-export const EditPicTour = async () => {};
-export const DeletePicTour = async () => {};
 
-export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
+export const EbicPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { isLoading } = useSelector((state) => state.pictours);
+  const { isLoading } = useSelector((state) => state.ebic);
 
   const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -212,14 +188,14 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
     try {
       const payload = {
         user_id: user?.id,
-        pic_tours_id: image?.tour_id,
+        GEBC_id: image?.gebc_id,
         comment: commentText,
       };
 
       setComments((prev) => [...prev, commentText]);
 
       const { statusCode } = await dispatch(
-        addCommentOnPicTour({ payload, token })
+        addCommentOnEbic({ payload, token })
       ).unwrap();
 
       if (statusCode === 201) {
@@ -235,7 +211,7 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   };
 
   const handleLike = async () => {
-    if (!image?.tour_id) return;
+    if (!image?.gebc_id) return;
 
     setIsLiked((prev) => !prev);
     setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
@@ -243,11 +219,11 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
     try {
       const payload = {
         user_id: user?.id,
-        pic_tour_id: image?.tour_id,
+        GEBC_id: image?.gebc_id,
       };
 
       const { statusCode } = await dispatch(
-        likeUnlikePicTour({ payload, token })
+        likeUnlikeEbic({ payload, token })
       ).unwrap();
 
       if (statusCode === 201) {
@@ -261,11 +237,11 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   };
 
   const getAllLikes = async () => {
-    if (!image?.tour_id) return;
+    if (!image?.gebc_id) return;
 
     try {
       const data = await dispatch(
-        getPicTourLikes({ token, id: image?.tour_id })
+        getEbicLikes({ token, id: image?.gebc_id })
       ).unwrap();
 
       setLikes(data?.totalLikes || 0);
@@ -281,16 +257,16 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   };
 
   const getAllComments = async () => {
-    if (!image?.tour_id) return;
+    if (!image?.gebc_id) return;
 
     try {
       const data = await dispatch(
-        getPicTourComments({ token, id: image?.tour_id })
+        getEbicComments({ token, id: image?.gebc_id })
       ).unwrap();
 
       setTotalComments(data?.totalComments || 0);
 
-      setComments(data?.AllComents);
+      setComments(data?.AllComments);
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
@@ -301,7 +277,7 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
       getAllLikes();
       getAllComments();
     }
-  }, [image?.tour_id]);
+  }, [image?.gebc_id]);
 
   return (
     <ImagePreviewer
@@ -316,6 +292,7 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
         commentText,
         setCommentText,
         totalComments,
+        isEmoji: true,
       }}
       comments={comments}
       OnLike={handleLike}
