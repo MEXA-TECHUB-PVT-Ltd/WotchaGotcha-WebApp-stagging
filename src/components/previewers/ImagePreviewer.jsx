@@ -24,6 +24,7 @@ const ImagePreviewer = ({
   description,
   userImage,
   userName,
+  isEmoji = false,
 }) => {
   const { textColor } = useSelector((state) => state.theme);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,12 +54,18 @@ const ImagePreviewer = ({
           <div className="flex flex-col absolute inset-0 md:flex-row">
             {/* Image Section */}
             <div className="flex-1">
-              <img
-                src={image}
-                className="h-full w-full object-contain"
-                style={{ imageRendering: "-webkit-optimize-contrast" }}
-                alt="Preview"
-              />
+              {isEmoji ? (
+                <div className="flex justify-center items-center h-full w-full cursor-pointer">
+                  <span className="text-9xl">{image}</span>
+                </div>
+              ) : (
+                <img
+                  src={image}
+                  className="h-full w-full object-contain"
+                  style={{ imageRendering: "-webkit-optimize-contrast" }}
+                  alt="Preview"
+                />
+              )}
             </div>
 
             {/* Description Section */}
@@ -95,14 +102,15 @@ const ImagePreviewer = ({
                 {totalComments} {totalComments === 1 ? "comment" : "comments"}
               </span>
             )}
-
-            <button
-              onClick={handleCopy}
-              className={`action-button hover:${textColor}`}
-              aria-label="Copy Link"
-            >
-              <FaCopy className="h-6 w-6" /> Copy Link
-            </button>
+            {!isEmoji && (
+              <button
+                onClick={handleCopy}
+                className={`action-button hover:${textColor}`}
+                aria-label="Copy Link"
+              >
+                <FaCopy className="h-6 w-6" /> Copy Link
+              </button>
+            )}
           </div>
         )}
       </Modal>

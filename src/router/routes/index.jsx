@@ -10,6 +10,7 @@ import LearningAndHobbies from "../../views/LearningAndHobbies";
 import SportsAndSports from "../../views/SportsAndSports";
 import OnNews from "../../views/OnNews";
 import Qafi from "../../views/Qafi";
+import Ebic from "../../views/Ebic";
 export default [
   {
     path: "/",
@@ -58,5 +59,9 @@ export default [
   {
     path: "/qafi",
     element: <Qafi />,
+  },
+  {
+    path: "/ebic",
+    element: <Ebic />,
   },
 ];

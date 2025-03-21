@@ -37,7 +37,7 @@ const Modal = ({ title, onClose, isOpen, size = "sm", children }) => {
           ? "md:w-[60%]"
           : size === "lg"
           ? "md:w-[97%] md:h-[99vh]"
-          : "md:w-[35%]"
+          : "md:w-[40%]"
       }  bg-white dark:bg-dark_bg_4 shadow-sm outline-none rounded p-3 dark:text-dark_text_1 overflow-hidden`}
     >
       <div className="flex-between cursor-pointer">

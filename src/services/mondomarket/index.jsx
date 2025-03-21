@@ -31,7 +31,7 @@ import AppInput from "../../components/form/AppInput";
 import Button from "../../components/form/Button";
 import { Spinner } from "../../components/theme/Loader";
 import Form from "../../components/form/Form";
-import { FaUpload } from "react-icons/fa";
+import { FaPlusCircle } from "react-icons/fa";
 import ErrorMessage from "../../components/form/ErrorMessage";
 import AppSelect from "../../components/form/AppSelect";
 import AppTextArea from "../../components/form/AppTextArea";
@@ -166,8 +166,8 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
                     }}
                     hidden
                   />
+                  <FaPlusCircle size={25} className={textColor} />
                   <p>Upload Image</p>
-                  <FaUpload size={25} className={textColor} />
                 </div>
               )}
             </div>

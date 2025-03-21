@@ -15,7 +15,7 @@ import {
 } from "../../app/features/cinematic";
 import { Toast } from "../../components/theme/Toast";
 import Form from "../../components/form/Form";
-import { FaCopy, FaUpload } from "react-icons/fa";
+import { FaCopy, FaPlusCircle } from "react-icons/fa";
 import ErrorMessage from "../../components/form/ErrorMessage";
 import AppSelect from "../../components/form/AppSelect";
 import AppTextArea from "../../components/form/AppTextArea";
@@ -110,7 +110,7 @@ export const AddCinematic = ({
           <div className="flex-col-start gap-5">
             <div className="flex items-center gap-5">
               <div
-                className={`capture-container ${borderColor}`}
+                className={`relative capture-container ${borderColor}`}
                 onClick={() => videoRef.current.click()}
               >
                 <input
@@ -126,12 +126,14 @@ export const AddCinematic = ({
                 />
                 {!values?.video ? (
                   <>
+                    <FaPlusCircle size={25} className={textColor} />
                     <p>Upload Video</p>
-                    <FaUpload size={25} className={textColor} />
                   </>
                 ) : (
-                  <div className="py-2">
-                    <p className={`px-2 ${bgColor} rounded-full text-white`}>
+                  <>
+                    <p
+                      className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
+                    >
                       Change Video
                     </p>
                     <img
@@ -140,12 +142,12 @@ export const AddCinematic = ({
                       alt="Video"
                       className="w-full h-full"
                     />
-                  </div>
+                  </>
                 )}
               </div>
 
               <div
-                className={`capture-container ${borderColor}`}
+                className={`relative capture-container ${borderColor}`}
                 onClick={() => thumbnailRef.current.click()}
               >
                 <input
@@ -161,13 +163,13 @@ export const AddCinematic = ({
                 />
                 {!values?.thumbnail ? (
                   <>
-                    <p>Upload Tumbnail</p>
-                    <FaUpload size={25} className={textColor} />
+                    <FaPlusCircle size={25} className={textColor} />
+                    <p>Video Tumbnail</p>
                   </>
                 ) : (
-                  <div className="py-2 relative">
+                  <>
                     <p
-                      className={`px-2 ${bgColor} rounded-full text-white absolute top-0 left-1`}
+                      className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
                     >
                       Change Image
                     </p>
@@ -181,7 +183,7 @@ export const AddCinematic = ({
                       alt="Thumbnail"
                       className="w-full h-full"
                     />
-                  </div>
+                  </>
                 )}
               </div>
             </div>

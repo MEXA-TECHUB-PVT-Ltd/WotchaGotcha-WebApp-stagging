@@ -9,7 +9,7 @@ import Form from "../../components/form/Form";
 import { Spinner } from "../../components/theme/Loader";
 import AppTextArea from "../../components/form/AppTextArea";
 
-import { FaUpload } from "react-icons/fa";
+import { FaPlusCircle } from "react-icons/fa";
 import { Toast } from "../../components/theme/Toast";
 import { uploadImage } from "../../utils/common/cloudinary";
 
@@ -97,7 +97,7 @@ export const AddNews = ({ setAddModal, dispatch, setReload, categoryId }) => {
           <div className="flex-col-start gap-5">
             <div className="flex gap-5 items-center">
               <div
-                className={`capture-container ${borderColor}`}
+                className={`relative capture-container ${borderColor}`}
                 onClick={() => imageRef.current.click()}
               >
                 <input
@@ -113,16 +113,16 @@ export const AddNews = ({ setAddModal, dispatch, setReload, categoryId }) => {
                 />
                 {!values?.image ? (
                   <>
+                    <FaPlusCircle size={25} className={textColor} />
                     <p>Upload Image</p>
-                    <FaUpload size={25} className={textColor} />
                   </>
                 ) : (
-                  <div className="py-2 relative">
-                    <p
-                      className={`px-2 ${bgColor} rounded-full text-white absolute top-0 left-1`}
+                  <>
+                    <div
+                      className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
                     >
                       Change Image
-                    </p>
+                    </div>
                     <img
                       style={{ imageRendering: "-webkit-optimize-contrast" }}
                       src={
@@ -133,7 +133,7 @@ export const AddNews = ({ setAddModal, dispatch, setReload, categoryId }) => {
                       alt="Image"
                       className="h-full w-full"
                     />
-                  </div>
+                  </>
                 )}
               </div>
             </div>
@@ -179,7 +179,6 @@ export const NewsPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
   const { isLoading } = useSelector((state) => state.onnews);
-  const { textColor } = useSelector((state) => state.theme);
 
   const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);

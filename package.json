@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emoji-mart/data": "^1.2.1",
+    "@emoji-mart/react": "^1.1.1",
     "@reduxjs/toolkit": "^2.2.6",
     "axios": "^1.7.2",
     "formik": "^2.4.6",

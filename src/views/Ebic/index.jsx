@@ -5,30 +5,31 @@ import Header from "../../components/header";
 import { handleSearch } from "../../utils/common/fetchDataHelpers";
 import { useDispatch, useSelector } from "react-redux";
 
-import ThumbnailCard from "../../components/card/ThumbnailCard";
 import { Spinner } from "../../components/theme/Loader";
 import Modal from "../../components/modal/Modal";
 
+import { AddEbic, EbicPreviewer } from "../../services/ebic";
 import {
-  getQafiByCategory,
-  getQafiCategories,
-  getTopQafi,
-  searchQafi,
-} from "../../app/features/qafi";
-import { AddQafi, QafiPreviewer } from "../../services/qafi";
-const Qafi = () => {
+  getEbicCategories,
+  getTopEbic,
+  getEbicByCategory,
+  searchEbic,
+} from "../../app/features/ebic";
+import EmojiCard from "../../components/card/EmojiCard";
+
+const Ebic = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
-  const [qafiModal, setQafiModal] = useState(false);
+  const [ebicModal, setEbicModal] = useState(false);
   const [reload, setReload] = useState(false);
   const [isTop, setIsTop] = useState(false);
 
-  const [qafi, setQafi] = useState([]);
+  const [ebic, setEbic] = useState([]);
 
-  const [topQafi, setTopQafi] = useState(null);
+  const [topEbic, setTopEbic] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [currentQafi, setCurrentQafi] = useState(null);
+  const [currentEbic, setCurrentEbic] = useState(null);
 
   // ** Redux ---
   const dispatch = useDispatch();
@@ -37,10 +38,10 @@ const Qafi = () => {
   const {
     categories,
     isFetching,
-    isQafiFetching,
-    isTopQafiFetching,
+    isEbicFetching,
+    isTopEbicFetching,
     isSearching,
-  } = useSelector((state) => state.qafi);
+  } = useSelector((state) => state.ebic);
 
   // ** Methods ---
   const onSearch = useCallback(handleSearch(setSearchQuery), [searchQuery]);
@@ -48,7 +49,7 @@ const Qafi = () => {
   // ** Hooks ---
 
   useEffect(() => {
-    dispatch(getQafiCategories({ token }))
+    dispatch(getEbicCategories({ token }))
       .unwrap()
       .then((data) => {
         if (data?.AllCategories?.length > 0) {
@@ -61,10 +62,10 @@ const Qafi = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(getTopQafi({ token }))
+    dispatch(getTopEbic({ token }))
       .unwrap()
       .then((data) => {
-        setTopQafi(data?.data);
+        setTopEbic(data?.data);
       })
       .catch((error) => {
         console.error(error);
@@ -77,20 +78,20 @@ const Qafi = () => {
     let timeout;
     if (searchQuery?.trim()?.length > 0) {
       timeout = setTimeout(() => {
-        dispatch(searchQafi({ token, searchQuery }))
+        dispatch(searchEbic({ token, searchQuery }))
           .unwrap()
           .then((data) => {
-            setQafi(data?.QAFIs);
+            setEbic(data?.GEBCs);
           })
           .catch((error) => {
             console.error(error);
           });
       }, 300);
     } else {
-      dispatch(getQafiByCategory({ token, id: activeCategory?.id }))
+      dispatch(getEbicByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
-          setQafi(data?.data);
+          setEbic(data?.data);
         })
         .catch((error) => {
           console.error(error);
@@ -103,7 +104,7 @@ const Qafi = () => {
   return (
     <Fragment>
       <Header
-        title={<BreadCrumb items={[{ label: "QAFI" }]} />}
+        title={<BreadCrumb items={[{ label: "EBIC" }]} />}
         buttonTitle={"Add"}
         buttonIcon={FaPlus}
         onSearch={onSearch}
@@ -135,33 +136,30 @@ const Qafi = () => {
         </div>
       )}
 
-      {/* Top Qafi*/}
+      {/* Top EBIC*/}
       <div className="flex items-center mt-10">
-        {isTopQafiFetching ? (
+        {isTopEbicFetching ? (
           <Spinner />
-        ) : topQafi ? (
+        ) : topEbic ? (
           <div
             className="flex justify-center gap-5 items-center"
             onClick={() => {
-              setCurrentQafi(topQafi);
-              setQafiModal(true);
+              setCurrentEbic(topEbic);
+              setEbicModal(true);
               setIsTop(true);
             }}
           >
-            <img
-              style={{ imageRendering: "-webkit-optimize-contrast" }}
-              src={topQafi?.image}
-              alt={"topQafi"}
-              className="video-thumbnail"
-            />
+            <div className="video-thumbnail flex justify-center items-center">
+              <span className="text-5xl">{topEbic?.image}</span>
+            </div>
 
             <div className="text-sm break-words whitespace-pre-line">
-              {topQafi?.description}
+              {topEbic?.description}
             </div>
           </div>
-        ) : !topQafi && !isFetching ? (
+        ) : !topEbic && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Qafi Found
+            No Top Ebic Found
           </div>
         ) : null}
       </div>
@@ -171,23 +169,23 @@ const Qafi = () => {
         <div className="mt-10">
           {isSearching ? (
             <Spinner />
-          ) : qafi?.length > 0 ? (
+          ) : ebic?.length > 0 ? (
             <div className="mb-5">
               <div className="cards-container">
-                {qafi?.map((pic) => (
-                  <ThumbnailCard
+                {ebic?.map((pic) => (
+                  <EmojiCard
                     key={pic?.news_id}
                     image={pic?.image}
                     title={pic?.username}
                     onClick={() => {
-                      setCurrentQafi(pic);
-                      setQafiModal(true);
+                      setCurrentEbic(pic);
+                      setEbicModal(true);
                     }}
                   />
                 ))}
               </div>
             </div>
-          ) : qafi?.length === 0 && !isSearching ? (
+          ) : ebic?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
               No Data Found
             </div>
@@ -195,24 +193,24 @@ const Qafi = () => {
         </div>
       ) : (
         <div className="mt-10">
-          {isQafiFetching ? (
+          {isEbicFetching ? (
             <Spinner />
-          ) : qafi?.length > 0 ? (
-            qafi?.map((qafi) => (
-              <div className="mb-5" key={qafi?.id}>
+          ) : ebic?.length > 0 ? (
+            ebic?.map((ebic) => (
+              <div className="mb-5" key={ebic?.id}>
                 <div className="heading">
-                  {qafi?.sub_category_name || "Others"}
+                  {ebic?.sub_category_name || "Others"}
                 </div>
                 <div className="cards-container">
-                  {qafi?.QAFI_result?.QAFIs?.length > 0 ? (
-                    qafi?.QAFI_result?.QAFIs?.map((qafi) => (
-                      <ThumbnailCard
-                        key={qafi?.news_id}
-                        image={qafi?.image}
-                        title={qafi?.username}
+                  {ebic?.GEBC_result?.GEBCs?.length > 0 ? (
+                    ebic?.GEBC_result?.GEBCs?.map((ebic) => (
+                      <EmojiCard
+                        key={ebic?.news_id}
+                        image={ebic?.image}
+                        title={ebic?.username}
                         onClick={() => {
-                          setCurrentQafi(qafi);
-                          setQafiModal(true);
+                          setCurrentEbic(ebic);
+                          setEbicModal(true);
                         }}
                       />
                     ))
@@ -224,7 +222,7 @@ const Qafi = () => {
                 </div>
               </div>
             ))
-          ) : qafi?.length === 0 && !isQafiFetching ? (
+          ) : ebic?.length === 0 && !isEbicFetching ? (
             <div className="flex justify-center text-gray-400">
               No Data Found
             </div>
@@ -237,9 +235,9 @@ const Qafi = () => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add Qafi"
+        title="Add Ebic"
       >
-        <AddQafi
+        <AddEbic
           setAddModal={setAddModal}
           dispatch={dispatch}
           setReload={setReload}
@@ -248,11 +246,11 @@ const Qafi = () => {
       </Modal>
 
       {/* //**  Image Modal  */}
-      <QafiPreviewer
-        image={currentQafi}
-        isOpen={qafiModal}
+      <EbicPreviewer
+        image={currentEbic}
+        isOpen={ebicModal}
         onClose={() => {
-          setQafiModal(false);
+          setEbicModal(false);
           setIsTop(false);
         }}
         isTop={isTop}
@@ -261,4 +259,4 @@ const Qafi = () => {
   );
 };
 
-export default Qafi;
+export default Ebic;
