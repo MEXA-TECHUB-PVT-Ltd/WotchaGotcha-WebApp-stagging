@@ -11,6 +11,9 @@ import kidVidsSlice from "./features/kidvids";
 import tvProgmaxSlice from "./features/tvprogmax";
 import learningAndHobbiesSlice from "./features/learningandhobbies";
 import sportsAndSportsSlice from "./features/sportsandsports";
+import onNewsSlice from "./features/onnews";
+import qafiSlice from "./features/qafi";
+
 const rootReducer = combineReducers({
   theme: themeSlice,
   auth: authSlice,
@@ -24,6 +27,8 @@ const rootReducer = combineReducers({
   tvProgmax: tvProgmaxSlice,
   learningandhobbies: learningAndHobbiesSlice,
   sportsandsports: sportsAndSportsSlice,
+  onnews: onNewsSlice,
+  qafi: qafiSlice,
 });
 
 export default rootReducer;

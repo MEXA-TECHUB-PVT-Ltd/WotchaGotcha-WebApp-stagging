@@ -20,7 +20,7 @@ const SportsAndSports = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
-  const [picTourModal, setPicTourModal] = useState(false);
+  const [sportModal, setSportModal] = useState(false);
   const [reload, setReload] = useState(false);
   const [isTop, setIsTop] = useState(false);
 
@@ -28,7 +28,7 @@ const SportsAndSports = () => {
 
   const [topSports, setTopSports] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [currentPicTour, setCurrentPicTour] = useState(null);
+  const [currentSport, setCurrentSport] = useState(null);
 
   // ** Redux ---
   const dispatch = useDispatch();
@@ -114,7 +114,7 @@ const SportsAndSports = () => {
       {/* All Categories */}
 
       {!searchQuery?.trim()?.length > 0 && (
-        <div className="flex items-center gap-5 overflow-x-auto flex-1 scrollbar-hidden">
+        <div className="flex flex-1 gap-5 items-center overflow-x-auto scrollbar-hidden">
           {isFetching ? (
             <Spinner />
           ) : (
@@ -141,10 +141,10 @@ const SportsAndSports = () => {
           <Spinner />
         ) : topSports ? (
           <div
-            className="flex justify-center items-center gap-5"
+            className="flex justify-center gap-5 items-center"
             onClick={() => {
-              setCurrentPicTour(topSports);
-              setPicTourModal(true);
+              setCurrentSport(topSports);
+              setSportModal(true);
               setIsTop(true);
             }}
           >
@@ -180,8 +180,8 @@ const SportsAndSports = () => {
                     image={pic?.image}
                     title={pic?.name}
                     onClick={() => {
-                      setCurrentPicTour(pic);
-                      setPicTourModal(true);
+                      setCurrentSport(pic);
+                      setSportModal(true);
                     }}
                   />
                 ))}
@@ -209,8 +209,8 @@ const SportsAndSports = () => {
                         image={pic?.image}
                         title={pic?.name}
                         onClick={() => {
-                          setCurrentPicTour(pic);
-                          setPicTourModal(true);
+                          setCurrentSport(pic);
+                          setSportModal(true);
                         }}
                       />
                     ))
@@ -247,10 +247,10 @@ const SportsAndSports = () => {
 
       {/* //**  Image Modal  */}
       <SportsPreviewer
-        image={currentPicTour}
-        isOpen={picTourModal}
+        image={currentSport}
+        isOpen={sportModal}
         onClose={() => {
-          setPicTourModal(false);
+          setSportModal(false);
           setIsTop(false);
         }}
         isTop={isTop}

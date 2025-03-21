@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 
-import AppInput from "../../components/form/AppInput";
 import AppSelect from "../../components/form/AppSelect";
 import Button from "../../components/form/Button";
 import ErrorMessage from "../../components/form/ErrorMessage";
@@ -15,17 +14,18 @@ import { Toast } from "../../components/theme/Toast";
 import { uploadImage } from "../../utils/common/cloudinary";
 
 import { copyLink } from "../../utils/copyLink";
+
 import {
-  addCommentOnSportsAndSports,
-  addSportsAndSports,
-  getSportsAndSportsComments,
-  getSportsAndSportsLikes,
-  getSportsAndSportsSubCategoryByCategory,
-  likeUnlikeSportsAndSports,
-} from "../../app/features/sportsandsports";
+  addCommentOnOnNews,
+  addOnNews,
+  getOnNewsComments,
+  getOnNewsLikes,
+  getOnNewsSubCategoryByCategory,
+  likeUnlikeOnNews,
+} from "../../app/features/onnews";
 import ImagePreviewer from "../../components/previewers/ImagePreviewer";
 
-export const AddSports = ({ setAddModal, dispatch, setReload, categoryId }) => {
+export const AddNews = ({ setAddModal, dispatch, setReload, categoryId }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
   const { textColor, borderColor, bgColor } = useSelector(
@@ -37,7 +37,7 @@ export const AddSports = ({ setAddModal, dispatch, setReload, categoryId }) => {
   const [subCategory, setSubCategory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleAddSports = async (data, { resetForm }) => {
+  const handleAddNews = async (data, { resetForm }) => {
     setIsLoading(true);
     try {
       const image = await uploadImage(data?.image);
@@ -45,18 +45,18 @@ export const AddSports = ({ setAddModal, dispatch, setReload, categoryId }) => {
 
       const payload = { ...data, image };
       const { statusCode } = await dispatch(
-        addSportsAndSports({ token, payload })
+        addOnNews({ token, payload })
       ).unwrap();
 
       if (statusCode === 201) {
-        Toast("success", "Sports uploaded successfully");
+        Toast("success", "News uploaded successfully");
         setReload((prev) => !prev);
         setAddModal(false);
         resetForm();
       }
     } catch (error) {
       console.error("Upload Error:", error);
-      Toast("error", error?.message || "Error uploading sports");
+      Toast("error", error?.message || "Error uploading news");
     } finally {
       setIsLoading(false);
     }
@@ -66,7 +66,7 @@ export const AddSports = ({ setAddModal, dispatch, setReload, categoryId }) => {
     const fetchSubCategories = async () => {
       if (categoryId) {
         const { AllCategories } = await dispatch(
-          getSportsAndSportsSubCategoryByCategory({ token, id: categoryId })
+          getOnNewsSubCategoryByCategory({ token, id: categoryId })
         ).unwrap();
 
         setSubCategory(AllCategories);
@@ -80,20 +80,18 @@ export const AddSports = ({ setAddModal, dispatch, setReload, categoryId }) => {
     <>
       <Form
         initialValues={{
-          name: "",
           description: "",
-          category_id: categoryId,
-          sub_category_id: "",
+          category: categoryId,
+          sub_category: "",
           image: "",
           user_id: user?.id,
         }}
         validationSchema={Yup.object().shape({
-          name: Yup.string().required("Name is required"),
-          description: Yup.string().required("Description is required"),
-          sub_category_id: Yup.string().required("Sub Category is required"),
+          description: Yup.string().required("News is required"),
+          sub_category: Yup.string().required("Sub Category is required"),
           image: Yup.string().required("Image is required"),
         })}
-        onSubmit={handleAddSports}
+        onSubmit={handleAddNews}
       >
         {({ handleSubmit, values, handleChange, setFieldValue }) => (
           <div className="flex-col-start gap-5">
@@ -141,34 +139,24 @@ export const AddSports = ({ setAddModal, dispatch, setReload, categoryId }) => {
             </div>
 
             <div className="input-container">
-              <AppInput
-                label={"Name"}
-                name="name"
-                value={values.name}
-                onChange={handleChange}
-              />
-              <ErrorMessage name="name" />
-            </div>
-
-            <div className="input-container">
-              <AppSelect
-                label={"Sub Category"}
-                name="sub_category_id"
-                value={values.sub_category_id}
-                onChange={handleChange}
-                options={subCategory}
-              />
-              <ErrorMessage name="sub_category_id" />
-            </div>
-
-            <div className="input-container">
               <AppTextArea
-                label={"Description"}
+                label={"News"}
                 name="description"
                 value={values.description}
                 onChange={handleChange}
               />
               <ErrorMessage name="description" />
+            </div>
+
+            <div className="input-container">
+              <AppSelect
+                label={"Sub Category"}
+                name="sub_category"
+                value={values.sub_category}
+                onChange={handleChange}
+                options={subCategory}
+              />
+              <ErrorMessage name="sub_category" />
             </div>
 
             <div className="btn-container">
@@ -186,11 +174,12 @@ export const AddSports = ({ setAddModal, dispatch, setReload, categoryId }) => {
   );
 };
 
-export const SportsPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
+export const NewsPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { isLoading } = useSelector((state) => state.sportsandsports);
+  const { isLoading } = useSelector((state) => state.onnews);
+  const { textColor } = useSelector((state) => state.theme);
 
   const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -206,14 +195,16 @@ export const SportsPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
     try {
       const payload = {
         user_id: user?.id,
-        sport_id: image?.sport_id,
+        NEWS_id: image?.news_id,
         comment: commentText,
       };
 
       setComments((prev) => [...prev, commentText]);
 
+      console.log("enter");
+
       const { statusCode } = await dispatch(
-        addCommentOnSportsAndSports({ payload, token })
+        addCommentOnOnNews({ payload, token })
       ).unwrap();
 
       if (statusCode === 201) {
@@ -229,7 +220,7 @@ export const SportsPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   };
 
   const handleLike = async () => {
-    if (!image?.sport_id) return;
+    if (!image?.news_id) return;
 
     setIsLiked((prev) => !prev);
     setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
@@ -237,11 +228,11 @@ export const SportsPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
     try {
       const payload = {
         user_id: user?.id,
-        sport_id: image?.sport_id,
+        NEWS_id: image?.news_id,
       };
 
       const { statusCode } = await dispatch(
-        likeUnlikeSportsAndSports({ payload, token })
+        likeUnlikeOnNews({ payload, token })
       ).unwrap();
 
       if (statusCode === 201) {
@@ -255,18 +246,18 @@ export const SportsPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   };
 
   const getAllLikes = async () => {
-    if (!image?.sport_id) return;
+    if (!image?.news_id) return;
 
     try {
       const data = await dispatch(
-        getSportsAndSportsLikes({ token, id: image?.sport_id })
+        getOnNewsLikes({ token, id: image?.news_id })
       ).unwrap();
 
-      setLikes(data?.likes || 0);
+      setLikes(data?.totalLikes || 0);
 
       const userHasLiked =
-        Array.isArray(data?.allLikes) &&
-        data.allLikes.some((like) => like.user_id === user?.id);
+        Array.isArray(data?.AllLikes) &&
+        data.AllLikes.some((like) => like.user_id === user?.id);
 
       setIsLiked(userHasLiked);
     } catch (error) {
@@ -275,16 +266,16 @@ export const SportsPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   };
 
   const getAllComments = async () => {
-    if (!image?.sport_id) return;
+    if (!image?.news_id) return;
 
     try {
       const data = await dispatch(
-        getSportsAndSportsComments({ token, id: image?.sport_id })
+        getOnNewsComments({ token, id: image?.news_id })
       ).unwrap();
 
       setTotalComments(data?.totalComments || 0);
 
-      setComments(data?.comments);
+      setComments(data?.AllComments);
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
@@ -295,7 +286,7 @@ export const SportsPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
       getAllLikes();
       getAllComments();
     }
-  }, [image?.sport_id]);
+  }, [image?.news_id]);
 
   return (
     <ImagePreviewer
