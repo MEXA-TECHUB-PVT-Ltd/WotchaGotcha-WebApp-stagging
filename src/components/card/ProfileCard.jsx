@@ -12,8 +12,7 @@ const ProfileCard = ({ title, subTitle, image }) => {
             style={{ imageRendering: "-webkit-optimize-contrast" }}
             className={`p-card-avatar ${borderColor} object-cover`}
             src={image}
-            alt="User Avatar"
-          
+            alt="Avatar"
           />
         ) : title ? (
           <div className={`p-card-avatar ${borderColor} text-gray-500`}>

@@ -13,11 +13,10 @@ import { useSelector } from "react-redux";
 import AppInput from "../form/AppInput";
 import Previewer from "../modal/Previewer";
 
-const ImagePreviewer = ({
-  image,
+const VideoPlayer = ({
+  video,
   isOpen,
   onClose,
-  isTop = false,
   likes = 0,
   comments = [],
   commentText,
@@ -31,7 +30,6 @@ const ImagePreviewer = ({
   description,
   userImage,
   userName,
-  isEmoji = false,
   title,
 }) => {
   const { textColor } = useSelector((state) => state.theme);
@@ -46,15 +44,6 @@ const ImagePreviewer = ({
     [OnCopy, isLoading]
   );
 
-  const handleDownload = () => {
-    const downloadUrl = image.replace("/upload/", "/upload/fl_attachment/");
-    const a = document.createElement("a");
-    a.href = downloadUrl;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
-
   const profileTitle = useMemo(
     () => <ProfileCard image={userImage} title={userName} />,
     [userImage, userName]
@@ -62,28 +51,20 @@ const ImagePreviewer = ({
 
   return (
     <>
-      <Previewer isOpen={isOpen} onClose={onClose} size="lg">
+      <Previewer isOpen={isOpen} onClose={onClose}>
         <div className="viewer-container relative">
           <IoClose
             className="h-7 w-7 cursor-pointer hover:text-red-500 absolute top-5 right-3 bg-white dark:bg-dark_bg_4 rounded-full p-1 md:bg-transparent md:p-0"
             onClick={onClose}
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 px-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 pr-3">
             {/* Image Section */}
             <div className="flex-1">
-              {isEmoji ? (
-                <div className="flex justify-center items-center h-[80vh] w-full cursor-pointer">
-                  <span className="text-9xl">{image}</span>
-                </div>
-              ) : (
-                <img
-                  src={image}
-                  className="h-[82vh] w-full object-contain"
-                  style={{ imageRendering: "-webkit-optimize-contrast" }}
-                  alt="Preview"
-                />
-              )}
-              <div className="flex justify-between items-center">
+              <div className="player">
+                <video src={video} controls className="w-full h-full" />
+              </div>
+
+              <div className="flex justify-between items-center pl-3">
                 <div className={`flex flex-col gap-1 flex-1`}>
                   <div
                     className={`font-bold text-lg ${title ? "mt-1" : "mt-6"}`}
@@ -108,13 +89,9 @@ const ImagePreviewer = ({
                     )}
                   </div>
                 </div>
-                <FaDownload
-                  className="w-5 h-5 cursor-pointer text-gray-700 hover:text-blue-500"
-                  onClick={handleDownload}
-                />
               </div>
               <div className="w-full h-[1px] bg-gray-200 my-2"></div>
-              <div className="action-buttons-container">
+              <div className="action-buttons-container pl-3">
                 <div className="flex items-center gap-4">
                   <button
                     onClick={handleLike}
@@ -129,16 +106,14 @@ const ImagePreviewer = ({
                     <span className="hidden md:block text-sm">Like</span>
                   </button>
 
-                  {!isEmoji && (
-                    <button
-                      onClick={handleCopy}
-                      className={`action-button hover:${textColor}`}
-                      aria-label="Copy Link"
-                    >
-                      <FaCopy className="w-5 h-5" />
-                      <span className="hidden md:block text-sm">Copy Link</span>
-                    </button>
-                  )}
+                  <button
+                    onClick={handleCopy}
+                    className={`action-button hover:${textColor}`}
+                    aria-label="Copy Link"
+                  >
+                    <FaCopy className="w-5 h-5" />
+                    <span className="hidden md:block text-sm">Copy Link</span>
+                  </button>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-1 action-button">
@@ -158,7 +133,7 @@ const ImagePreviewer = ({
               {userName && userImage ? (
                 profileTitle
               ) : (
-                <span className="text-gray-700 font-bold my-2">Top Image</span>
+                <span className="text-gray-700 font-bold my-2">Top Video</span>
               )}
               <div className="w-full h-[1px] bg-gray-200 my-2"></div>
 
@@ -202,4 +177,4 @@ const ImagePreviewer = ({
   );
 };
 
-export default ImagePreviewer;
+export default VideoPlayer;

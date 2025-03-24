@@ -75,24 +75,23 @@
 }
 
 .thumbnail-container {
-  @apply w-44 h-40 flex flex-col gap-2 my-5 cursor-pointer;
+  @apply w-44 h-40 flex flex-col gap-2 my-5 cursor-pointer justify-center items-center;
 }
 
 .video-thumbnail {
   @apply w-44 h-40 object-cover rounded-lg border border-gray-200 overflow-hidden;
 }
 
-
 .capture-container {
-  @apply w-32 h-32 border border-dashed  p-2 rounded-lg flex flex-col gap-1 justify-center items-center text-sm cursor-pointer text-center;
+  @apply w-36 h-36 bg-gray-100 p-2 rounded-lg flex flex-col gap-1 justify-center items-center text-sm cursor-pointer text-center text-gray-700;
 }
 
 .player {
-  @apply relative w-full h-[75vh] bg-dark_bg_2 rounded-lg overflow-hidden;
+  @apply relative w-full h-[82vh] bg-dark_bg_2 overflow-hidden;
 }
 
 .action-buttons-container {
-  @apply flex items-center justify-center gap-10 mt-5;
+  @apply flex items-center justify-between mt-2;
 }
 
 .action-button {
@@ -108,5 +107,9 @@
 }
 
 .previewer {
-  @apply relative w-full h-[75vh] overflow-hidden;
+  @apply relative w-full h-[82vh] overflow-hidden;
+}
+
+.viewer-container {
+  @apply w-full h-[98vh] overflow-auto;
 }

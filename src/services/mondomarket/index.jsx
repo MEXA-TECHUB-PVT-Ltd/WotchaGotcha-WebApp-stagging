@@ -166,7 +166,7 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
                     }}
                     hidden
                   />
-                  <FaPlusCircle size={25} className={textColor} />
+                  <FaPlusCircle size={25} />
                   <p>Upload Image</p>
                 </div>
               )}
@@ -249,6 +249,7 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
             <div className="btn-container">
               <Button
                 title={"Add"}
+                icon={isLoading ? null : FaPlusCircle}
                 width={false}
                 onClick={isLoading ? null : handleSubmit}
                 spinner={isLoading ? <Spinner size="sm" /> : null}
