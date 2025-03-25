@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
-import ProfileCard from "../../components/card/ProfileCard";
-import Modal from "../../components/modal/Modal";
-import { IoChatbubbleEllipses, IoHeart, IoSend } from "react-icons/io5";
+
 import AppInput from "../../components/form/AppInput";
 import { uploadImage, uploadVideo } from "../../utils/common/cloudinary";
 import Form from "../../components/form/Form";
@@ -11,7 +9,7 @@ import ErrorMessage from "../../components/form/ErrorMessage";
 import Button from "../../components/form/Button";
 import AppSelect from "../../components/form/AppSelect";
 import AppTextArea from "../../components/form/AppTextArea";
-import { FaCopy, FaPlusCircle } from "react-icons/fa";
+import { FaPlusCircle } from "react-icons/fa";
 import videoIcon from "../../assets/videoIcon.svg";
 import { Spinner } from "../../components/theme/Loader";
 import { Toast } from "../../components/theme/Toast";
@@ -35,9 +33,7 @@ export const AddTvProgmax = ({
 }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { textColor, borderColor, bgColor } = useSelector(
-    (state) => state.theme
-  );
+  const { borderColor, bgColor } = useSelector((state) => state.theme);
 
   const videoRef = useRef(null);
   const thumbnailRef = useRef(null);

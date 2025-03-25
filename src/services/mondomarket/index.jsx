@@ -1,10 +1,4 @@
 import { FaLocationDot } from "react-icons/fa6";
-import {
-  MdBookmark,
-  MdLocalOffer,
-  MdNotifications,
-  MdNotificationsActive,
-} from "react-icons/md";
 import ProfileCard from "../../components/card/ProfileCard";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
@@ -15,6 +9,7 @@ import { Navigation, A11y, Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+
 import Modal from "../../components/modal/Modal";
 import { Toast } from "../../components/theme/Toast";
 import {
@@ -36,11 +31,18 @@ import ErrorMessage from "../../components/form/ErrorMessage";
 import AppSelect from "../../components/form/AppSelect";
 import AppTextArea from "../../components/form/AppTextArea";
 import { uploadImage } from "../../utils/common/cloudinary";
-
+import Previewer from "../../components/modal/Previewer";
+import { IoIosSend } from "react-icons/io";
+import {
+  IoBookmarkOutline,
+  IoClose,
+  IoNotificationsOutline,
+} from "react-icons/io5";
+import { MdOutlineNotificationsActive } from "react-icons/md";
 export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { textColor, borderColor } = useSelector((state) => state.theme);
+  const { borderColor } = useSelector((state) => state.theme);
 
   const conditions = [
     { id: "new", name: "New" },
@@ -262,15 +264,9 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
   );
 };
 
-export const MondoDetailsViewer = ({
-  mondo,
-  isOpen,
-  onClose,
-  isTop = false,
-  token,
-}) => {
+export const MondoDetailsViewer = ({ mondo, isOpen, onClose, token }) => {
   const dispatch = useDispatch();
-  const { textColor } = useSelector((state) => state.theme);
+  const { textColor, bgColor } = useSelector((state) => state.theme);
   const { isLoading } = useSelector((state) => state.mondomarket);
   const { user } = useSelector((state) => state.user);
 
@@ -392,93 +388,94 @@ export const MondoDetailsViewer = ({
 
   return (
     <>
-      <Modal title={"View Images"} isOpen={isOpen} onClose={onClose} size="lg">
-        <Swiper
-          spaceBetween={0}
-          slidesPerView={1}
-          loop={true}
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-          }}
-          speed={2000}
-          navigation={true}
-          pagination={{
-            clickable: true,
-          }}
-          modules={[Navigation, A11y, Autoplay, Pagination]}
-          className="h-[75vh] w-full"
-        >
-          {mondo?.images?.map((image, index) => (
-            <SwiperSlide key={index}>
-              <img
-                src={image?.image}
-                alt={"Mondo Image"}
-                className="h-full w-full object-contain"
-                style={{
-                  imageRendering: "-webkit-optimize-contrast",
-                }}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-
-        {/* Action Buttons  */}
-
-        <div className="flex flex-col gap-5 px-2 py-5">
-          <div>
-            <h1 className="text-3xl text-dark_bg_5 dark:text-dark_text_1 font-bold">
-              {mondo?.title}
-            </h1>
-            <p className="text-gray-500 text-sm dark:text-dark_text_1 mt-1">
-              {mondo?.item_category_name}
-            </p>
-            <p className={`text-lg font-semibold ${textColor} mt-3`}>
-              ${mondo?.price}
-            </p>
-            {mondo?.location && (
-              <p className="flex text-gray-500 dark:text-dark_text_1 gap-3 items-center mt-2">
-                <FaLocationDot className={`${textColor}`} size={20} />{" "}
-                {mondo?.location}
-              </p>
-            )}
-            <p className="text-gray-700 dark:text-dark_text_1 mt-4">
-              {mondo?.description}
-            </p>
-          </div>
-
-          <ProfileCard image={mondo?.userimage} title={mondo?.username} />
-
-          <div className="flex justify-center cursor-pointer gap-10 items-center mb-5 mt-8">
-            <div
-              className="flex flex-col justify-center items-center"
-              onClick={() => setOfferModal(true)}
+      <Previewer isOpen={isOpen} onClose={onClose}>
+        <div className="mondo-container relative">
+          <IoClose
+            className="h-7 w-7 cursor-pointer hover:text-red-500 absolute top-5 right-3 bg-white dark:bg-dark_bg_4 rounded-full p-1 md:bg-transparent md:p-0 z-10"
+            onClick={onClose}
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 px-3">
+            <Swiper
+              spaceBetween={12}
+              slidesPerView={1}
+              speed={1500}
+              loop={true}
+              navigation={true}
+              pagination={{
+                clickable: true,
+              }}
+              modules={[Navigation, A11y, Autoplay, Pagination]}
+              className="h-[100vh] w-full px-3"
             >
-              <MdLocalOffer size={30} className={`${textColor}`} />
-              <div>Send Offer</div>
-            </div>
-            <div
-              className="flex flex-col justify-center items-center"
-              onClick={isLoading ? null : handleToggleAlert}
-            >
-              {alertSetteled ? (
-                <MdNotificationsActive size={30} className={`${textColor}`} />
-              ) : (
-                <MdNotifications size={30} className={`${textColor}`} />
-              )}
-              <div>{alertSetteled ? "Remove Alert" : "Set Alert"}</div>
-            </div>
+              {mondo?.images?.map((image, index) => (
+                <SwiperSlide key={index}>
+                  <img
+                    src={image?.image}
+                    alt="Mondo Image"
+                    className="h-full w-full object-contain"
+                    style={{ imageRendering: "-webkit-optimize-contrast" }}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
 
-            <div
-              className="flex flex-col justify-center items-center"
-              onClick={handleBookmarkItem}
-            >
-              <MdBookmark size={30} className={`${textColor}`} />
-              <div>Book Mark</div>
+            {/* Action Buttons  */}
+
+            <div className="flex flex-col p-3 space-y-3 h-full w-full border-l border-gray-200">
+              <ProfileCard image={mondo?.userimage} title={mondo?.username} />
+
+              <div className="w-full h-[1px] bg-gray-200 my-2"></div>
+
+              <div className="max-h-[60vh] h-[75vh] md:max-h-[75vh] overflow-y-auto">
+                <h1 className="text-2xl text-dark_bg_5 dark:text-dark_text_1 font-bold mt-5">
+                  {mondo?.title}
+                </h1>
+                <p className="text-gray-500 text-sm dark:text-dark_text_1 mt-1">
+                  {mondo?.item_category_name}
+                </p>
+                <p
+                  className={`text-lg font-semibold text-dark_bg_5 dark:text-dark_text_1  mt-3`}
+                >
+                  ${mondo?.price}
+                </p>
+
+                <p className="text-gray-700 dark:text-dark_text_1 mt-4">
+                  {mondo?.description}
+                </p>
+              </div>
+
+              <div className="flex justify-center cursor-pointer gap-5 items-center mt-8">
+                <div
+                  className={`offer-button hover:${bgColor} hover:text-white text-light_text_1 dark:text-dark_text_1`}
+                  onClick={() => setOfferModal(true)}
+                >
+                  <IoIosSend size={25} />
+                  <span>Send Offer</span>
+                </div>
+                <div
+                  className={`offer-button hover:${bgColor} hover:text-white text-light_text_1 dark:text-dark_text_1`}
+                  onClick={isLoading ? null : handleToggleAlert}
+                >
+                  {alertSetteled ? (
+                    <MdOutlineNotificationsActive size={25} />
+                  ) : (
+                    <IoNotificationsOutline size={25} />
+                  )}
+                  <span>{alertSetteled ? "Remove Alert" : "Set Alert"}</span>
+                </div>
+
+                <div
+                  className={`offer-button hover:${bgColor} hover:text-white text-light_text_1 dark:text-dark_text_1`}
+                  onClick={handleBookmarkItem}
+                >
+                  <IoBookmarkOutline size={25} />
+                  <span>Bookmark</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </Modal>
+      </Previewer>
 
       {/* Offer Modal  */}
       <Modal
@@ -489,11 +486,11 @@ export const MondoDetailsViewer = ({
           setAmount("");
         }}
       >
-        <div className="flex gap-5 items-center mb-10">
+        <div className="flex gap-5 items-center justify-center mb-10">
           <img
             src={mondo?.images[0]?.image}
             alt="img"
-            className="h-28 rounded w-28 overflow-hidden"
+            className="h-36 rounded-lg w-36 overflow-hidden border border-gray-200"
             style={{
               imageRendering: "-webkit-optimize-contrast",
             }}
@@ -502,9 +499,13 @@ export const MondoDetailsViewer = ({
             <p className="text-dark_bg_5 text-lg dark:text-dark_text_1 font-semibold">
               {mondo?.title}
             </p>
-            <p className={`text-base ${textColor}`}>
-              listed price: ${mondo?.price}
-            </p>
+            <p className={`text-base ${textColor}`}>$ {mondo?.price}</p>
+            {mondo?.location && (
+              <p className="flex items-center gap-1 text-gray-500 text-sm dark:text-dark_text_1 mt-1">
+                <FaLocationDot className={`${textColor}`} size={15} />
+                {mondo?.location}
+              </p>
+            )}
           </div>
         </div>
 
@@ -512,11 +513,15 @@ export const MondoDetailsViewer = ({
           type="number"
           placeholder="Enter amount"
           value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value.replaceAll("-", "");
+            setAmount(value);
+          }}
         />
-        <div className="float-end mt-5">
+        <div className="w-full flex justify-center mt-10">
           <Button
             title="Send"
+            icon={isLoading ? null : IoIosSend}
             onClick={isLoading ? null : handleSendOffer}
             spinner={isLoading ? <Spinner size="sm" /> : null}
           />

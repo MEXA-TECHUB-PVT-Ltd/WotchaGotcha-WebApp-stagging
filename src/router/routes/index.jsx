@@ -11,6 +11,8 @@ import SportsAndSports from "../../views/SportsAndSports";
 import OnNews from "../../views/OnNews";
 import Qafi from "../../views/Qafi";
 import Ebic from "../../views/Ebic";
+import OpenLetters from "../../views/OpenLetters";
+
 export default [
   {
     path: "/",
@@ -63,5 +65,9 @@ export default [
   {
     path: "/ebic",
     element: <Ebic />,
+  },
+  {
+    path: "/open-letters",
+    element: <OpenLetters />,
   },
 ];

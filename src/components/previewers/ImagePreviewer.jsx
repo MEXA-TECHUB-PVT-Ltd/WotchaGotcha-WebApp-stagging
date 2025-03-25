@@ -17,7 +17,6 @@ const ImagePreviewer = ({
   image,
   isOpen,
   onClose,
-  isTop = false,
   likes = 0,
   comments = [],
   commentText,
@@ -108,10 +107,12 @@ const ImagePreviewer = ({
                     )}
                   </div>
                 </div>
-                <FaDownload
-                  className="w-5 h-5 cursor-pointer text-gray-700 hover:text-blue-500"
-                  onClick={handleDownload}
-                />
+                {!isEmoji && (
+                  <FaDownload
+                    className="w-5 h-5 cursor-pointer text-gray-700 hover:text-blue-500"
+                    onClick={handleDownload}
+                  />
+                )}
               </div>
               <div className="w-full h-[1px] bg-gray-200 my-2"></div>
               <div className="action-buttons-container">
@@ -155,7 +156,7 @@ const ImagePreviewer = ({
 
             {/* Comments Section */}
             <div className="flex flex-col p-3 space-y-3 h-full w-full">
-              {userName && userImage ? (
+              {userName || userImage ? (
                 profileTitle
               ) : (
                 <span className="text-gray-700 font-bold my-2">Top Image</span>

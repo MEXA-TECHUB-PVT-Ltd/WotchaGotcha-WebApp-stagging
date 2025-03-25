@@ -24,7 +24,6 @@ const MondoMarket = () => {
   const [addModal, setAddModal] = useState(false);
   const [mondoModal, setMondoModal] = useState(false);
   const [reload, setReload] = useState(false);
-  const [isTop, setIsTop] = useState(false);
 
   const [mondoCategories, setMondoCategories] = useState([]);
   const [items, setItems] = useState([]);
@@ -166,7 +165,6 @@ const MondoMarket = () => {
             onClick={() => {
               setCurrentMondo(topMondo);
               setMondoModal(true);
-              setIsTop(true);
             }}
           >
             <img

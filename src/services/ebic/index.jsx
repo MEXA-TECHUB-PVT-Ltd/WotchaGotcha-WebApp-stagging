@@ -169,7 +169,7 @@ export const AddEbic = ({ setAddModal, dispatch, setReload, categoryId }) => {
   );
 };
 
-export const EbicPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
+export const EbicPreviewer = ({ image, isOpen, onClose }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
@@ -274,10 +274,8 @@ export const EbicPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   };
 
   useEffect(() => {
-    if (!isTop) {
-      getAllLikes();
-      getAllComments();
-    }
+    getAllLikes();
+    getAllComments();
   }, [image?.gebc_id]);
 
   return (
@@ -286,7 +284,7 @@ export const EbicPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
         image: image?.image,
         isOpen,
         onClose,
-        isTop,
+
         likes,
         isLoading,
         isLiked,

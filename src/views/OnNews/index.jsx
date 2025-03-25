@@ -23,7 +23,6 @@ const OnNews = () => {
   const [addModal, setAddModal] = useState(false);
   const [newsModal, setNewsModal] = useState(false);
   const [reload, setReload] = useState(false);
-  const [isTop, setIsTop] = useState(false);
 
   const [news, setNews] = useState([]);
 
@@ -146,7 +145,6 @@ const OnNews = () => {
             onClick={() => {
               setCurrentNews(topNews);
               setNewsModal(true);
-              setIsTop(true);
             }}
           >
             <img
@@ -254,9 +252,7 @@ const OnNews = () => {
         isOpen={newsModal}
         onClose={() => {
           setNewsModal(false);
-          setIsTop(false);
         }}
-        isTop={isTop}
       />
     </Fragment>
   );

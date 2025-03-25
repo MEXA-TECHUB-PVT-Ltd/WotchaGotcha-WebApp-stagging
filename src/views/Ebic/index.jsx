@@ -23,7 +23,6 @@ const Ebic = () => {
   const [addModal, setAddModal] = useState(false);
   const [ebicModal, setEbicModal] = useState(false);
   const [reload, setReload] = useState(false);
-  const [isTop, setIsTop] = useState(false);
 
   const [ebic, setEbic] = useState([]);
 
@@ -146,7 +145,6 @@ const Ebic = () => {
             onClick={() => {
               setCurrentEbic(topEbic);
               setEbicModal(true);
-              setIsTop(true);
             }}
           >
             <div className="video-thumbnail flex justify-center items-center">
@@ -251,9 +249,7 @@ const Ebic = () => {
         isOpen={ebicModal}
         onClose={() => {
           setEbicModal(false);
-          setIsTop(false);
         }}
-        isTop={isTop}
       />
     </Fragment>
   );

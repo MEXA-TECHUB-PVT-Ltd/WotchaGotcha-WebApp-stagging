@@ -206,6 +206,7 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   const [commentText, setCommentText] = useState("");
 
   const handleComment = async () => {
+    if (isTop) return Toast("error", "You can't comment on top pic tour");
     if (!commentText.trim()) return;
 
     const previousComments = [...comments];
@@ -310,7 +311,6 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
         image: image?.image,
         isOpen,
         onClose,
-        isTop,
         likes,
         isLoading,
         isLiked,

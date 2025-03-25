@@ -175,7 +175,7 @@ export const AddQafi = ({ setAddModal, dispatch, setReload, categoryId }) => {
   );
 };
 
-export const QafiPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
+export const QafiPreviewer = ({ image, isOpen, onClose }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
@@ -280,10 +280,8 @@ export const QafiPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   };
 
   useEffect(() => {
-    if (!isTop) {
-      getAllLikes();
-      getAllComments();
-    }
+    getAllLikes();
+    getAllComments();
   }, [image?.qafi_id]);
 
   return (
@@ -292,7 +290,6 @@ export const QafiPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
         image: image?.image,
         isOpen,
         onClose,
-        isTop,
         likes,
         isLoading,
         isLiked,

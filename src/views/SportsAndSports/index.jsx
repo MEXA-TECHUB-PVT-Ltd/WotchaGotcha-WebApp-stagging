@@ -22,7 +22,6 @@ const SportsAndSports = () => {
   const [addModal, setAddModal] = useState(false);
   const [sportModal, setSportModal] = useState(false);
   const [reload, setReload] = useState(false);
-  const [isTop, setIsTop] = useState(false);
 
   const [sports, setSports] = useState([]);
 
@@ -145,7 +144,6 @@ const SportsAndSports = () => {
             onClick={() => {
               setCurrentSport(topSports);
               setSportModal(true);
-              setIsTop(true);
             }}
           >
             <img
@@ -251,9 +249,7 @@ const SportsAndSports = () => {
         isOpen={sportModal}
         onClose={() => {
           setSportModal(false);
-          setIsTop(false);
         }}
-        isTop={isTop}
       />
     </Fragment>
   );
