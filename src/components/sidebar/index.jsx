@@ -35,7 +35,7 @@ const Sidebar = () => {
     <>
       {isSideBarOpen && (
         <div
-          className="fixed inset-0 bg-black opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black opacity-50 z-40 lg:hidden cursor-pointer"
           onClick={handleToggleSidebar}
         ></div>
       )}
@@ -55,7 +55,11 @@ const Sidebar = () => {
               className="w-50 h-auto"
             />
           </div>
-          <CgClose onClick={handleToggleSidebar} size={25} />
+          <CgClose
+            onClick={handleToggleSidebar}
+            size={25}
+            className="cursor-pointer"
+          />
         </div>
         <SidebarLayout />
       </div>

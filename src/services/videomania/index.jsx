@@ -23,8 +23,8 @@ import videoIcon from "../../assets/videoIcon.svg";
 import { Toast } from "../../components/theme/Toast";
 import { uploadImage, uploadVideo } from "../../utils/common/cloudinary";
 
-import { copyLink } from "../../utils/copyLink";
 import VideoPlayer from "../../components/previewers/VideoPlayer";
+import { copyLink } from "../../utils/copyLink";
 
 export const AddVideoMania = ({
   setAddModal,
@@ -34,9 +34,7 @@ export const AddVideoMania = ({
 }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { textColor, borderColor, bgColor } = useSelector(
-    (state) => state.theme
-  );
+  const { bgColor } = useSelector((state) => state.theme);
 
   const videoRef = useRef(null);
   const thumbnailRef = useRef(null);
@@ -237,13 +235,7 @@ export const AddVideoMania = ({
 export const EditVideoMania = async () => {};
 export const DeleteVideoMania = async () => {};
 
-export const VideoManiaPlayer = ({
-  video,
-  isOpen,
-  onClose,
-  isTop = false,
-  dispatch,
-}) => {
+export const VideoManiaPlayer = ({ video, isOpen, onClose, dispatch }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
   const { isLoading } = useSelector((state) => state.video_mania);
@@ -347,10 +339,8 @@ export const VideoManiaPlayer = ({
   };
 
   useEffect(() => {
-    if (!isTop) {
-      getAllLikes();
-      getAllComments();
-    }
+    getAllLikes();
+    getAllComments();
   }, [video?.video_id]);
 
   return (
@@ -365,13 +355,13 @@ export const VideoManiaPlayer = ({
       totalComments={totalComments}
       OnLike={handleLike}
       onComment={handleComment}
+      OnCopy={() => copyLink(video?.video)}
       description={video?.description}
       userImage={video?.userimage || video?.user_image}
       userName={video?.username}
       title={video?.name}
       isLiked={isLiked}
       isLoading={isLoading}
-      onCopy={() => copyLink(video?.video)}
     />
   );
 };

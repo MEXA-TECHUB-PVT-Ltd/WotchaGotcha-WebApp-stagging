@@ -8,26 +8,26 @@ import { useDispatch, useSelector } from "react-redux";
 import ThumbnailCard from "../../components/card/ThumbnailCard";
 import { Spinner } from "../../components/theme/Loader";
 import Modal from "../../components/modal/Modal";
-
 import {
-  getQafiByCategory,
-  getQafiCategories,
-  getTopQafi,
-  searchQafi,
-} from "../../app/features/qafi";
-import { AddQafi, QafiPreviewer } from "../../services/qafi";
-const Qafi = () => {
+  getPicTourByCategory,
+  getPicTourCategories,
+  getTopPicTour,
+  searchPicTour,
+} from "../../app/features/pictours";
+import { AddPicTour, PicTourPreviewer } from "../../services/pictours";
+
+const OpenLetters = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
-  const [qafiModal, setQafiModal] = useState(false);
+  const [picTourModal, setPicTourModal] = useState(false);
   const [reload, setReload] = useState(false);
 
-  const [qafi, setQafi] = useState([]);
+  const [picTours, setPicTours] = useState([]);
 
-  const [topQafi, setTopQafi] = useState(null);
+  const [topPicTour, setTopPicTour] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [currentQafi, setCurrentQafi] = useState(null);
+  const [currentPicTour, setCurrentPicTour] = useState(null);
 
   // ** Redux ---
   const dispatch = useDispatch();
@@ -36,10 +36,10 @@ const Qafi = () => {
   const {
     categories,
     isFetching,
-    isQafiFetching,
-    isTopQafiFetching,
+    isTopPicTourFetching,
+    isPicTourFetching,
     isSearching,
-  } = useSelector((state) => state.qafi);
+  } = useSelector((state) => state.pictours);
 
   // ** Methods ---
   const onSearch = useCallback(handleSearch(setSearchQuery), [searchQuery]);
@@ -47,7 +47,7 @@ const Qafi = () => {
   // ** Hooks ---
 
   useEffect(() => {
-    dispatch(getQafiCategories({ token }))
+    dispatch(getPicTourCategories({ token }))
       .unwrap()
       .then((data) => {
         if (data?.AllCategories?.length > 0) {
@@ -60,15 +60,16 @@ const Qafi = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(getTopQafi({ token }))
+    if (!activeCategory) return;
+    dispatch(getTopPicTour({ token, id: activeCategory?.id }))
       .unwrap()
       .then((data) => {
-        setTopQafi(data?.data);
+        setTopPicTour(data?.topTour[0]);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [activeCategory]);
 
   useEffect(() => {
     if (!activeCategory) return;
@@ -76,20 +77,25 @@ const Qafi = () => {
     let timeout;
     if (searchQuery?.trim()?.length > 0) {
       timeout = setTimeout(() => {
-        dispatch(searchQafi({ token, searchQuery }))
+        dispatch(searchPicTour({ token, searchQuery }))
           .unwrap()
           .then((data) => {
-            setQafi(data?.QAFIs);
+            setPicTours(
+              data?.Tours?.map((tour) => ({
+                ...tour,
+                tour_id: tour?.pic_tour_id,
+              })) || []
+            );
           })
           .catch((error) => {
             console.error(error);
           });
       }, 300);
     } else {
-      dispatch(getQafiByCategory({ token, id: activeCategory?.id }))
+      dispatch(getPicTourByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
-          setQafi(data?.data);
+          setPicTours(data?.data);
         })
         .catch((error) => {
           console.error(error);
@@ -102,7 +108,7 @@ const Qafi = () => {
   return (
     <Fragment>
       <Header
-        title={<BreadCrumb items={[{ label: "QAFI" }]} />}
+        title={<BreadCrumb items={[{ label: "Open Letters" }]} />}
         buttonTitle={"Add"}
         buttonIcon={FaPlus}
         onSearch={onSearch}
@@ -113,7 +119,7 @@ const Qafi = () => {
       {/* All Categories */}
 
       {!searchQuery?.trim()?.length > 0 && (
-        <div className="flex flex-1 gap-5 items-center overflow-x-auto scrollbar-hidden">
+        <div className="flex items-center gap-5 overflow-x-auto flex-1 scrollbar-hidden">
           {isFetching ? (
             <Spinner />
           ) : (
@@ -134,32 +140,32 @@ const Qafi = () => {
         </div>
       )}
 
-      {/* Top Qafi*/}
+      {/* Top PicTour*/}
       <div className="flex items-center mt-10">
-        {isTopQafiFetching ? (
+        {isTopPicTourFetching ? (
           <Spinner />
-        ) : topQafi ? (
+        ) : topPicTour ? (
           <div
-            className="flex justify-center gap-5 items-center"
+            className="flex justify-center items-center gap-5"
             onClick={() => {
-              setCurrentQafi(topQafi);
-              setQafiModal(true);
+              setCurrentPicTour(topPicTour);
+              setPicTourModal(true);
             }}
           >
             <img
               style={{ imageRendering: "-webkit-optimize-contrast" }}
-              src={topQafi?.image}
-              alt={"topQafi"}
+              src={topPicTour?.image}
+              alt={"topPicTour"}
               className="video-thumbnail"
             />
 
             <div className="text-sm break-words whitespace-pre-line">
-              {topQafi?.description}
+              {topPicTour?.description}
             </div>
           </div>
-        ) : !topQafi && !isFetching ? (
+        ) : !topPicTour && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Qafi Found
+            No Top Pic Tour Found
           </div>
         ) : null}
       </div>
@@ -169,23 +175,23 @@ const Qafi = () => {
         <div className="mt-10">
           {isSearching ? (
             <Spinner />
-          ) : qafi?.length > 0 ? (
+          ) : picTours?.length > 0 ? (
             <div className="mb-5">
               <div className="cards-container">
-                {qafi?.map((pic) => (
+                {picTours?.map((pic) => (
                   <ThumbnailCard
-                    key={pic?.news_id}
+                    key={pic?.tour_id}
                     image={pic?.image}
-                    title={pic?.username}
+                    title={pic?.name}
                     onClick={() => {
-                      setCurrentQafi(pic);
-                      setQafiModal(true);
+                      setCurrentPicTour(pic);
+                      setPicTourModal(true);
                     }}
                   />
                 ))}
               </div>
             </div>
-          ) : qafi?.length === 0 && !isSearching ? (
+          ) : picTours?.Tours?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
               No Data Found
             </div>
@@ -193,24 +199,22 @@ const Qafi = () => {
         </div>
       ) : (
         <div className="mt-10">
-          {isQafiFetching ? (
+          {isPicTourFetching ? (
             <Spinner />
-          ) : qafi?.length > 0 ? (
-            qafi?.map((qafi) => (
-              <div className="mb-5" key={qafi?.id}>
-                <div className="heading">
-                  {qafi?.sub_category_name || "Others"}
-                </div>
+          ) : picTours?.length > 0 ? (
+            picTours?.map((pictour) => (
+              <div className="mb-5" key={pictour?.id}>
+                <div className="heading">{pictour?.sub_category_name}</div>
                 <div className="cards-container">
-                  {qafi?.QAFI_result?.QAFIs?.length > 0 ? (
-                    qafi?.QAFI_result?.QAFIs?.map((qafi) => (
+                  {pictour?.tour_result?.Tours?.length > 0 ? (
+                    pictour?.tour_result?.Tours?.map((pic) => (
                       <ThumbnailCard
-                        key={qafi?.news_id}
-                        image={qafi?.image}
-                        title={qafi?.username}
+                        key={pic?.tour_id}
+                        image={pic?.image}
+                        title={pic?.name}
                         onClick={() => {
-                          setCurrentQafi(qafi);
-                          setQafiModal(true);
+                          setCurrentPicTour(pic);
+                          setPicTourModal(true);
                         }}
                       />
                     ))
@@ -222,7 +226,7 @@ const Qafi = () => {
                 </div>
               </div>
             ))
-          ) : qafi?.length === 0 && !isQafiFetching ? (
+          ) : picTours?.length === 0 && !isPicTourFetching ? (
             <div className="flex justify-center text-gray-400">
               No Data Found
             </div>
@@ -235,9 +239,9 @@ const Qafi = () => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add Qafi"
+        title="Add Pic Tour"
       >
-        <AddQafi
+        <AddPicTour
           setAddModal={setAddModal}
           dispatch={dispatch}
           setReload={setReload}
@@ -246,15 +250,15 @@ const Qafi = () => {
       </Modal>
 
       {/* //**  Image Modal  */}
-      <QafiPreviewer
-        image={currentQafi}
-        isOpen={qafiModal}
+      <PicTourPreviewer
+        image={currentPicTour}
+        isOpen={picTourModal}
         onClose={() => {
-          setQafiModal(false);
+          setPicTourModal(false);
         }}
       />
     </Fragment>
   );
 };
 
-export default Qafi;
+export default OpenLetters;

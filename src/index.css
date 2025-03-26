@@ -49,9 +49,32 @@ input[type="number"] {
 .swiper-pagination-bullet-active {
   @apply bg-yellow-500;
 }
-.swiper-button-prev:after,
-.swiper-button-next:after {
-  @apply hidden;
+.swiper-button-prev,
+.swiper-button-next {
+  @apply text-white bg-black/60 rounded-full w-14 h-14 flex items-center justify-center transition-all duration-300;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  @apply bg-black/90 scale-105 shadow-lg;
+}
+
+@media (max-width: 768px) {
+  .swiper-button-prev,
+  .swiper-button-next {
+    @apply w-10 h-10;
+  }
+  .swiper-button-prev::after,
+  .swiper-button-next::after {
+    font-size: 18px;
+  }
 }
 
 .full {

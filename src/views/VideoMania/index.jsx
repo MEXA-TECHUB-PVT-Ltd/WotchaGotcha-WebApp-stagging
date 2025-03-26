@@ -22,7 +22,6 @@ const VideoMania = () => {
   const [addModal, setAddModal] = useState(false);
   const [videoModal, setVideoModal] = useState(false);
   const [reload, setReload] = useState(false);
-  const [isTop, setIsTop] = useState(false);
 
   const [videos, setVideos] = useState([]);
 
@@ -137,7 +136,6 @@ const VideoMania = () => {
               onClick={() => {
                 setCurrentVideo(topVideo);
                 setVideoModal(true);
-                setIsTop(true);
               }}
             >
               <FaPlayCircle className={`w-32 h-32 ${textColor}`} />
@@ -233,9 +231,7 @@ const VideoMania = () => {
         isOpen={videoModal}
         onClose={() => {
           setVideoModal(false);
-          setIsTop(false);
         }}
-        isTop={isTop}
         dispatch={dispatch}
       />
     </Fragment>

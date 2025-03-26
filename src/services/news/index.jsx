@@ -175,7 +175,7 @@ export const AddNews = ({ setAddModal, dispatch, setReload, categoryId }) => {
   );
 };
 
-export const NewsPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
+export const NewsPreviewer = ({ image, isOpen, onClose }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
@@ -282,10 +282,8 @@ export const NewsPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   };
 
   useEffect(() => {
-    if (!isTop) {
-      getAllLikes();
-      getAllComments();
-    }
+    getAllLikes();
+    getAllComments();
   }, [image?.news_id]);
 
   return (
@@ -294,7 +292,6 @@ export const NewsPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
         image: image?.image,
         isOpen,
         onClose,
-        isTop,
         likes,
         isLoading,
         isLiked,
