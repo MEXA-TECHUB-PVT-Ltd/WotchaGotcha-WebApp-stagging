@@ -121,3 +121,7 @@
 .offer-button {
   @apply flex justify-center items-center gap-2 border border-gray-200 rounded-lg px-2 py-1;
 }
+
+.letter-card {
+  @apply w-48 h-auto max-h-36 border-b-2 border-t-4 border-blue-400 overflow-hidden my-4 p-1;
+}

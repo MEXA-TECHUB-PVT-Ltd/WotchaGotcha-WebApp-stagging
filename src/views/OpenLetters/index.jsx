@@ -5,29 +5,30 @@ import Header from "../../components/header";
 import { handleSearch } from "../../utils/common/fetchDataHelpers";
 import { useDispatch, useSelector } from "react-redux";
 
-import ThumbnailCard from "../../components/card/ThumbnailCard";
 import { Spinner } from "../../components/theme/Loader";
 import Modal from "../../components/modal/Modal";
+
+import { AddOpenLetter, OpenLetterPreviewer } from "../../services/openletters";
 import {
-  getPicTourByCategory,
-  getPicTourCategories,
-  getTopPicTour,
-  searchPicTour,
-} from "../../app/features/pictours";
-import { AddPicTour, PicTourPreviewer } from "../../services/pictours";
+  getLetterByCategory,
+  getLetterCategories,
+  getTopLetter,
+  searchLetters,
+} from "../../app/features/openletters";
+import LetterCard from "../../components/card/LetterCard";
 
 const OpenLetters = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
-  const [picTourModal, setPicTourModal] = useState(false);
+  const [letterModal, setLetterModal] = useState(false);
   const [reload, setReload] = useState(false);
 
-  const [picTours, setPicTours] = useState([]);
+  const [letters, setLetters] = useState([]);
 
-  const [topPicTour, setTopPicTour] = useState(null);
+  const [topLetter, setTopLetter] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [currentPicTour, setCurrentPicTour] = useState(null);
+  const [currentLetter, setCurrentLetter] = useState(null);
 
   // ** Redux ---
   const dispatch = useDispatch();
@@ -36,10 +37,10 @@ const OpenLetters = () => {
   const {
     categories,
     isFetching,
-    isTopPicTourFetching,
-    isPicTourFetching,
+    isTopLetterFetching,
+    isLetterFetching,
     isSearching,
-  } = useSelector((state) => state.pictours);
+  } = useSelector((state) => state.openletter);
 
   // ** Methods ---
   const onSearch = useCallback(handleSearch(setSearchQuery), [searchQuery]);
@@ -47,7 +48,7 @@ const OpenLetters = () => {
   // ** Hooks ---
 
   useEffect(() => {
-    dispatch(getPicTourCategories({ token }))
+    dispatch(getLetterCategories({ token }))
       .unwrap()
       .then((data) => {
         if (data?.AllCategories?.length > 0) {
@@ -61,10 +62,10 @@ const OpenLetters = () => {
 
   useEffect(() => {
     if (!activeCategory) return;
-    dispatch(getTopPicTour({ token, id: activeCategory?.id }))
+    dispatch(getTopLetter({ token }))
       .unwrap()
       .then((data) => {
-        setTopPicTour(data?.topTour[0]);
+        setTopLetter(data?.topitem[0]);
       })
       .catch((error) => {
         console.error(error);
@@ -77,25 +78,20 @@ const OpenLetters = () => {
     let timeout;
     if (searchQuery?.trim()?.length > 0) {
       timeout = setTimeout(() => {
-        dispatch(searchPicTour({ token, searchQuery }))
+        dispatch(searchLetters({ token, searchQuery }))
           .unwrap()
           .then((data) => {
-            setPicTours(
-              data?.Tours?.map((tour) => ({
-                ...tour,
-                tour_id: tour?.pic_tour_id,
-              })) || []
-            );
+            setLetters(data?.letters);
           })
           .catch((error) => {
             console.error(error);
           });
       }, 300);
     } else {
-      dispatch(getPicTourByCategory({ token, id: activeCategory?.id }))
+      dispatch(getLetterByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
-          setPicTours(data?.data);
+          setLetters(data?.data);
         })
         .catch((error) => {
           console.error(error);
@@ -140,32 +136,23 @@ const OpenLetters = () => {
         </div>
       )}
 
-      {/* Top PicTour*/}
+      {/* Top Letter*/}
       <div className="flex items-center mt-10">
-        {isTopPicTourFetching ? (
+        {isTopLetterFetching ? (
           <Spinner />
-        ) : topPicTour ? (
-          <div
-            className="flex justify-center items-center gap-5"
+        ) : topLetter ? (
+          <LetterCard
+            userImage={topLetter?.userimage}
+            date={topLetter?.top_added_date}
+            subject={topLetter?.subject_place}
+            address={topLetter?.address}
             onClick={() => {
-              setCurrentPicTour(topPicTour);
-              setPicTourModal(true);
+              setCurrentLetter(topLetter);
             }}
-          >
-            <img
-              style={{ imageRendering: "-webkit-optimize-contrast" }}
-              src={topPicTour?.image}
-              alt={"topPicTour"}
-              className="video-thumbnail"
-            />
-
-            <div className="text-sm break-words whitespace-pre-line">
-              {topPicTour?.description}
-            </div>
-          </div>
-        ) : !topPicTour && !isFetching ? (
+          />
+        ) : !topLetter && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Pic Tour Found
+            No Top Letter Found
           </div>
         ) : null}
       </div>
@@ -175,23 +162,24 @@ const OpenLetters = () => {
         <div className="mt-10">
           {isSearching ? (
             <Spinner />
-          ) : picTours?.length > 0 ? (
+          ) : letters?.length > 0 ? (
             <div className="mb-5">
               <div className="cards-container">
-                {picTours?.map((pic) => (
-                  <ThumbnailCard
-                    key={pic?.tour_id}
-                    image={pic?.image}
-                    title={pic?.name}
+                {letters?.map((letter) => (
+                  <LetterCard
+                    userImage={letter?.userimage}
+                    date={letter?.post_date}
+                    subject={letter?.subject_place}
+                    address={letter?.address}
+                    signImage={letter?.signature_image}
                     onClick={() => {
-                      setCurrentPicTour(pic);
-                      setPicTourModal(true);
+                      setCurrentLetter(letter);
                     }}
                   />
                 ))}
               </div>
             </div>
-          ) : picTours?.Tours?.length === 0 && !isSearching ? (
+          ) : letters?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
               No Data Found
             </div>
@@ -199,22 +187,23 @@ const OpenLetters = () => {
         </div>
       ) : (
         <div className="mt-10">
-          {isPicTourFetching ? (
+          {isLetterFetching ? (
             <Spinner />
-          ) : picTours?.length > 0 ? (
-            picTours?.map((pictour) => (
-              <div className="mb-5" key={pictour?.id}>
-                <div className="heading">{pictour?.sub_category_name}</div>
+          ) : letters?.length > 0 ? (
+            letters?.map((letter) => (
+              <div className="mb-5" key={letter?.id}>
+                <div className="heading">{letter?.sub_category_name}</div>
                 <div className="cards-container">
-                  {pictour?.tour_result?.Tours?.length > 0 ? (
-                    pictour?.tour_result?.Tours?.map((pic) => (
-                      <ThumbnailCard
-                        key={pic?.tour_id}
-                        image={pic?.image}
-                        title={pic?.name}
+                  {letter?.total_result?.letters?.length > 0 ? (
+                    letter?.total_result?.letters?.map((details) => (
+                      <LetterCard
+                        userImage={details?.userimage}
+                        date={details?.post_date}
+                        subject={details?.subject_place}
+                        address={details?.address}
+                        signImage={details?.signature_image}
                         onClick={() => {
-                          setCurrentPicTour(pic);
-                          setPicTourModal(true);
+                          setCurrentLetter(details);
                         }}
                       />
                     ))
@@ -226,7 +215,7 @@ const OpenLetters = () => {
                 </div>
               </div>
             ))
-          ) : picTours?.length === 0 && !isPicTourFetching ? (
+          ) : letters?.length === 0 && !isLetterFetching ? (
             <div className="flex justify-center text-gray-400">
               No Data Found
             </div>
@@ -239,9 +228,10 @@ const OpenLetters = () => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add Pic Tour"
+        title="Add Letter"
+        size="lg"
       >
-        <AddPicTour
+        <AddOpenLetter
           setAddModal={setAddModal}
           dispatch={dispatch}
           setReload={setReload}
@@ -250,11 +240,11 @@ const OpenLetters = () => {
       </Modal>
 
       {/* //**  Image Modal  */}
-      <PicTourPreviewer
-        image={currentPicTour}
-        isOpen={picTourModal}
+      <OpenLetterPreviewer
+        image={currentLetter}
+        isOpen={letterModal}
         onClose={() => {
-          setPicTourModal(false);
+          setLetterModal(false);
         }}
       />
     </Fragment>
