@@ -25,7 +25,7 @@ import {
 } from "../../app/features/ebic";
 import ImagePreviewer from "../../components/previewers/ImagePreviewer";
 import Modal from "../../components/modal/Modal";
-import { FaRegSmile } from "react-icons/fa";
+import { FaPlusCircle, FaRegSmile } from "react-icons/fa";
 
 export const AddEbic = ({ setAddModal, dispatch, setReload, categoryId }) => {
   const { user } = useSelector((state) => state.user);
@@ -91,9 +91,9 @@ export const AddEbic = ({ setAddModal, dispatch, setReload, categoryId }) => {
         onSubmit={handleAddEbic}
       >
         {({ handleSubmit, values, handleChange, setFieldValue }) => (
-          <div className="flex-col-start gap-5">
+          <div className="flex-col-center gap-5 w-full">
             <div
-              className={`relative capture-container ${borderColor}`}
+              className={`relative capture-container`}
               onClick={() => setIsEmojiModalOpen(true)}
             >
               {values.image ? (
@@ -109,7 +109,7 @@ export const AddEbic = ({ setAddModal, dispatch, setReload, categoryId }) => {
                 </>
               ) : (
                 <>
-                  <FaRegSmile size={30} className={textColor} />
+                  <FaRegSmile size={30} />
                   <p>Select an Emoji</p>
                 </>
               )}
@@ -139,6 +139,7 @@ export const AddEbic = ({ setAddModal, dispatch, setReload, categoryId }) => {
             <div className="btn-container">
               <Button
                 title={"Add"}
+                icon={isLoading ? null : FaPlusCircle}
                 width={false}
                 onClick={isLoading ? null : handleSubmit}
                 spinner={isLoading ? <Spinner size="sm" /> : null}

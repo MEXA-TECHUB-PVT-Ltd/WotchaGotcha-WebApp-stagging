@@ -95,9 +95,9 @@ export const AddNews = ({ setAddModal, dispatch, setReload, categoryId }) => {
       >
         {({ handleSubmit, values, handleChange, setFieldValue }) => (
           <div className="flex-col-start gap-5">
-            <div className="flex gap-5 items-center">
+            <div className="w-full flex gap-5 items-center justify-center">
               <div
-                className={`relative capture-container ${borderColor}`}
+                className={`relative capture-container`}
                 onClick={() => imageRef.current.click()}
               >
                 <input
@@ -113,7 +113,7 @@ export const AddNews = ({ setAddModal, dispatch, setReload, categoryId }) => {
                 />
                 {!values?.image ? (
                   <>
-                    <FaPlusCircle size={25} className={textColor} />
+                    <FaPlusCircle size={25} />
                     <p>Upload Image</p>
                   </>
                 ) : (
@@ -162,6 +162,7 @@ export const AddNews = ({ setAddModal, dispatch, setReload, categoryId }) => {
             <div className="btn-container">
               <Button
                 title={"Add"}
+                icon={isLoading ? null : FaPlusCircle}
                 width={false}
                 onClick={isLoading ? null : handleSubmit}
                 spinner={isLoading ? <Spinner size="sm" /> : null}

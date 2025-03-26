@@ -99,7 +99,7 @@ input[type="number"] {
 }
 
 .btn-container {
-  @apply flex items-center justify-end w-full;
+  @apply flex items-center justify-center w-full;
 }
 
 .profile-item {

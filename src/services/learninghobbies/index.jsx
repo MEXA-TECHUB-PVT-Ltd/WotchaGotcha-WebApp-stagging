@@ -25,6 +25,7 @@ import {
   likeUnlikeLearningHobbies,
 } from "../../app/features/learningandhobbies";
 import { copyLink } from "../../utils/copyLink";
+import VideoPlayer from "../../components/previewers/VideoPlayer";
 
 export const AddLearningHobbies = ({
   setAddModal,
@@ -109,9 +110,9 @@ export const AddLearningHobbies = ({
       >
         {({ handleSubmit, values, handleChange, setFieldValue }) => (
           <div className="flex-col-start gap-5">
-            <div className="flex items-center gap-5">
+            <div className="w-full flex items-center justify-center gap-5">
               <div
-                className={`relative capture-container ${borderColor}`}
+                className={`relative capture-container`}
                 onClick={() => videoRef.current.click()}
               >
                 <input
@@ -127,7 +128,7 @@ export const AddLearningHobbies = ({
                 />
                 {!values?.video ? (
                   <>
-                    <FaPlusCircle size={25} className={textColor} />
+                    <FaPlusCircle size={25} />
                     <p>Upload Video</p>
                   </>
                 ) : (
@@ -148,7 +149,7 @@ export const AddLearningHobbies = ({
               </div>
 
               <div
-                className={`relative capture-container ${borderColor}`}
+                className={`relative capture-container`}
                 onClick={() => thumbnailRef.current.click()}
               >
                 <input
@@ -164,7 +165,7 @@ export const AddLearningHobbies = ({
                 />
                 {!values?.thumbnail ? (
                   <>
-                    <FaPlusCircle size={25} className={textColor} />
+                    <FaPlusCircle size={25} />
                     <p>Video Tumbnail</p>
                   </>
                 ) : (
@@ -223,6 +224,7 @@ export const AddLearningHobbies = ({
             <div className="btn-container">
               <Button
                 title={"Add"}
+                icon={isLoading ? null : FaPlusCircle}
                 width={false}
                 onClick={isLoading ? null : handleSubmit}
                 spinner={isLoading ? <Spinner size="sm" /> : null}
@@ -346,92 +348,24 @@ export const LearningHobbiesPlayer = ({ video, isOpen, onClose, dispatch }) => {
   }, [video?.video_id]);
 
   return (
-    <>
-      <Modal
-        title={
-          <ProfileCard
-            image={video?.user_image || video?.userimage}
-            title={video?.username}
-          />
-        }
-        isOpen={isOpen}
-        onClose={onClose}
-        size="lg"
-      >
-        {/* Video Player */}
-        <div className="player">
-          <video src={video?.video} controls className="w-full h-full" />
-        </div>
-
-        {/* Action Buttons */}
-
-        <div className="action-buttons-container">
-          <button
-            onClick={handleLike}
-            className="action-button"
-            disabled={isLoading}
-          >
-            <IoHeart className={`w-6 h-6 ${isLiked ? "text-red-500" : ""}`} />{" "}
-            {likes}
-          </button>
-
-          <button
-            className="action-button"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <IoChatbubbleEllipses className="w-6 h-6" /> Comment
-          </button>
-          {totalComments > 0 && (
-            <button className="action-button">
-              {totalComments === 1
-                ? `${totalComments} comment`
-                : `${totalComments} comments`}
-            </button>
-          )}
-          <button
-            onClick={() => copyLink(video?.video)}
-            className={`action-button hover:${textColor}`}
-            disabled={isLoading}
-          >
-            <FaCopy className={`w-6 h-6`} /> Copy Link
-          </button>
-        </div>
-      </Modal>
-
-      <Modal
-        title="Comments"
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      >
-        <div className="flex flex-col max-h-[70vh] flex-1 overflow-y-auto overflow-x-hidden space-y-3 p-3">
-          {comments?.length > 0 ? (
-            comments?.map((comment, index) => (
-              <ProfileCard
-                key={index}
-                image={comment?.user_image}
-                title={comment?.username}
-                subTitle={comment?.comment}
-              />
-            ))
-          ) : (
-            <p className="flex justify-center text-gray-400">
-              No Comments Found
-            </p>
-          )}
-        </div>
-
-        <div>
-          <AppInput
-            placeholder="comment here..."
-            rounded="rounded-full"
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-            icon={IoSend}
-            onIconClick={handleComment}
-            onEnterPress={handleComment}
-          />
-        </div>
-      </Modal>
-    </>
+    <VideoPlayer
+      video={video?.video}
+      isOpen={isOpen}
+      onClose={onClose}
+      likes={likes}
+      comments={comments}
+      commentText={commentText}
+      setCommentText={setCommentText}
+      totalComments={totalComments}
+      OnLike={handleLike}
+      OnCopy={() => copyLink(video?.video)}
+      isLoading={isLoading}
+      isLiked={isLiked}
+      onComment={handleComment}
+      description={video?.description}
+      userImage={video?.user_image || video?.userimage}
+      userName={video?.username}
+      title={video?.name}
+    />
   );
 };
