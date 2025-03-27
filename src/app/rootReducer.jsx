@@ -14,7 +14,7 @@ import sportsAndSportsSlice from "./features/sportsandsports";
 import onNewsSlice from "./features/onnews";
 import qafiSlice from "./features/qafi";
 import ebicSlice from "./features/ebic";
-
+import openLetterSlice from "./features/openletters";
 
 const rootReducer = combineReducers({
   theme: themeSlice,
@@ -32,6 +32,7 @@ const rootReducer = combineReducers({
   onnews: onNewsSlice,
   qafi: qafiSlice,
   ebic: ebicSlice,
+  openletter: openLetterSlice,
 });
 
 export default rootReducer;
