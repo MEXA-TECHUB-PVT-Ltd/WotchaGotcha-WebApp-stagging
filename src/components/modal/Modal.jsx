@@ -32,12 +32,12 @@ const Modal = ({ title, onClose, isOpen, size = "sm", children }) => {
         theme === "dark" && "dark"
       } fixed h-auto max-h-[98vh] w-[95%] ${
         size === "sm"
-          ? "md:w-[40%]"
+          ? "md:w-[38%]"
           : size === "md"
           ? "md:w-[60%]"
           : size === "lg"
           ? "md:w-[97%] md:h-[99vh]"
-          : "md:w-[40%]"
+          : "md:w-[38%]"
       }  bg-white dark:bg-dark_bg_4 shadow-sm outline-none rounded p-3 dark:text-dark_text_1 overflow-hidden`}
     >
       <div className="flex-between cursor-pointer">
@@ -51,7 +51,7 @@ const Modal = ({ title, onClose, isOpen, size = "sm", children }) => {
           <IoClose />
         </p>
       </div>
-      <div className="flex-1 p-2 max-h-[85vh] mt-8 overflow-auto">
+      <div className="flex-1 p-2 max-h-[85vh] mt-8 overflow-y-auto overflow-x-hidden">
         {children}
       </div>
     </AppModal>

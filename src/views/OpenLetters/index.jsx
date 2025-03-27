@@ -148,6 +148,7 @@ const OpenLetters = () => {
             address={topLetter?.address}
             onClick={() => {
               setCurrentLetter(topLetter);
+              setLetterModal(true);
             }}
           />
         ) : !topLetter && !isFetching ? (
@@ -174,6 +175,7 @@ const OpenLetters = () => {
                     signImage={letter?.signature_image}
                     onClick={() => {
                       setCurrentLetter(letter);
+                      setLetterModal(true);
                     }}
                   />
                 ))}
@@ -204,6 +206,7 @@ const OpenLetters = () => {
                         signImage={details?.signature_image}
                         onClick={() => {
                           setCurrentLetter(details);
+                          setLetterModal(true);
                         }}
                       />
                     ))
@@ -229,7 +232,6 @@ const OpenLetters = () => {
         isOpen={addModal}
         onClose={() => setAddModal(false)}
         title="Add Letter"
-        size="lg"
       >
         <AddOpenLetter
           setAddModal={setAddModal}
@@ -239,9 +241,9 @@ const OpenLetters = () => {
         />
       </Modal>
 
-      {/* //**  Image Modal  */}
+      {/* //**  Previewer Modal  */}
       <OpenLetterPreviewer
-        image={currentLetter}
+        letter={currentLetter}
         isOpen={letterModal}
         onClose={() => {
           setLetterModal(false);

@@ -40,7 +40,7 @@ const LetterCard = ({
           <img
             src={signImage}
             className="w-16 h-16 object-contain"
-            alt="Sign"
+            alt="sign"
             style={{
               imageRendering: "-webkit-optimize-contrast",
             }}
