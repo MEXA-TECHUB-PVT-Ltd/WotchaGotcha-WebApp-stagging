@@ -121,8 +121,29 @@ export const searchLetters = createAsyncThunk(
   }
 );
 
+export const addSignature = createAsyncThunk(
+  "signature/createSignature",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.post(
+        `/signature/createSignature`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 const openLetterSlice = createSlice({
-  name: "pictours",
+  name: "openletter",
 
   initialState: {
     isLoading: false,

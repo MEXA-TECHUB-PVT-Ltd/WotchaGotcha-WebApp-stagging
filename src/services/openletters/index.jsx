@@ -13,11 +13,12 @@ import { Spinner } from "../../components/theme/Loader";
 import AppTextArea from "../../components/form/AppTextArea";
 import { FaPlusCircle, FaRegCheckCircle } from "react-icons/fa";
 import { Toast } from "../../components/theme/Toast";
-import { uploadImage } from "../../utils/common/cloudinary";
+import { uploadImage, uploadVideo } from "../../utils/common/cloudinary";
 import Modal from "../../components/modal/Modal";
 import ProfileCard from "../../components/card/ProfileCard";
 import {
   addLetter,
+  addSignature,
   getLetterSubByCategory,
 } from "../../app/features/openletters";
 import videoIcon from "../../assets/videoIcon.svg";
@@ -30,7 +31,6 @@ export const AddOpenLetter = ({
 }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { bgColor } = useSelector((state) => state.theme);
 
   const imageRef = useRef(null);
   const sigCanvas = useRef(null);
@@ -52,29 +52,95 @@ export const AddOpenLetter = ({
   };
 
   const handleAddLetter = async (data, { resetForm }) => {
-    console.log("data", data);
-    // setIsLoading(true);
-    // try {
-    //   const image = await uploadImage(data?.image);
-    //   if (!image) throw new Error("Failed to upload image.");
+    setIsLoading(true);
+    try {
+      const signatureImageUrl = await uploadImage(sigImage);
+      if (!signatureImageUrl) throw new Error("Failed to upload signature");
 
-    //   const payload = { ...data, image };
-    //   const { statusCode } = await dispatch(
-    //     addLetter({ token, payload })
-    //   ).unwrap();
+      const sigPayload = {
+        image: signatureImageUrl,
+        user_id: user?.id,
+      };
 
-    //   if (statusCode === 201) {
-    //     Toast("success", "Pic Tour uploaded successfully");
-    //     setReload((prev) => !prev);
-    //     setAddModal(false);
-    //     resetForm();
-    //   }
-    // } catch (error) {
-    //   console.error("Upload Error:", error);
-    //   Toast("error", error?.message || "Error uploading pic tour");
-    // } finally {
-    //   setIsLoading(false);
-    // }
+      const { data: signatureData } = await dispatch(
+        addSignature({ token, payload: sigPayload })
+      ).unwrap();
+
+      let uploadedImages = [];
+      let videoUrl = null;
+
+      if (Array.isArray(images) && images?.length > 0) {
+        const imageUploadPromises = images.map((img) => uploadImage(img));
+        uploadedImages = await Promise.all(imageUploadPromises);
+
+        if (uploadedImages.some((url) => !url)) {
+          throw new Error("Failed to upload one or more images");
+        }
+      } else if (data?.video) {
+        videoUrl = await uploadVideo(data.video);
+        if (!videoUrl) throw new Error("Failed to upload video");
+      }
+
+      const payload = {
+        ...data,
+        signature_id: signatureData?.signature_id,
+        image: uploadedImages || [],
+        video: videoUrl,
+      };
+
+      const { statusCode } = await dispatch(
+        addLetter({ token, payload })
+      ).unwrap();
+
+      if (statusCode === 201) {
+        Toast("success", "Letter uploaded successfully");
+        setReload((prev) => !prev);
+        setAddModal(false);
+        resetForm();
+        setImages([]);
+      }
+    } catch (error) {
+      console.error("Upload Error:", error);
+      Toast("error", error?.message || "Error uploading Letter");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const validateForm = (values) => {
+    if (step === 1) {
+      if (
+        !values.name ||
+        !values.address ||
+        !values.contact_no ||
+        !values.email ||
+        !values.disc_sub_category
+      ) {
+        Toast("error", "Please fill all the fields");
+        return false;
+      }
+    } else if (step === 2) {
+      if (
+        !values?.subject_place ||
+        !values?.introduction ||
+        !values?.body ||
+        !values?.greetings
+      ) {
+        Toast("error", "Please fill all the fields");
+        return false;
+      }
+    } else if (step === 3) {
+      if (!sigImage) {
+        Toast("error", "Please add a signature");
+        return false;
+      }
+    } else if (step === 4) {
+      if (images.length === 0 && !values?.video) {
+        Toast("error", "Please add at least one image or video");
+        return false;
+      }
+    }
+    return true;
   };
 
   useEffect(() => {
@@ -111,6 +177,7 @@ export const AddOpenLetter = ({
           post_type: "public",
           receiver_type: "leader",
           paid_status: false,
+          form_of_appeal: "letter",
         }}
         onSubmit={handleAddLetter}
       >
@@ -236,6 +303,7 @@ export const AddOpenLetter = ({
                 </h2>
                 <SignatureCanvas
                   penColor="black"
+                  onEnd={handleSave}
                   canvasProps={{
                     width: 400,
                     height: 200,
@@ -383,16 +451,16 @@ export const AddOpenLetter = ({
                 icon={!isLoading && step === 4 && FaRegCheckCircle}
                 lastIcon={step !== 4 && MdSkipNext}
                 width={false}
-                onClick={
-                  step >= 4
-                    ? handleSubmit
-                    : () => {
-                        step === 3 && handleSave();
-
-                        setStep((prev) => prev + 1);
-                      }
-                }
-                spinner={isLoading ? <Spinner /> : null}
+                onClick={() => {
+                  if (validateForm(values)) {
+                    if (step >= 4) {
+                      handleSubmit();
+                    } else {
+                      setStep((prev) => prev + 1);
+                    }
+                  }
+                }}
+                spinner={isLoading ? <Spinner size="sm" /> : null}
               />
             </div>
           </>
@@ -403,13 +471,16 @@ export const AddOpenLetter = ({
 };
 
 export const OpenLetterPreviewer = ({ letter, isOpen, onClose }) => {
+  const hasValidImages =
+    Array.isArray(letter?.images) && letter.images.some((img) => img !== null);
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Letter Details">
+    <Modal isOpen={isOpen} onClose={onClose} title="Letter Details" size="md">
       {/* Profile Section */}
       <div className="border-b border-gray-200 pb-3">
         <ProfileCard
           image={letter?.userimage}
-          title={<MdVerified className="text-yellow-500" size={20} />}
+          title={letter?.username}
           subTitle={`${letter?.address}, ${new Date(
             letter?.post_date
           ).toLocaleDateString("en-US", {
@@ -437,7 +508,9 @@ export const OpenLetterPreviewer = ({ letter, isOpen, onClose }) => {
           </span>
         )}
         {letter?.body && (
-          <span className="break-words whitespace-pre-line">{letter.body}</span>
+          <span className="break-words whitespace-pre-line my-3 ml-4">
+            {letter.body}
+          </span>
         )}
         {letter?.greetings && (
           <span className="break-words whitespace-pre-line">
@@ -451,7 +524,7 @@ export const OpenLetterPreviewer = ({ letter, isOpen, onClose }) => {
         <div className="w-full flex justify-end mt-4">
           <img
             src={letter.signature_image}
-            className="w-20 h-20 object-contain"
+            className="w-30 h-20 object-contain"
             alt="Signature"
             loading="lazy"
             style={{ imageRendering: "-webkit-optimize-contrast" }}
@@ -460,19 +533,34 @@ export const OpenLetterPreviewer = ({ letter, isOpen, onClose }) => {
       )}
 
       {/* Letter Images */}
-      {letter?.images?.length > 0 && (
-        <div className="flex justify-center flex-wrap gap-2 mt-4 overflow-x-auto">
-          {letter.images.map((image, index) => (
+      {hasValidImages ? (
+        <div className="flex justify-center flex-wrap gap-5 my-4 overflow-x-auto">
+          {letter?.images?.map((image, index) => (
             <img
               key={index}
               src={image}
               loading="lazy"
-              className="w-36 h-36 object-cover rounded-md shadow-md cursor-pointer"
+              className="w-32 h-32 object-cover rounded-md cursor-pointer"
               alt={`Image ${index + 1}`}
+              onClick={() => {
+                window.open(image, "_blank");
+              }}
             />
           ))}
         </div>
-      )}
+      ) : letter?.video ? (
+        <div className="w-full flex justify-center my-4">
+          <video
+            id="video"
+            controls
+            controlsList="nodownload"
+            className="w-60 h-40 object-cover rounded-md"
+          >
+            <source src={letter?.video} type="video/mp4" />
+            Your browser does not support the video.
+          </video>
+        </div>
+      ) : null}
     </Modal>
   );
 };
