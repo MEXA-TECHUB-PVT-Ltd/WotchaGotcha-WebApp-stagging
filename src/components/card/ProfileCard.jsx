@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-const ProfileCard = ({ title, subTitle, image }) => {
+const ProfileCard = ({ title, subTitle, image , subTitleSize= "text-base" }) => {
   const { borderColor } = useSelector((state) => state.theme);
 
   return (
@@ -26,7 +26,7 @@ const ProfileCard = ({ title, subTitle, image }) => {
           {title}
         </div>
 
-        <div className="md:text-base text-sm text-gray-600 dark:text-gray-400 break-words whitespace-pre-line">
+        <div className={`md:${subTitleSize} text-sm text-gray-600 dark:text-gray-400 break-words whitespace-pre-line`}>
           {subTitle}
         </div>
       </div>

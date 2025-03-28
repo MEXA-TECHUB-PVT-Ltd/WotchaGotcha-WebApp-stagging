@@ -84,86 +84,11 @@ export const getLetterByCategory = createAsyncThunk(
   }
 );
 
-export const addPicTour = createAsyncThunk(
-  "/picTour/createPicTour",
+export const addLetter = createAsyncThunk(
+  "letter/createLetter",
   async ({ token, payload }, { rejectWithValue }) => {
     try {
-      const { data } = await client.post(`/picTour/createPicTour`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error);
-    }
-  }
-);
-
-export const getPicTourLikes = createAsyncThunk(
-  "/picTour/getAllLikesByPicTour",
-  async ({ token, id }, { rejectWithValue }) => {
-    try {
-      const { data } = await client.get(`/picTour/getAllLikesByPicTour/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error);
-    }
-  }
-);
-
-export const likeUnlikePicTour = createAsyncThunk(
-  "/picTour/likeUnlikePicTour",
-  async ({ token, payload }, { rejectWithValue }) => {
-    try {
-      const { data } = await client.post(
-        `/picTour/likeUnlikePicTour`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error);
-    }
-  }
-);
-
-export const getPicTourComments = createAsyncThunk(
-  "/picTour/getAllCommentsByPicTour",
-  async ({ token, id }, { rejectWithValue }) => {
-    try {
-      const { data } = await client.get(
-        `/picTour/getAllCommentsByPicTour/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error);
-    }
-  }
-);
-
-export const addCommentOnPicTour = createAsyncThunk(
-  "/picTour/sendComment",
-  async ({ token, payload }, { rejectWithValue }) => {
-    try {
-      const { data } = await client.post(`/picTour/sendComment`, payload, {
+      const { data } = await client.post(`/letter/createLetter`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -244,26 +169,7 @@ const openLetterSlice = createSlice({
         state.isTopLetterFetching = false;
         state.error = action?.payload;
       })
-      .addCase(likeUnlikePicTour.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(likeUnlikePicTour.fulfilled, (state, action) => {
-        state.isLoading = false;
-      })
-      .addCase(likeUnlikePicTour.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action?.payload;
-      })
-      .addCase(addCommentOnPicTour.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(addCommentOnPicTour.fulfilled, (state, action) => {
-        state.isLoading = false;
-      })
-      .addCase(addCommentOnPicTour.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action?.payload;
-      })
+
       .addCase(searchLetters.pending, (state) => {
         state.isSearhing = true;
       })

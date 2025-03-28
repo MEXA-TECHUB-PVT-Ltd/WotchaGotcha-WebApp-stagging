@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
+import { MdSkipNext, MdSkipPrevious, MdVerified } from "react-icons/md";
+import SignatureCanvas from "react-signature-canvas";
 
 import AppInput from "../../components/form/AppInput";
 import AppSelect from "../../components/form/AppSelect";
@@ -9,20 +11,16 @@ import ErrorMessage from "../../components/form/ErrorMessage";
 import Form from "../../components/form/Form";
 import { Spinner } from "../../components/theme/Loader";
 import AppTextArea from "../../components/form/AppTextArea";
-import { FaPlusCircle } from "react-icons/fa";
+import { FaPlusCircle, FaRegCheckCircle } from "react-icons/fa";
 import { Toast } from "../../components/theme/Toast";
 import { uploadImage } from "../../utils/common/cloudinary";
+import Modal from "../../components/modal/Modal";
+import ProfileCard from "../../components/card/ProfileCard";
 import {
-  addCommentOnPicTour,
-  addPicTour,
-  getPicTourComments,
-  getPicTourLikes,
-  getPicTourSubCategoryByCategory,
-  likeUnlikePicTour,
-} from "../../app/features/pictours";
-
-import { copyLink } from "../../utils/copyLink";
-import ImagePreviewer from "../../components/previewers/ImagePreviewer";
+  addLetter,
+  getLetterSubByCategory,
+} from "../../app/features/openletters";
+import videoIcon from "../../assets/videoIcon.svg";
 
 export const AddOpenLetter = ({
   setAddModal,
@@ -35,43 +33,58 @@ export const AddOpenLetter = ({
   const { bgColor } = useSelector((state) => state.theme);
 
   const imageRef = useRef(null);
+  const sigCanvas = useRef(null);
+  const videoRef = useRef(null);
 
   const [subCategory, setSubCategory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [step, setStep] = useState(1);
+  const [images, setImages] = useState([]);
+  const [sigImage, setSigImage] = useState(null);
 
-  const handleAddPicTour = async (data, { resetForm }) => {
-    setIsLoading(true);
-    try {
-      const image = await uploadImage(data?.image);
-      if (!image) throw new Error("Failed to upload image.");
+  const handleClear = () => {
+    sigCanvas.current.clear();
+  };
 
-      const payload = { ...data, image };
-      const { statusCode } = await dispatch(
-        addPicTour({ token, payload })
-      ).unwrap();
+  const handleSave = () => {
+    const dataUrl = sigCanvas.current.toDataURL();
+    setSigImage(dataUrl);
+  };
 
-      if (statusCode === 201) {
-        Toast("success", "Pic Tour uploaded successfully");
-        setReload((prev) => !prev);
-        setAddModal(false);
-        resetForm();
-      }
-    } catch (error) {
-      console.error("Upload Error:", error);
-      Toast("error", error?.message || "Error uploading pic tour");
-    } finally {
-      setIsLoading(false);
-    }
+  const handleAddLetter = async (data, { resetForm }) => {
+    console.log("data", data);
+    // setIsLoading(true);
+    // try {
+    //   const image = await uploadImage(data?.image);
+    //   if (!image) throw new Error("Failed to upload image.");
+
+    //   const payload = { ...data, image };
+    //   const { statusCode } = await dispatch(
+    //     addLetter({ token, payload })
+    //   ).unwrap();
+
+    //   if (statusCode === 201) {
+    //     Toast("success", "Pic Tour uploaded successfully");
+    //     setReload((prev) => !prev);
+    //     setAddModal(false);
+    //     resetForm();
+    //   }
+    // } catch (error) {
+    //   console.error("Upload Error:", error);
+    //   Toast("error", error?.message || "Error uploading pic tour");
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   useEffect(() => {
     const fetchSubCategories = async () => {
       if (categoryId) {
-        const { AllCategories } = await dispatch(
-          getPicTourSubCategoryByCategory({ token, id: categoryId })
+        const { data } = await dispatch(
+          getLetterSubByCategory({ token, id: categoryId })
         ).unwrap();
 
-        setSubCategory(AllCategories);
+        setSubCategory(data);
       }
     };
 
@@ -83,250 +96,383 @@ export const AddOpenLetter = ({
       <Form
         initialValues={{
           name: "",
-          description: "",
-          pic_category: categoryId,
-          sub_category: "",
-          image: "",
-          user_id: user?.id,
+          address: "",
+          email: "",
+          contact_no: "",
+          subject_place: "",
+          post_date: new Date(Date.now()),
+          greetings: "",
+          introduction: "",
+          body: "",
+          video: "",
+          user_id: user?.id || "",
+          disc_category: categoryId,
+          disc_sub_category: "",
+          post_type: "public",
+          receiver_type: "leader",
+          paid_status: false,
         }}
-        validationSchema={Yup.object().shape({
-          name: Yup.string().required("Name is required"),
-          description: Yup.string().required("Description is required"),
-          sub_category: Yup.string().required("Sub Category is required"),
-          image: Yup.string().required("Image is required"),
-        })}
-        onSubmit={handleAddPicTour}
+        onSubmit={handleAddLetter}
       >
         {({ handleSubmit, values, handleChange, setFieldValue }) => (
-          <div className="flex-col-start gap-5">
-            <div className="w-full flex gap-5 items-center justify-center">
-              <div
-                className={`relative capture-container`}
-                onClick={() => imageRef.current.click()}
-              >
-                <input
-                  name="image"
-                  ref={imageRef}
-                  type="file"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    setFieldValue("image", file);
+          <>
+            <span className="w-full flex justify-center font-bold text-lg dark:text-dark_text_1 text-dark_bg_5 pr-1">
+              {step === 1
+                ? "Sender Informations "
+                : step === 2
+                ? "Letter Details "
+                : step === 3
+                ? "E-Signature "
+                : step === 4
+                ? "Relevant Media "
+                : null}
+              ({step}/4)
+            </span>
+
+            {/* step 1  */}
+            {step === 1 && (
+              <div className="flex-col-start gap-5">
+                {/* Name Input */}
+                <div className="input-container">
+                  <AppInput
+                    label="Name"
+                    name="name"
+                    value={values.name}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Address Input */}
+                <div className="input-container">
+                  <AppInput
+                    label="Address"
+                    name="address"
+                    value={values.address}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Contact Number Input */}
+                <div className="input-container">
+                  <AppInput
+                    type="number"
+                    label="Contact Number"
+                    name="contact_no"
+                    value={values.contact_no}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Email Input */}
+                <div className="input-container">
+                  <AppInput
+                    type="email"
+                    label="Email"
+                    name="email"
+                    value={values.email}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Sub Category Select */}
+                <div className="input-container">
+                  <AppSelect
+                    label="Sub Category"
+                    name="disc_sub_category"
+                    value={values.disc_sub_category}
+                    onChange={handleChange}
+                    options={subCategory}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* step 2  */}
+            {step === 2 && (
+              <div className="flex-col-start gap-5">
+                <div className="input-container">
+                  <AppInput
+                    label="Subject"
+                    name="subject_place"
+                    value={values.subject_place}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="input-container">
+                  <AppInput
+                    label="Introduction"
+                    name="introduction"
+                    value={values.introduction}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="input-container">
+                  <AppTextArea
+                    label="Body"
+                    name="body"
+                    value={values.body}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="input-container">
+                  <AppTextArea
+                    label="Greetings"
+                    name="greetings"
+                    value={values.greetings}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* /* step 3   */}
+            {step === 3 && (
+              <div className="flex flex-col w-full justify-center mt-5 gap-1 relative">
+                <h2 className="text-dark_bg_5 dark:text-dark_bg_5">
+                  Draw your signature
+                </h2>
+                <SignatureCanvas
+                  penColor="black"
+                  canvasProps={{
+                    width: 400,
+                    height: 200,
+                    className: "sigCanvas",
                   }}
-                  accept="image/*"
-                  hidden
+                  ref={sigCanvas}
                 />
-                {!values?.image ? (
-                  <>
-                    <FaPlusCircle size={25} />
-                    <p>Upload Image</p>
-                  </>
-                ) : (
-                  <>
-                    <div
-                      className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
-                    >
-                      Change Image
+
+                <button
+                  className="absolute top-3 right-0 bg-red-500 text-white px-2 py-1 w-30 rounded"
+                  onClick={handleClear}
+                >
+                  Clear
+                </button>
+              </div>
+            )}
+
+            {/* step 4  */}
+
+            {step === 4 && (
+              <div className="flex flex-col w-full justify-center mt-5">
+                {/* Images Section  */}
+                {!values?.video && (
+                  <div className="mt-2 mb-5 flex flex-col gap-2">
+                    <h2 className="text-dark_bg_5 dark:text-dark_bg_5">
+                      Images (max 3)
+                    </h2>
+
+                    <div className="flex flex-wrap gap-5 items-center">
+                      {images.map((image, index) => (
+                        <div
+                          key={index}
+                          className={`capture-container relative`}
+                        >
+                          <img
+                            src={URL.createObjectURL(image)}
+                            alt="Preview"
+                            className="h-full w-full"
+                          />
+                          <button
+                            className="flex bg-red-500  w-5 h-5 justify-center p-1 rounded-full text-white absolute items-center right-0 top-0"
+                            onClick={() =>
+                              setImages(images.filter((_, i) => i !== index))
+                            }
+                          >
+                            X
+                          </button>
+                        </div>
+                      ))}
+                      {images.length < 3 && (
+                        <div
+                          className={`capture-container`}
+                          onClick={() => imageRef.current.click()}
+                        >
+                          <input
+                            ref={imageRef}
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            hidden
+                            onChange={(e) => {
+                              const files = Array.from(e.target.files);
+                              setImages((prev) =>
+                                [...prev, ...files].slice(0, 3)
+                              );
+                            }}
+                          />
+                          <FaPlusCircle size={25} />
+                        </div>
+                      )}
                     </div>
-                    <img
-                      style={{ imageRendering: "-webkit-optimize-contrast" }}
-                      src={
-                        values.image instanceof File
-                          ? URL.createObjectURL(values?.image)
-                          : values.image
-                      }
-                      alt="Image"
-                      className="h-full w-full"
-                    />
-                  </>
+                  </div>
+                )}
+
+                {/* Video Section  */}
+                {images?.length === 0 && (
+                  <div className="mt-2 mb-5 flex flex-col gap-2">
+                    <h2 className="text-dark_bg_5 dark:text-dark_bg_5">
+                      Video (max 1)
+                    </h2>
+                    {!values?.video ? (
+                      <div
+                        className={`relative capture-container`}
+                        onClick={() => videoRef.current.click()}
+                      >
+                        <input
+                          name="video"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            setFieldValue("video", file);
+                          }}
+                          ref={videoRef}
+                          type="file"
+                          accept="video/*"
+                          hidden
+                        />
+
+                        <FaPlusCircle size={25} />
+                      </div>
+                    ) : (
+                      <div
+                        className={`relative capture-container`}
+                        onClick={() => videoRef.current.click()}
+                      >
+                        <div>
+                          <p
+                            className={`w-5 h-5 p-1 rounded-full text-white absolute bg-red-500 top-0 right-0 flex justify-center items-center`}
+                            onClick={() => {
+                              setFieldValue("video", null);
+                            }}
+                          >
+                            X
+                          </p>
+                          <img
+                            style={{
+                              imageRendering: "-webkit-optimize-contrast",
+                            }}
+                            src={videoIcon}
+                            alt="Video"
+                            className="w-full h-full"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
-            </div>
+            )}
 
-            <div className="input-container">
-              <AppInput
-                label={"Name"}
-                name="name"
-                value={values.name}
-                onChange={handleChange}
-              />
-              <ErrorMessage name="name" />
-            </div>
+            {/* Next Button */}
+            <div className="btn-container mt-5 gap-2">
+              {step !== 1 && (
+                <Button
+                  title={"Back"}
+                  icon={MdSkipPrevious}
+                  width={false}
+                  onClick={() => {
+                    setStep((prev) => prev - 1);
+                  }}
+                />
+              )}
 
-            <div className="input-container">
-              <AppSelect
-                label={"Sub Category"}
-                name="sub_category"
-                value={values.sub_category}
-                onChange={handleChange}
-                options={subCategory}
-              />
-              <ErrorMessage name="sub_category" />
-            </div>
-
-            <div className="input-container">
-              <AppTextArea
-                label={"Description"}
-                name="description"
-                value={values.description}
-                onChange={handleChange}
-              />
-              <ErrorMessage name="description" />
-            </div>
-
-            <div className="btn-container">
               <Button
-                title={"Add"}
-                icon={isLoading ? null : FaPlusCircle}
+                title={step === 4 ? "Post" : "Next"}
+                icon={!isLoading && step === 4 && FaRegCheckCircle}
+                lastIcon={step !== 4 && MdSkipNext}
                 width={false}
-                onClick={isLoading ? null : handleSubmit}
-                spinner={isLoading ? <Spinner size="sm" /> : null}
+                onClick={
+                  step >= 4
+                    ? handleSubmit
+                    : () => {
+                        step === 3 && handleSave();
+
+                        setStep((prev) => prev + 1);
+                      }
+                }
+                spinner={isLoading ? <Spinner /> : null}
               />
             </div>
-          </div>
+          </>
         )}
       </Form>
     </>
   );
 };
 
-export const OpenLetterPreviewer = ({
-  image,
-  isOpen,
-  onClose,
-  isTop = false,
-}) => {
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
-  const { token } = useSelector((state) => state.auth);
-  const { isLoading } = useSelector((state) => state.pictours);
-
-  const [likes, setLikes] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
-  const [comments, setComments] = useState([]);
-  const [totalComments, setTotalComments] = useState(0);
-  const [commentText, setCommentText] = useState("");
-
-  const handleComment = async () => {
-    if (isTop) return Toast("error", "You can't comment on top pic tour");
-    if (!commentText.trim()) return;
-
-    const previousComments = [...comments];
-
-    try {
-      const payload = {
-        user_id: user?.id,
-        pic_tours_id: image?.tour_id,
-        comment: commentText,
-      };
-
-      setComments((prev) => [...prev, commentText]);
-
-      const { statusCode } = await dispatch(
-        addCommentOnPicTour({ payload, token })
-      ).unwrap();
-
-      if (statusCode === 201) {
-        setCommentText("");
-        await getAllComments();
-      } else {
-        setComments(previousComments);
-      }
-    } catch (error) {
-      setComments(previousComments);
-      console.log(error);
-    }
-  };
-
-  const handleLike = async () => {
-    if (!image?.tour_id) return;
-
-    setIsLiked((prev) => !prev);
-    setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
-
-    try {
-      const payload = {
-        user_id: user?.id,
-        pic_tour_id: image?.tour_id,
-      };
-
-      const { statusCode } = await dispatch(
-        likeUnlikePicTour({ payload, token })
-      ).unwrap();
-
-      if (statusCode === 201) {
-        await getAllLikes();
-      }
-    } catch (error) {
-      console.log(error);
-      setIsLiked((prev) => !prev);
-      setLikes((prev) => (isLiked ? prev + 1 : prev - 1));
-    }
-  };
-
-  const getAllLikes = async () => {
-    if (!image?.tour_id) return;
-
-    try {
-      const data = await dispatch(
-        getPicTourLikes({ token, id: image?.tour_id })
-      ).unwrap();
-
-      setLikes(data?.totalLikes || 0);
-
-      const userHasLiked =
-        Array.isArray(data?.AllLikes) &&
-        data.AllLikes.some((like) => like.user_id === user?.id);
-
-      setIsLiked(userHasLiked);
-    } catch (error) {
-      console.error("Error fetching likes:", error);
-    }
-  };
-
-  const getAllComments = async () => {
-    if (!image?.tour_id) return;
-
-    try {
-      const data = await dispatch(
-        getPicTourComments({ token, id: image?.tour_id })
-      ).unwrap();
-
-      setTotalComments(data?.totalComments || 0);
-
-      setComments(data?.AllComents);
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (!isTop) {
-      getAllLikes();
-      getAllComments();
-    }
-  }, [image?.tour_id]);
-
+export const OpenLetterPreviewer = ({ letter, isOpen, onClose }) => {
   return (
-    <ImagePreviewer
-      {...{
-        image: image?.image,
-        isOpen,
-        onClose,
-        likes,
-        isLoading,
-        isLiked,
-        commentText,
-        setCommentText,
-        totalComments,
-        title: image?.name,
-      }}
-      comments={comments}
-      OnLike={handleLike}
-      OnCopy={() => copyLink(image?.image)}
-      onComment={handleComment}
-      description={image?.description}
-      userImage={image?.user_image || image?.userimage}
-      userName={image?.username}
-    />
+    <Modal isOpen={isOpen} onClose={onClose} title="Letter Details">
+      {/* Profile Section */}
+      <div className="border-b border-gray-200 pb-3">
+        <ProfileCard
+          image={letter?.userimage}
+          title={<MdVerified className="text-yellow-500" size={20} />}
+          subTitle={`${letter?.address}, ${new Date(
+            letter?.post_date
+          ).toLocaleDateString("en-US", {
+            dateStyle: "long",
+          })}`}
+          subTitleSize="text-sm"
+        />
+      </div>
+
+      {/* Letter Subject */}
+      {letter?.subject_place && (
+        <div className="mt-5 flex items-center gap-2">
+          <span className="text-base font-semibold">Subject:</span>
+          <p className="text-sm text-gray-700 dark:text-dark_text_1 break-all whitespace-pre-line">
+            {letter.subject_place}
+          </p>
+        </div>
+      )}
+
+      {/* Letter Body */}
+      <div className="flex flex-col gap-1 text-sm text-gray-700 dark:text-dark_text_1 my-4">
+        {letter?.introduction && (
+          <span className="break-words whitespace-pre-line ">
+            {letter.introduction},
+          </span>
+        )}
+        {letter?.body && (
+          <span className="break-words whitespace-pre-line">{letter.body}</span>
+        )}
+        {letter?.greetings && (
+          <span className="break-words whitespace-pre-line">
+            {letter.greetings}
+          </span>
+        )}
+      </div>
+
+      {/* Signature */}
+      {letter?.signature_image && (
+        <div className="w-full flex justify-end mt-4">
+          <img
+            src={letter.signature_image}
+            className="w-20 h-20 object-contain"
+            alt="Signature"
+            loading="lazy"
+            style={{ imageRendering: "-webkit-optimize-contrast" }}
+          />
+        </div>
+      )}
+
+      {/* Letter Images */}
+      {letter?.images?.length > 0 && (
+        <div className="flex justify-center flex-wrap gap-2 mt-4 overflow-x-auto">
+          {letter.images.map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              loading="lazy"
+              className="w-36 h-36 object-cover rounded-md shadow-md cursor-pointer"
+              alt={`Image ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </Modal>
   );
 };

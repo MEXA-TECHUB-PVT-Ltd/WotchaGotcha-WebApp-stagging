@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 const Button = ({
   onClick,
   icon: BtnIcon,
+  lastIcon: LastIcon,
   title,
   width = false,
   spinner = null,
@@ -28,6 +29,7 @@ const Button = ({
           {title}
         </h1>
       )}
+      {LastIcon && <LastIcon className="text-white size-4" />}
     </button>
   );
 };
