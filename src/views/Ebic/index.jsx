@@ -17,7 +17,7 @@ import {
 } from "../../app/features/ebic";
 import EmojiCard from "../../components/card/EmojiCard";
 
-const Ebic = () => {
+const Ebic = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -102,14 +102,16 @@ const Ebic = () => {
 
   return (
     <Fragment>
-      <Header
-        title={<BreadCrumb items={[{ label: "EBIC" }]} />}
-        buttonTitle={"Add"}
-        buttonIcon={FaPlus}
-        onSearch={onSearch}
-        onAddButtonClick={() => setAddModal(true)}
-        searchBy={"name"}
-      />
+      {!isDashboard && (
+        <Header
+          title={<BreadCrumb items={[{ label: "EBIC" }]} />}
+          buttonTitle={"Add"}
+          buttonIcon={FaPlus}
+          onSearch={onSearch}
+          onAddButtonClick={() => setAddModal(true)}
+          searchBy={"name"}
+        />
+      )}
 
       {/* All Categories */}
 

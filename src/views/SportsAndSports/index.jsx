@@ -16,7 +16,7 @@ import {
 } from "../../app/features/sportsandsports";
 import { AddSports, SportsPreviewer } from "../../services/sports";
 
-const SportsAndSports = () => {
+const SportsAndSports = ({isDashboard = false}) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -101,6 +101,8 @@ const SportsAndSports = () => {
 
   return (
     <Fragment>
+    {
+      !isDashboard &&
       <Header
         title={<BreadCrumb items={[{ label: "Sports & Sports" }]} />}
         buttonTitle={"Add"}
@@ -109,6 +111,7 @@ const SportsAndSports = () => {
         onAddButtonClick={() => setAddModal(true)}
         searchBy={"name"}
       />
+    }
 
       {/* All Categories */}
 

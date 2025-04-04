@@ -1,21 +1,35 @@
 import React from "react";
 
-import Card from "../components/card/Card";
+import VideoMania from "./VideoMania";
+import PicTours from "./PicTours";
+import MondoMarket from "./MondoMarket";
+import Cinematic from "./Cinematic";
+import FanStarZone from "./FanStarZone";
+import TvProgMax from "./TvProgMax";
+import KidVids from "./KidVids";
+import LearningAndHobbies from "./LearningAndHobbies";
+import SportsAndSports from "./SportsAndSports";
+import OnNews from "./OnNews";
+import Qafi from "./Qafi";
+import OpenLetters from "./OpenLetters";
+import Ebic from "./Ebic";
 
 const Home = () => {
-  //** STATES */
-
-  // //** METHODS */
-
-  // //** HOOKS */
-
-  //** Main */
-
   return (
     <div className="my-5">
-      <Card className={"mt-10"}>
-        <div className="flex flex-wrap justify-center gap-3">Home</div>
-      </Card>
+      <VideoMania isDashbaord={true} />
+      <PicTours isDashboard={true} />
+      <MondoMarket isDashboard={true} />
+      <Cinematic isDashbaord={true} />
+      <FanStarZone isDashboard={true} />
+      <TvProgMax isDashboard={true} />
+      <KidVids isDashboard={true} />
+      <LearningAndHobbies isDashboard={true} />
+      <SportsAndSports isDashboard={true} />
+      <OnNews isDashboard={true} />
+      <Qafi isDashboard={true} />
+      <Ebic isDashboard={true} />
+      <OpenLetters isDashboard={true} />
     </div>
   );
 };

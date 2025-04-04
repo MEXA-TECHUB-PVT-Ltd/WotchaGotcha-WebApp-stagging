@@ -17,7 +17,7 @@ import {
 } from "../../app/features/openletters";
 import LetterCard from "../../components/card/LetterCard";
 
-const OpenLetters = () => {
+const OpenLetters = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -103,14 +103,16 @@ const OpenLetters = () => {
 
   return (
     <Fragment>
-      <Header
-        title={<BreadCrumb items={[{ label: "Open Letters" }]} />}
-        buttonTitle={"Add"}
-        buttonIcon={FaPlus}
-        onSearch={onSearch}
-        onAddButtonClick={() => setAddModal(true)}
-        searchBy={"name"}
-      />
+      {!isDashboard && (
+        <Header
+          title={<BreadCrumb items={[{ label: "Open Letters" }]} />}
+          buttonTitle={"Add"}
+          buttonIcon={FaPlus}
+          onSearch={onSearch}
+          onAddButtonClick={() => setAddModal(true)}
+          searchBy={"name"}
+        />
+      )}
 
       {/* All Categories */}
 
