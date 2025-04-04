@@ -16,7 +16,7 @@ import { nameElipse } from "../../utils/common/nameElipse";
 import Modal from "../../components/modal/Modal";
 import { AddVideoMania, VideoManiaPlayer } from "../../services/videomania";
 
-const VideoMania = () => {
+const VideoMania = ({isDashbaord = false}) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -92,6 +92,8 @@ const VideoMania = () => {
 
   return (
     <Fragment>
+
+      {!isDashbaord && 
       <Header
         title={<BreadCrumb items={[{ label: "Video Mania" }]} />}
         buttonTitle={"Add"}
@@ -99,7 +101,7 @@ const VideoMania = () => {
         onSearch={onSearch}
         onAddButtonClick={() => setAddModal(true)}
         searchBy={"name"}
-      />
+      /> }
 
       {/* All Categories */}
 

@@ -20,7 +20,7 @@ import {
   LearningHobbiesPlayer,
 } from "../../services/learninghobbies";
 
-const LearningAndHobbies = () => {
+const LearningAndHobbies = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -92,14 +92,16 @@ const LearningAndHobbies = () => {
 
   return (
     <Fragment>
-      <Header
-        title={<BreadCrumb items={[{ label: "Learning and Hobbies" }]} />}
-        buttonTitle={"Add"}
-        buttonIcon={FaPlus}
-        onSearch={onSearch}
-        onAddButtonClick={() => setAddModal(true)}
-        searchBy={"name"}
-      />
+      {!isDashboard && (
+        <Header
+          title={<BreadCrumb items={[{ label: "Learning and Hobbies" }]} />}
+          buttonTitle={"Add"}
+          buttonIcon={FaPlus}
+          onSearch={onSearch}
+          onAddButtonClick={() => setAddModal(true)}
+          searchBy={"name"}
+        />
+      )}
 
       {/* All Categories */}
       {!searchQuery?.trim()?.length > 0 && (

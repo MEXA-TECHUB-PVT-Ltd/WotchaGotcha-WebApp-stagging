@@ -18,7 +18,7 @@ import {
 import { AddMondoItem, MondoDetailsViewer } from "../../services/mondomarket";
 import Modal from "../../components/modal/Modal";
 
-const MondoMarket = () => {
+const MondoMarket = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -129,14 +129,16 @@ const MondoMarket = () => {
 
   return (
     <Fragment>
-      <Header
-        title={<BreadCrumb items={[{ label: "Mondo Market" }]} />}
-        buttonTitle={"Add"}
-        buttonIcon={FaPlus}
-        onSearch={onSearch}
-        onAddButtonClick={() => setAddModal(true)}
-        searchBy={"name"}
-      />
+      {!isDashboard && (
+        <Header
+          title={<BreadCrumb items={[{ label: "Mondo Market" }]} />}
+          buttonTitle={"Add"}
+          buttonIcon={FaPlus}
+          onSearch={onSearch}
+          onAddButtonClick={() => setAddModal(true)}
+          searchBy={"name"}
+        />
+      )}
 
       {/* All Regions */}
       <div className="flex items-center gap-5 overflow-x-auto flex-1 scrollbar-hidden">

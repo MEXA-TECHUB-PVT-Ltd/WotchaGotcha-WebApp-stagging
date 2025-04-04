@@ -16,7 +16,7 @@ import {
 } from "../../app/features/fanstarzone";
 import { AddFanStar, FanStarPlayer } from "../../services/fanstarzone";
 
-const FanStarZone = () => {
+const FanStarZone = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -88,14 +88,16 @@ const FanStarZone = () => {
 
   return (
     <Fragment>
-      <Header
-        title={<BreadCrumb items={[{ label: "Fan Star Zone" }]} />}
-        buttonTitle={"Add"}
-        buttonIcon={FaPlus}
-        onSearch={onSearch}
-        onAddButtonClick={() => setAddModal(true)}
-        searchBy={"name"}
-      />
+      {!isDashboard && (
+        <Header
+          title={<BreadCrumb items={[{ label: "Fan Star Zone" }]} />}
+          buttonTitle={"Add"}
+          buttonIcon={FaPlus}
+          onSearch={onSearch}
+          onAddButtonClick={() => setAddModal(true)}
+          searchBy={"name"}
+        />
+      )}
 
       {/* All Categories */}
       {!searchQuery?.trim()?.length > 0 && (
