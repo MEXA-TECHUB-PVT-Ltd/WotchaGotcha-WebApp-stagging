@@ -12,11 +12,16 @@ import OnNews from "../../views/OnNews";
 import Qafi from "../../views/Qafi";
 import Ebic from "../../views/Ebic";
 import OpenLetters from "../../views/OpenLetters";
+import Profile from "../../views/Profile";
 
 export default [
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
   {
     path: "/video-mania",

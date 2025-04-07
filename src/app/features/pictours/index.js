@@ -84,6 +84,27 @@ export const getPicTourByCategory = createAsyncThunk(
   }
 );
 
+export const getPicTourByUser = createAsyncThunk(
+  "picTour/getAllPicToursByUser",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/picTour/getAllPicToursByUser/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page: 1,
+          limit: 1000,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const addPicTour = createAsyncThunk(
   "/picTour/createPicTour",
   async ({ token, payload }, { rejectWithValue }) => {
@@ -273,7 +294,8 @@ const picTourSlice = createSlice({
       .addCase(searchPicTour.rejected, (state, action) => {
         state.isSearhing = false;
         state.error = action?.payload;
-      });
+      })
+     
   },
 });
 

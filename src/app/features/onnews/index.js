@@ -81,6 +81,27 @@ export const getOnNewsByCategory = createAsyncThunk(
   }
 );
 
+export const getOnNewsByUser = createAsyncThunk(
+  "news/getAllNewsByUser",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/news/getAllNewsByUser/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page: 1,
+          limit: 10000,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const addOnNews = createAsyncThunk(
   "/news/createNews",
   async ({ token, payload }, { rejectWithValue }) => {

@@ -15,6 +15,7 @@ import onNewsSlice from "./features/onnews";
 import qafiSlice from "./features/qafi";
 import ebicSlice from "./features/ebic";
 import openLetterSlice from "./features/openletters";
+import profileSlice from "./features/profile";
 
 const rootReducer = combineReducers({
   theme: themeSlice,
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
   qafi: qafiSlice,
   ebic: ebicSlice,
   openletter: openLetterSlice,
+  profile: profileSlice,
 });
 
 export default rootReducer;

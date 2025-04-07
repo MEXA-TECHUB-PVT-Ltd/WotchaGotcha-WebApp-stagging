@@ -81,6 +81,27 @@ export const getCinematicByCategory = createAsyncThunk(
   }
 );
 
+export const getCinematicByUser = createAsyncThunk(
+  "cinematics/getByUserId/",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/cinematics/getByUserId/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page: 1,
+          limit: 1000,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const addCinematic = createAsyncThunk(
   "/cinematics/create",
   async ({ token, payload }, { rejectWithValue }) => {

@@ -81,6 +81,27 @@ export const getSportsAndSportsByCategory = createAsyncThunk(
   }
 );
 
+export const getSportsAndSportsByUser = createAsyncThunk(
+  "sports/getByUserId",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/sports/getByUserId/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page: 1,
+          limit: 1000,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const addSportsAndSports = createAsyncThunk(
   "/sports/create",
   async ({ token, payload }, { rejectWithValue }) => {
@@ -263,7 +284,8 @@ const sportsAndSportsSlice = createSlice({
       .addCase(searchSportsAndSports.rejected, (state, action) => {
         state.isSearching = false;
         state.error = action?.payload;
-      });
+      })
+    
   },
 });
 

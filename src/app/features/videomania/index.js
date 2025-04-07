@@ -26,6 +26,27 @@ export const getVideoCategories = createAsyncThunk(
   }
 );
 
+export const getVideosByUser = createAsyncThunk(
+  "xpi/getAllVideosByUser",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/xpi/getAllVideosByUser/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page: 1,
+          limit: 1000,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const getVideoSubCategoryByCategory = createAsyncThunk(
   "video/sub_category/getAllByCategory",
   async ({ token, id }, { rejectWithValue }) => {

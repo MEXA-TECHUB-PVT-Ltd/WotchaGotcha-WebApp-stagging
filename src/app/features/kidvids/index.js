@@ -81,6 +81,27 @@ export const getKidVidsByCategory = createAsyncThunk(
   }
 );
 
+export const getKidVidsByUser = createAsyncThunk(
+  "kisVids/getByUserId",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/kidVids/getByUserId/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page: 1,
+          limit: 10000,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const addKidVids = createAsyncThunk(
   "/kidVids/create",
   async ({ token, payload }, { rejectWithValue }) => {
