@@ -81,6 +81,27 @@ export const getEbicByCategory = createAsyncThunk(
   }
 );
 
+export const getEbicByUser = createAsyncThunk(
+  "gebc/getAllGEBCByUser",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/gebc/getAllGEBCByUser/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page: 1,
+          limit: 10000,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const addEbic = createAsyncThunk(
   "/gebc/createGEBC",
   async ({ token, payload }, { rejectWithValue }) => {
@@ -262,6 +283,16 @@ const ebicSlice = createSlice({
       })
       .addCase(searchEbic.rejected, (state, action) => {
         state.isSearching = false;
+        state.error = action?.payload;
+      })
+      .addCase(getEbicByUser.pending, (state, action) => {
+        state.isEbicFetching = true;
+      })
+      .addCase(getEbicByUser.fulfilled, (state, action) => {
+        state.isEbicFetching = false;
+      })
+      .addCase(getEbicByUser.rejected, (state, action) => {
+        state.isEbicFetching = false;
         state.error = action?.payload;
       });
   },

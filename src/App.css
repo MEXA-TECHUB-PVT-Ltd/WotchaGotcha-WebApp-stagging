@@ -129,3 +129,7 @@
 .sigCanvas {
   border: 1px solid #ccc;
 }
+
+.img-card-avatar {
+  @apply rounded-full w-28 h-28  border  flex justify-center items-center;
+}

@@ -157,6 +157,15 @@ const Navbar = () => {
             <p
               className="dropdown-item"
               onClick={() => {
+                navigate("/profile");
+                handleToggleDropDown();
+              }}
+            >
+              Profile
+            </p>
+            <p
+              className="dropdown-item"
+              onClick={() => {
                 setPasswordModal(true);
                 handleToggleDropDown();
               }}

@@ -81,6 +81,27 @@ export const getFanStarByCategory = createAsyncThunk(
   }
 );
 
+export const getFanStarByUser = createAsyncThunk(
+  "fanStar/getByUserId",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/fanStar/getByUserId/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page: 1,
+          limit: 1000,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const addFanStar = createAsyncThunk(
   "/fanstar/create",
   async ({ token, payload }, { rejectWithValue }) => {

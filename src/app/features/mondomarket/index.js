@@ -82,6 +82,28 @@ export const getMondoByCategory = createAsyncThunk(
   }
 );
 
+export const getMondoByUser = createAsyncThunk(
+  "item/getAllItemByUser",
+  async ({ token, id, region }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/item/getAllItemByUser/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page: 1,
+          limit: 1000,
+          region: region,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const bookMarkItem = createAsyncThunk(
   "item/saveItem",
   async ({ token, payload }, { rejectWithValue }) => {

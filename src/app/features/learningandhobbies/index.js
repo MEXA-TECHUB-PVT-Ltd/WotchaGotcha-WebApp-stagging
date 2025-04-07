@@ -84,6 +84,27 @@ export const getLearningHobbiesByCategory = createAsyncThunk(
   }
 );
 
+export const getLearningHobbiesByUser = createAsyncThunk(
+  "learningHobbies/getByUserId",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/learningHobbies/getByUserId/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page: 1,
+          limit: 10000,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const addLearningHobbies = createAsyncThunk(
   "/learningHobbies/create",
   async ({ token, payload }, { rejectWithValue }) => {
