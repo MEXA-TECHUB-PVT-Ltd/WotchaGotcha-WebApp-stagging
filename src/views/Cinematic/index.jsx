@@ -16,7 +16,7 @@ import {
 } from "../../app/features/cinematic";
 import { AddCinematic, CinematicPlayer } from "../../services/cinematic";
 
-const Cinematic = () => {
+const Cinematic = ({isDashbaord = false}) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -88,14 +88,16 @@ const Cinematic = () => {
 
   return (
     <Fragment>
-      <Header
-        title={<BreadCrumb items={[{ label: "Cinematics" }]} />}
-        buttonTitle={"Add"}
-        buttonIcon={FaPlus}
-        onSearch={onSearch}
-        onAddButtonClick={() => setAddModal(true)}
-        searchBy={"name"}
-      />
+      {!isDashbaord && (
+        <Header
+          title={<BreadCrumb items={[{ label: "Cinematics" }]} />}
+          buttonTitle={"Add"}
+          buttonIcon={FaPlus}
+          onSearch={onSearch}
+          onAddButtonClick={() => setAddModal(true)}
+          searchBy={"name"}
+        />
+      )}
 
       {/* All Categories */}
 

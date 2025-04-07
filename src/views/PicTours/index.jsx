@@ -16,7 +16,7 @@ import {
 } from "../../app/features/pictours";
 import { AddPicTour, PicTourPreviewer } from "../../services/pictours";
 
-const PicTours = () => {
+const PicTours = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -108,14 +108,16 @@ const PicTours = () => {
 
   return (
     <Fragment>
-      <Header
-        title={<BreadCrumb items={[{ label: "Pic Tours" }]} />}
-        buttonTitle={"Add"}
-        buttonIcon={FaPlus}
-        onSearch={onSearch}
-        onAddButtonClick={() => setAddModal(true)}
-        searchBy={"name"}
-      />
+      {!isDashboard && (
+        <Header
+          title={<BreadCrumb items={[{ label: "Pic Tours" }]} />}
+          buttonTitle={"Add"}
+          buttonIcon={FaPlus}
+          onSearch={onSearch}
+          onAddButtonClick={() => setAddModal(true)}
+          searchBy={"name"}
+        />
+      )}
 
       {/* All Categories */}
 

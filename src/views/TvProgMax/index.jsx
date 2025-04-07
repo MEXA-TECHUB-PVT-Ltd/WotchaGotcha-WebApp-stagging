@@ -16,7 +16,7 @@ import {
 } from "../../app/features/tvprogmax";
 import { AddTvProgmax, TvProgmaxPlayer } from "../../services/tvprogmax";
 
-const TvProgMax = () => {
+const TvProgMax = ({isDashboard = false}) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -88,6 +88,8 @@ const TvProgMax = () => {
 
   return (
     <Fragment>
+      {
+        !isDashboard &&
       <Header
         title={<BreadCrumb items={[{ label: "Tv ProgMax" }]} />}
         buttonTitle={"Add"}
@@ -96,6 +98,7 @@ const TvProgMax = () => {
         onAddButtonClick={() => setAddModal(true)}
         searchBy={"name"}
       />
+      }
 
       {/* All Categories */}
       {!searchQuery?.trim()?.length > 0 && (
