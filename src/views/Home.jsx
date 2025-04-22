@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 import VideoMania from "./VideoMania";
 import PicTours from "./PicTours";
@@ -16,7 +16,7 @@ import Ebic from "./Ebic";
 
 const Home = () => {
   return (
-    <div className="my-5">
+    <div className="my-5 overflow-x-hidden">
       <VideoMania isDashbaord={true} />
       <PicTours isDashboard={true} />
       <MondoMarket isDashboard={true} />

@@ -444,7 +444,7 @@ export const MondoDetailsViewer = ({ mondo, isOpen, onClose, token }) => {
                 </p>
               </div>
 
-              <div className="flex justify-center cursor-pointer gap-5 items-center mt-8">
+              <div className="flex flex-wrap justify-center cursor-pointer gap-5 items-center mt-8">
                 <div
                   className={`offer-button hover:${bgColor} hover:text-white text-light_text_1 dark:text-dark_text_1`}
                   onClick={() => setOfferModal(true)}

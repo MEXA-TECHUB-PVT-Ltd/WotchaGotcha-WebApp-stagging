@@ -45,6 +45,18 @@ export const AddVideoMania = ({
   const handleAddVideoMania = async (data, { resetForm }) => {
     setIsLoading(true);
     try {
+      if (!data?.video) {
+        Toast("error", "Please upload a video");
+        setIsLoading(false);
+        return;
+      }
+
+      if (!data?.thumbnail) {
+        Toast("error", "Please upload a thumbnail");
+        setIsLoading(false);
+        return;
+      }
+
       const video = await uploadVideo(data.video);
       if (!video) throw new Error("Failed to upload video.");
 
@@ -100,8 +112,8 @@ export const AddVideoMania = ({
           name: Yup.string().required("Name is required"),
           description: Yup.string().required("Description is required"),
           sub_category: Yup.string().required("Sub Category is required"),
-          video: Yup.string().required("Video is required"),
-          thumbnail: Yup.string().required("Thumbnail is required"),
+          video: Yup.string().optional(),
+          thumbnail: Yup.string().optional(),
         })}
         onSubmit={handleAddVideoMania}
       >

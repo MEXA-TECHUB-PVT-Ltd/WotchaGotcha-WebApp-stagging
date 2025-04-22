@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import logo from "../../assets/logo.svg";
+import logo from "../../assets/logo.png";
 import SidebarLayout from "../../layouts/sidebar/index.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { CgClose } from "react-icons/cg";
@@ -35,7 +35,7 @@ const Sidebar = () => {
     <>
       {isSideBarOpen && (
         <div
-          className="fixed inset-0 bg-black opacity-50 z-40 lg:hidden cursor-pointer"
+          className="fixed inset-0 bg-black opacity-50 z-50 lg:hidden cursor-pointer"
           onClick={handleToggleSidebar}
         ></div>
       )}
@@ -46,7 +46,7 @@ const Sidebar = () => {
             : "hidden"
         }`}
       >
-        <div className="row mb-5 flex-between">
+        <div className="row flex-between mb-3">
           <div className="flex-center gap-2">
             <img
               style={{ imageRendering: "-webkit-optimize-contrast" }}
@@ -57,7 +57,7 @@ const Sidebar = () => {
           </div>
           <CgClose
             onClick={handleToggleSidebar}
-            size={25}
+            size={30}
             className="cursor-pointer"
           />
         </div>

@@ -205,7 +205,6 @@ const Navbar = () => {
       >
         <Form
           initialValues={{
-            // email: user?.email,
             oldPassword: "",
             newPassword: "",
             confirmNewPassword: "",
@@ -215,43 +214,48 @@ const Navbar = () => {
         >
           {({ values, handleChange, handleSubmit }) => (
             <div className="flex flex-col gap-5">
-              <AppInput
-                type={`${isOldPassword ? "password" : "text"}`}
-                label={"Old Password"}
-                placeholder={`********`}
-                icon={isOldPassword ? FaEye : FaEyeSlash}
-                onIconClick={() => setIsOldPassword((prev) => !prev)}
-                name={"oldPassword"}
-                onChange={handleChange("oldPassword")}
-                value={values["oldPassword"]}
-              />
+              <div>
+                <AppInput
+                  type={`${isOldPassword ? "password" : "text"}`}
+                  label={"Old Password"}
+                  placeholder={`********`}
+                  icon={isOldPassword ? FaEye : FaEyeSlash}
+                  onIconClick={() => setIsOldPassword((prev) => !prev)}
+                  name={"oldPassword"}
+                  onChange={handleChange("oldPassword")}
+                  value={values["oldPassword"]}
+                />
+                <ErrorMessage name={"oldPassword"} />
+              </div>
+              <div>
+                <AppInput
+                  type={`${isPassword ? "password" : "text"}`}
+                  label={"New Password"}
+                  placeholder={`********`}
+                  icon={isPassword ? FaEye : FaEyeSlash}
+                  onIconClick={() => setIsPassword((prev) => !prev)}
+                  name={"newPassword"}
+                  onChange={handleChange("newPassword")}
+                  value={values["newPassword"]}
+                />
 
-              <ErrorMessage name={"oldPassword"} />
-              <AppInput
-                type={`${isPassword ? "password" : "text"}`}
-                label={"New Password"}
-                placeholder={`********`}
-                icon={isPassword ? FaEye : FaEyeSlash}
-                onIconClick={() => setIsPassword((prev) => !prev)}
-                name={"newPassword"}
-                onChange={handleChange("newPassword")}
-                value={values["newPassword"]}
-              />
+                <ErrorMessage name={"newPassword"} />
+              </div>
 
-              <ErrorMessage name={"newPassword"} />
+              <div>
+                <AppInput
+                  label={"Confirm New Password"}
+                  placeholder={`********`}
+                  icon={isConfirmPassword ? FaEye : FaEyeSlash}
+                  onIconClick={() => setIsConfirmPassword((prev) => !prev)}
+                  type={`${isConfirmPassword ? "password" : "text"}`}
+                  name={"confirmNewPassword"}
+                  onChange={handleChange("confirmNewPassword")}
+                  value={values["confirmNewPassword"]}
+                />
 
-              <AppInput
-                label={"Confirm New Password"}
-                placeholder={`********`}
-                icon={isConfirmPassword ? FaEye : FaEyeSlash}
-                onIconClick={() => setIsConfirmPassword((prev) => !prev)}
-                type={`${isConfirmPassword ? "password" : "text"}`}
-                name={"confirmNewPassword"}
-                onChange={handleChange("confirmNewPassword")}
-                value={values["confirmNewPassword"]}
-              />
-
-              <ErrorMessage name={"confirmNewPassword"} />
+                <ErrorMessage name={"confirmNewPassword"} />
+              </div>
 
               <div className="flex-end">
                 <Button

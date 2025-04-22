@@ -32,9 +32,7 @@ export const AddPicTour = ({
 }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { textColor, borderColor, bgColor } = useSelector(
-    (state) => state.theme
-  );
+  const { bgColor } = useSelector((state) => state.theme);
 
   const imageRef = useRef(null);
 
@@ -44,6 +42,12 @@ export const AddPicTour = ({
   const handleAddPicTour = async (data, { resetForm }) => {
     setIsLoading(true);
     try {
+      if (!data?.image) {
+        Toast("error", "Please select an image");
+        setIsLoading(false);
+        return;
+      }
+
       const image = await uploadImage(data?.image);
       if (!image) throw new Error("Failed to upload image.");
 
@@ -95,7 +99,7 @@ export const AddPicTour = ({
           name: Yup.string().required("Name is required"),
           description: Yup.string().required("Description is required"),
           sub_category: Yup.string().required("Sub Category is required"),
-          image: Yup.string().required("Image is required"),
+          image: Yup.string().optional(),
         })}
         onSubmit={handleAddPicTour}
       >

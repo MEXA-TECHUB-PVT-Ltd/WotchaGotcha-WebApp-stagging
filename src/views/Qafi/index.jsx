@@ -155,7 +155,7 @@ const Qafi = ({ isDashboard = false }) => {
               className="video-thumbnail"
             />
 
-            <div className="text-sm break-words whitespace-pre-line">
+            <div className="text-sm break-words whitespace-pre-line  max-w-[40%] md:max-w-[100%]">
               {topQafi?.description}
             </div>
           </div>

@@ -45,13 +45,23 @@ const ImagePreviewer = ({
     [OnCopy, isLoading]
   );
 
-  const handleDownload = () => {
-    const downloadUrl = image.replace("/upload/", "/upload/fl_attachment/");
-    const a = document.createElement("a");
-    a.href = downloadUrl;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+  const handleDownload = async () => {
+    try {
+      const downloadUrl = image.replace("/upload/", "/upload/fl_attachment/");
+      const response = await fetch(downloadUrl, { mode: "cors" });
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = "image.jpg";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Download failed", error);
+    }
   };
 
   const profileTitle = useMemo(
@@ -64,7 +74,7 @@ const ImagePreviewer = ({
       <Previewer isOpen={isOpen} onClose={onClose} size="lg">
         <div className="viewer-container relative">
           <IoClose
-            className="h-7 w-7 cursor-pointer hover:text-red-500 absolute top-5 right-3 bg-white dark:bg-dark_bg_4 rounded-full p-1 md:bg-transparent md:p-0"
+            className="h-7 w-7 cursor-pointer hover:text-red-500 absolute top-5 right-3 bg-white dark:bg-dark_bg_4 rounded-full p-1 md:bg-transparent md:p-0 z-50"
             onClick={onClose}
           />
           <div className="grid grid-cols-1 md:grid-cols-2 px-3">
@@ -89,7 +99,7 @@ const ImagePreviewer = ({
                   >
                     {title}
                   </div>
-                  <div className="text-gray-500 text-sm">
+                  <div className="text-gray-500 text-sm break-words whitespace-pre-line max-w-[90vw]">
                     {description?.length > 80 ? (
                       <>
                         {seeMore

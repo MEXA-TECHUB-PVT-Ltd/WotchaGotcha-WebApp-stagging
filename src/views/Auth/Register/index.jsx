@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import AppInput from "../../../components/form/AppInput";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Button from "../../../components/form/Button";
-import logo from "../../../assets/logo.svg";
+import logo from "../../../assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import Form from "../../../components/form/Form";
 import * as Yup from "yup";
@@ -46,11 +46,13 @@ const Register = () => {
               className="w-50 h-auto"
             />
           </div>
-          <img
-            style={{ imageRendering: "-webkit-optimize-contrast" }}
-            src={logo}
-            className="w-full h-[70vh]"
-          />
+          <div className="h-[70vh] flex justify-center items-center">
+            <img
+              style={{ imageRendering: "-webkit-optimize-contrast" }}
+              src={logo}
+              className="w-full h-auto"
+            />
+          </div>
         </div>
       </div>
 
