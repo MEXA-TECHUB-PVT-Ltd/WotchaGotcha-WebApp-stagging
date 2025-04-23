@@ -13,6 +13,9 @@ import Qafi from "../../views/Qafi";
 import Ebic from "../../views/Ebic";
 import OpenLetters from "../../views/OpenLetters";
 import Profile from "../../views/Profile";
+import AboutUs from "../../views/About";
+import TermsAndConditions from "../../views/Terms";
+import PrivacyPolicy from "../../views/Privacy";
 
 export default [
   {
@@ -74,5 +77,17 @@ export default [
   {
     path: "/open-letters",
     element: <OpenLetters />,
+  },
+  {
+    path: "/about-us",
+    element: <AboutUs />,
+  },
+  {
+    path: "/terms-and-conditions",
+    element: <TermsAndConditions />,
+  },
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicy />,
   },
 ];

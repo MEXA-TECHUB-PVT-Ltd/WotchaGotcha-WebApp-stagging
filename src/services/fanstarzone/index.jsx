@@ -34,9 +34,7 @@ export const AddFanStar = ({
 }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { textColor, borderColor, bgColor } = useSelector(
-    (state) => state.theme
-  );
+  const { bgColor } = useSelector((state) => state.theme);
 
   const videoRef = useRef(null);
   const thumbnailRef = useRef(null);
@@ -47,10 +45,22 @@ export const AddFanStar = ({
   const handleAddFanStar = async (data, { resetForm }) => {
     setIsLoading(true);
     try {
-      const video = await uploadVideo(data.video);
+      if (!data?.video) {
+        Toast("error", "Please select a video");
+        setIsLoading(false);
+        return;
+      }
+
+      if (!data?.thumbnail) {
+        Toast("error", "Please select a thumbnail");
+        setIsLoading(false);
+        return;
+      }
+
+      const video = await uploadVideo(data?.video);
       if (!video) throw new Error("Failed to upload video.");
 
-      const thumbnail = await uploadImage(data.thumbnail);
+      const thumbnail = await uploadImage(data?.thumbnail);
       if (!thumbnail) throw new Error("Failed to upload thumbnail.");
 
       const payload = { ...data, video, thumbnail };
@@ -102,8 +112,8 @@ export const AddFanStar = ({
           name: Yup.string().required("Name is required"),
           description: Yup.string().required("Description is required"),
           sub_category_id: Yup.string().required("Sub Category is required"),
-          video: Yup.string().required("Video is required"),
-          thumbnail: Yup.string().required("Thumbnail is required"),
+          video: Yup.string().optional(),
+          thumbnail: Yup.string().optional(),
         })}
         onSubmit={handleAddFanStar}
       >

@@ -1,5 +1,5 @@
 .sidebar {
-  @apply flex-shrink-0 lg:w-[17vw] h-full text-light_text_1  dark:bg-dark_bg_5 dark:text-dark_text_1 pr-2 py-5 pl-5 border-r-[.5px] dark:border-none dark:shadow-md bg-white;
+  @apply flex-shrink-0 lg:w-[17vw] h-[100vh] text-light_text_1  dark:bg-dark_bg_5 dark:text-dark_text_1 pr-2 py-5 pl-5 border-r-[.5px] dark:border-none dark:shadow-md bg-white;
 }
 
 .row {

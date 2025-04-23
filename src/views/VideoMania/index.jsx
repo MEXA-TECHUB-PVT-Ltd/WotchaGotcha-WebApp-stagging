@@ -16,7 +16,7 @@ import { nameElipse } from "../../utils/common/nameElipse";
 import Modal from "../../components/modal/Modal";
 import { AddVideoMania, VideoManiaPlayer } from "../../services/videomania";
 
-const VideoMania = ({isDashbaord = false}) => {
+const VideoMania = ({ isDashbaord = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -92,16 +92,16 @@ const VideoMania = ({isDashbaord = false}) => {
 
   return (
     <Fragment>
-
-      {!isDashbaord && 
-      <Header
-        title={<BreadCrumb items={[{ label: "Video Mania" }]} />}
-        buttonTitle={"Add"}
-        buttonIcon={FaPlus}
-        onSearch={onSearch}
-        onAddButtonClick={() => setAddModal(true)}
-        searchBy={"name"}
-      /> }
+      {!isDashbaord && (
+        <Header
+          title={<BreadCrumb items={[{ label: "Video Mania" }]} />}
+          buttonTitle={"Add"}
+          buttonIcon={FaPlus}
+          onSearch={onSearch}
+          onAddButtonClick={() => setAddModal(true)}
+          searchBy={"name"}
+        />
+      )}
 
       {/* All Categories */}
 
@@ -132,7 +132,7 @@ const VideoMania = ({isDashbaord = false}) => {
         {isTopVideoFetching ? (
           <Spinner />
         ) : topVideo ? (
-          <div className="flex justify-center items-center gap-5">
+          <div className="flex items-center gap-2 max-w-[90vw]">
             <div
               className="top-video-card"
               onClick={() => {
@@ -144,7 +144,7 @@ const VideoMania = ({isDashbaord = false}) => {
               <div className="text-lg">{nameElipse(topVideo?.name, 12)}</div>
             </div>
 
-            <div className="text-sm break-words whitespace-pre-line">
+            <div className="text-sm break-words whitespace-pre-line  max-w-[40%] md:max-w-[100%]">
               {topVideo?.description}
             </div>
           </div>

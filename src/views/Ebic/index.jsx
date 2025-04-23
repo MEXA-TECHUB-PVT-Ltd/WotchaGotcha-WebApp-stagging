@@ -153,7 +153,7 @@ const Ebic = ({ isDashboard = false }) => {
               <span className="text-5xl">{topEbic?.image}</span>
             </div>
 
-            <div className="text-sm break-words whitespace-pre-line">
+            <div className="text-sm break-words whitespace-pre-line  max-w-[40%] md:max-w-[100%]">
               {topEbic?.description}
             </div>
           </div>

@@ -28,9 +28,7 @@ import ImagePreviewer from "../../components/previewers/ImagePreviewer";
 export const AddSports = ({ setAddModal, dispatch, setReload, categoryId }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { textColor, borderColor, bgColor } = useSelector(
-    (state) => state.theme
-  );
+  const { bgColor } = useSelector((state) => state.theme);
 
   const imageRef = useRef(null);
 
@@ -40,6 +38,12 @@ export const AddSports = ({ setAddModal, dispatch, setReload, categoryId }) => {
   const handleAddSports = async (data, { resetForm }) => {
     setIsLoading(true);
     try {
+      if (!data?.image) {
+        Toast("error", "Please upload an image");
+        setIsLoading(false);
+        return;
+      }
+
       const image = await uploadImage(data?.image);
       if (!image) throw new Error("Failed to upload image.");
 
@@ -91,7 +95,7 @@ export const AddSports = ({ setAddModal, dispatch, setReload, categoryId }) => {
           name: Yup.string().required("Name is required"),
           description: Yup.string().required("Description is required"),
           sub_category_id: Yup.string().required("Sub Category is required"),
-          image: Yup.string().required("Image is required"),
+          image: Yup.string().optional(),
         })}
         onSubmit={handleAddSports}
       >

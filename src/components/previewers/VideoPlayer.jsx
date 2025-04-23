@@ -47,10 +47,10 @@ const VideoPlayer = ({
     <Previewer isOpen={isOpen} onClose={onClose}>
       <div className="viewer-container relative">
         <IoClose
-          className="h-7 w-7 cursor-pointer hover:text-red-500 absolute top-5 right-3 bg-white dark:bg-dark_bg_4 rounded-full p-1 md:bg-transparent md:p-0"
+          className="h-7 w-7 cursor-pointer hover:text-red-500 absolute top-5 right-3 bg-white dark:bg-dark_bg_4 rounded-full p-1 md:bg-transparent md:p-0 z-50"
           onClick={onClose}
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 pr-3">
+        <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Image Section */}
           <div className="flex-1">
             <div className="player">
@@ -62,7 +62,7 @@ const VideoPlayer = ({
                 <div className={`font-bold text-lg ${title ? "mt-1" : "mt-6"}`}>
                   {title}
                 </div>
-                <div className="text-gray-500 text-sm">
+                <div className="text-gray-500 text-sm break-words whitespace-pre-line max-w-[90vw]">
                   {description?.length > 80 ? (
                     <>
                       {seeMore

@@ -6,7 +6,14 @@ import {
   FaNewspaper,
   FaEnvelopeOpen,
 } from "react-icons/fa";
-import { FaChildren, FaFaceSmile, FaQ } from "react-icons/fa6";
+import {
+  FaChildren,
+  FaFaceSmile,
+  FaFileContract,
+  FaQ,
+  FaQuestion,
+} from "react-icons/fa6";
+import { FiShield } from "react-icons/fi";
 import {
   MdDashboard,
   MdImage,
@@ -99,5 +106,23 @@ export default [
     title: "Open Letters",
     path: "/open-letters",
     icon: <FaEnvelopeOpen size={22} />,
+  },
+  {
+    id: "about",
+    title: "About Us",
+    path: "/about-us",
+    icon: <FaQuestion size={22} />,
+  },
+  {
+    id: "terms",
+    title: "Terms & Conditions",
+    path: "/terms-and-conditions",
+    icon: <FaFileContract size={22} />,
+  },
+  {
+    id: "privacy",
+    title: "Privacy Policy",
+    path: "/privacy-policy",
+    icon: <FiShield size={22} />,
   },
 ];

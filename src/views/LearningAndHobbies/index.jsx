@@ -131,7 +131,7 @@ const LearningAndHobbies = ({ isDashboard = false }) => {
         {isTopVideoFetching ? (
           <Spinner />
         ) : topVideo ? (
-          <div className="flex justify-center items-center gap-5">
+          <div className="flex items-center gap-2 max-w-[90vw]">
             <div
               className="top-video-card"
               onClick={() => {
@@ -143,7 +143,7 @@ const LearningAndHobbies = ({ isDashboard = false }) => {
               <div className="text-lg">{nameElipse(topVideo?.name, 12)}</div>
             </div>
 
-            <div className="text-sm break-words whitespace-pre-line">
+            <div className="text-sm break-words whitespace-pre-line  max-w-[40%] md:max-w-[100%]">
               {topVideo?.description}
             </div>
           </div>

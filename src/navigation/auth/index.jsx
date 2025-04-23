@@ -5,6 +5,7 @@ import ForgotPassword from "../../views/Auth/ForgotPassword";
 import VerifyEmail from "../../views/Auth/VerifyEmail";
 import ResetPassword from "../../views/Auth/ResetPassword";
 import Register from "../../views/Auth/Register";
+import AboutUs from "../../views/About";
 
 const AuthNavigator = () => {
   return (
@@ -14,6 +15,7 @@ const AuthNavigator = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/about-us" element={<AboutUs />} />
     </Routes>
   );
 };

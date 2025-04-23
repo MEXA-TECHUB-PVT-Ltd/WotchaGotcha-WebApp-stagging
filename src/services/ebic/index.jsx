@@ -30,9 +30,7 @@ import { FaPlusCircle, FaRegSmile } from "react-icons/fa";
 export const AddEbic = ({ setAddModal, dispatch, setReload, categoryId }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-  const { mode, borderColor, bgColor, textColor } = useSelector(
-    (state) => state.theme
-  );
+  const { mode, bgColor } = useSelector((state) => state.theme);
 
   const [subCategory, setSubCategory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,6 +39,12 @@ export const AddEbic = ({ setAddModal, dispatch, setReload, categoryId }) => {
   const handleAddEbic = async (data, { resetForm }) => {
     setIsLoading(true);
     try {
+      if (!data?.image) {
+        Toast("error", "Please Select an Emoji");
+        setIsLoading(false);
+        return;
+      }
+
       const { statusCode } = await dispatch(
         addEbic({ token, payload: data })
       ).unwrap();
@@ -86,7 +90,7 @@ export const AddEbic = ({ setAddModal, dispatch, setReload, categoryId }) => {
         validationSchema={Yup.object().shape({
           description: Yup.string().required("Ebic is required"),
           sub_category: Yup.string().required("Sub Category is required"),
-          image: Yup.string().required("Image is required"),
+          image: Yup.string().optional(),
         })}
         onSubmit={handleAddEbic}
       >

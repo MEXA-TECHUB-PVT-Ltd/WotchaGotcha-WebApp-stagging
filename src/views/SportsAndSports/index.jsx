@@ -16,7 +16,7 @@ import {
 } from "../../app/features/sportsandsports";
 import { AddSports, SportsPreviewer } from "../../services/sports";
 
-const SportsAndSports = ({isDashboard = false}) => {
+const SportsAndSports = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [addModal, setAddModal] = useState(false);
@@ -101,17 +101,16 @@ const SportsAndSports = ({isDashboard = false}) => {
 
   return (
     <Fragment>
-    {
-      !isDashboard &&
-      <Header
-        title={<BreadCrumb items={[{ label: "Sports & Sports" }]} />}
-        buttonTitle={"Add"}
-        buttonIcon={FaPlus}
-        onSearch={onSearch}
-        onAddButtonClick={() => setAddModal(true)}
-        searchBy={"name"}
-      />
-    }
+      {!isDashboard && (
+        <Header
+          title={<BreadCrumb items={[{ label: "Sports & Sports" }]} />}
+          buttonTitle={"Add"}
+          buttonIcon={FaPlus}
+          onSearch={onSearch}
+          onAddButtonClick={() => setAddModal(true)}
+          searchBy={"name"}
+        />
+      )}
 
       {/* All Categories */}
 
@@ -156,7 +155,7 @@ const SportsAndSports = ({isDashboard = false}) => {
               className="video-thumbnail"
             />
 
-            <div className="text-sm break-words whitespace-pre-line">
+            <div className="text-sm break-words whitespace-pre-line  max-w-[40%] md:max-w-[100%]">
               {topSports?.description}
             </div>
           </div>
