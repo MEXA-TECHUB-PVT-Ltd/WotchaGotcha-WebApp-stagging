@@ -235,7 +235,6 @@ export const EbicPreviewer = ({ image, isOpen, onClose }) => {
         await getAllLikes();
       }
     } catch (error) {
-      console.log(error);
       setIsLiked((prev) => !prev);
       setLikes((prev) => (isLiked ? prev + 1 : prev - 1));
     }

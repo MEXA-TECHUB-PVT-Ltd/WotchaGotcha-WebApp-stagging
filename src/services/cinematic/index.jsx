@@ -47,7 +47,6 @@ export const AddCinematic = ({
   const handleAddCinematic = async (data, { resetForm }) => {
     setIsLoading(true);
     try {
-
       if (!data?.video) {
         Toast("error", "Please upload a video");
         setIsLoading(false);
@@ -253,14 +252,12 @@ export const CinematicPlayer = ({ video, isOpen, onClose, dispatch }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
   const { isLoading } = useSelector((state) => state.cinematics);
-  const { textColor } = useSelector((state) => state.theme);
 
   const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState([]);
   const [totalComments, setTotalComments] = useState(0);
   const [commentText, setCommentText] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleComment = async () => {
     if (!commentText.trim()) return;

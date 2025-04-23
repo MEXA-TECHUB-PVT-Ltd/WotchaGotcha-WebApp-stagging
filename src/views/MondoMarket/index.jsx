@@ -176,9 +176,7 @@ const MondoMarket = ({ isDashboard = false }) => {
               className="video-thumbnail"
             />
 
-            <div className="text-sm break-words whitespace-pre-line  max-w-[40%] md:max-w-[100%]">
-              {topMondo?.description}
-            </div>
+            <div className="long-desc">{topMondo?.description}</div>
           </div>
         ) : !topMondo && !isTopFetching ? (
           <div className="flex justify-center text-gray-400">
