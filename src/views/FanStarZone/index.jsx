@@ -139,9 +139,7 @@ const FanStarZone = ({ isDashboard = false }) => {
               <div className="text-lg">{nameElipse(topVideo?.name, 12)}</div>
             </div>
 
-            <div className="text-sm break-words whitespace-pre-line  max-w-[40%] md:max-w-[100%]">
-              {topVideo?.description}
-            </div>
+            <div className="long-desc">{topVideo?.description}</div>
           </div>
         ) : !topVideo && !isFetching ? (
           <div className="flex justify-center text-gray-400">

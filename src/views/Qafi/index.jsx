@@ -155,9 +155,7 @@ const Qafi = ({ isDashboard = false }) => {
               className="video-thumbnail"
             />
 
-            <div className="text-sm break-words whitespace-pre-line  max-w-[40%] md:max-w-[100%]">
-              {topQafi?.description}
-            </div>
+            <div className="long-desc">{topQafi?.description}</div>
           </div>
         ) : !topQafi && !isFetching ? (
           <div className="flex justify-center text-gray-400">

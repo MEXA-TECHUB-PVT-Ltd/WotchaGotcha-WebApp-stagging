@@ -135,7 +135,7 @@ const VideoPlayer = ({
                   comments.map((comment, index) => (
                     <ProfileCard
                       key={index}
-                      image={comment?.userimage}
+                      image={comment?.userimage || comment?.user_image}
                       title={comment?.username}
                       subTitle={comment?.comment}
                     />

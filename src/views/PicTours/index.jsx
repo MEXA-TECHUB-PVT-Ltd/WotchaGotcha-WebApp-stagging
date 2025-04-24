@@ -163,9 +163,7 @@ const PicTours = ({ isDashboard = false }) => {
               className="video-thumbnail"
             />
 
-            <div className="text-sm break-words whitespace-pre-line  max-w-[40%] md:max-w-[100%]">
-              {topPicTour?.description}
-            </div>
+            <div className="long-desc">{topPicTour?.description}</div>
           </div>
         ) : !topPicTour && !isFetching ? (
           <div className="flex justify-center text-gray-400">
