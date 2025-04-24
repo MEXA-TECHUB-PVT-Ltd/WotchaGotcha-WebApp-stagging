@@ -1,5 +1,8 @@
 import React from "react";
 import { nameElipse } from "../../utils/common/nameElipse";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 const LetterCard = ({
   userImage,
@@ -8,9 +11,26 @@ const LetterCard = ({
   date,
   subject,
   onClick,
+  for_modify = false,
+  onEdit,
+  onDelete,
 }) => {
+  const { textColor } = useSelector((state) => state.theme);
   return (
-    <div onClick={onClick} className={` ${!signImage && "pb-5"} letter-card`}>
+    <div
+      onClick={onClick}
+      className={` ${!signImage && "pb-5"} letter-card relative`}
+    >
+      {for_modify && (
+        <div
+          className="absolute top-0 right-1 flex gap-2 z-10"
+          onClick={(e) => e.stopPropagation()} // Prevent click bubbling to main card
+        >
+          <FaEdit onClick={onEdit} size={25} className={textColor} />
+          <MdDelete onClick={onDelete} size={25} className="text-red-600" />
+        </div>
+      )}
+
       {/* User Profile Image */}
       <img
         src={userImage}

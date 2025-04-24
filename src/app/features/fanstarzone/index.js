@@ -119,6 +119,40 @@ export const addFanStar = createAsyncThunk(
   }
 );
 
+export const deleteFanStar = createAsyncThunk(
+  "fanStar/delete",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.delete(`/fanStar/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updateFanStar = createAsyncThunk(
+  "fanStar/update",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.put(`/fanStar/update`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const getFanStarLikes = createAsyncThunk(
   "/fanstar/all-likes",
   async ({ token, id }, { rejectWithValue }) => {

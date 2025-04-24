@@ -4,14 +4,13 @@ import * as Yup from "yup";
 import {
   addCommentOnFanStar,
   addFanStar,
+  deleteFanStar,
   getFanStarComments,
   getFanStarLikes,
   getFanStarSubCategoriesByCategory,
   likeUnlikeFanStar,
+  updateFanStar,
 } from "../../app/features/fanstarzone";
-import ProfileCard from "../../components/card/ProfileCard";
-import Modal from "../../components/modal/Modal";
-import { IoChatbubbleEllipses, IoHeart, IoSend } from "react-icons/io5";
 import AppInput from "../../components/form/AppInput";
 import { uploadImage, uploadVideo } from "../../utils/common/cloudinary";
 import Form from "../../components/form/Form";
@@ -19,7 +18,7 @@ import ErrorMessage from "../../components/form/ErrorMessage";
 import Button from "../../components/form/Button";
 import AppSelect from "../../components/form/AppSelect";
 import AppTextArea from "../../components/form/AppTextArea";
-import { FaCopy, FaPlusCircle } from "react-icons/fa";
+import { FaPlusCircle } from "react-icons/fa";
 import videoIcon from "../../assets/videoIcon.svg";
 import { Spinner } from "../../components/theme/Loader";
 import { Toast } from "../../components/theme/Toast";
@@ -243,6 +242,276 @@ export const AddFanStar = ({
         )}
       </Form>
     </>
+  );
+};
+
+export const EditFanStar = ({ setEditModal, dispatch, setReload, fanStar }) => {
+  const { user } = useSelector((state) => state.user);
+  const { token } = useSelector((state) => state.auth);
+  const { bgColor } = useSelector((state) => state.theme);
+
+  const videoRef = useRef(null);
+  const thumbnailRef = useRef(null);
+
+  const [subCategory, setSubCategory] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleEditFanStar = async (data, { resetForm }) => {
+    setIsLoading(true);
+    try {
+      if (!data?.video) {
+        Toast("error", "Please select a video");
+        setIsLoading(false);
+        return;
+      }
+
+      if (!data?.thumbnail) {
+        Toast("error", "Please select a thumbnail");
+        setIsLoading(false);
+        return;
+      }
+
+      const video = await uploadVideo(data?.video);
+      if (!video) throw new Error("Failed to upload video.");
+
+      const thumbnail = await uploadImage(data?.thumbnail);
+      if (!thumbnail) throw new Error("Failed to upload thumbnail.");
+
+      const payload = { ...data, video, thumbnail };
+      const { statusCode } = await dispatch(
+        updateFanStar({ token, payload })
+      ).unwrap();
+
+      if (statusCode === 200) {
+        Toast("success", "Video updated successfully");
+        setReload((prev) => !prev);
+        setEditModal(false);
+        resetForm();
+      }
+    } catch (error) {
+      console.error("Upload Error:", error);
+      Toast("error", error?.message || "Error updating video");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchSubCategories = async () => {
+      if (fanStar?.category_id) {
+        const { AllCategories } = await dispatch(
+          getFanStarSubCategoriesByCategory({ token, id: fanStar?.category_id })
+        ).unwrap();
+
+        setSubCategory(AllCategories);
+      }
+    };
+
+    fetchSubCategories();
+  }, []);
+
+  return (
+    <>
+      <Form
+        initialValues={{
+          id: fanStar?.video_id || "",
+          name: fanStar?.name || "",
+          description: fanStar?.description || "",
+          category_id: fanStar?.category_id || "",
+          sub_category_id: fanStar?.sub_category_id || "",
+          video: fanStar?.video || "",
+          thumbnail: fanStar?.thumbnail || "",
+          user_id: user?.id,
+        }}
+        validationSchema={Yup.object().shape({
+          name: Yup.string().required("Name is required"),
+          description: Yup.string().required("Description is required"),
+          sub_category_id: Yup.string().required("Sub Category is required"),
+          video: Yup.string().optional(),
+          thumbnail: Yup.string().optional(),
+        })}
+        onSubmit={handleEditFanStar}
+      >
+        {({ handleSubmit, values, handleChange, setFieldValue }) => (
+          <div className="flex-col-start gap-5">
+            <div className="w-full flex items-center justify-center gap-5">
+              <div
+                className={`relative capture-container`}
+                onClick={() => videoRef.current.click()}
+              >
+                <input
+                  name="video"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    setFieldValue("video", file);
+                  }}
+                  ref={videoRef}
+                  type="file"
+                  accept="video/*"
+                  hidden
+                />
+                {!values?.video ? (
+                  <>
+                    <FaPlusCircle size={25} />
+                    <p>Upload Video</p>
+                  </>
+                ) : (
+                  <>
+                    <p
+                      className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
+                    >
+                      Change Video
+                    </p>
+                    <img
+                      style={{ imageRendering: "-webkit-optimize-contrast" }}
+                      src={videoIcon}
+                      alt="Video"
+                      className="w-full h-full"
+                    />
+                  </>
+                )}
+              </div>
+
+              <div
+                className={`relative capture-container`}
+                onClick={() => thumbnailRef.current.click()}
+              >
+                <input
+                  name="thumbnail"
+                  ref={thumbnailRef}
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    setFieldValue("thumbnail", file);
+                  }}
+                  accept="image/*"
+                  hidden
+                />
+                {!values?.thumbnail ? (
+                  <>
+                    <FaPlusCircle size={25} />
+                    <p>Video Tumbnail</p>
+                  </>
+                ) : (
+                  <>
+                    <p
+                      className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
+                    >
+                      Change Image
+                    </p>
+                    <img
+                      style={{ imageRendering: "-webkit-optimize-contrast" }}
+                      src={
+                        values.thumbnail instanceof File
+                          ? URL.createObjectURL(values?.thumbnail)
+                          : values.thumbnail
+                      }
+                      alt="Thumbnail"
+                      className="w-full h-full"
+                    />
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div className="input-container">
+              <AppInput
+                label={"Name"}
+                name="name"
+                value={values.name}
+                onChange={handleChange}
+              />
+              <ErrorMessage name="name" />
+            </div>
+
+            <div className="input-container">
+              <AppSelect
+                label={"Sub Category"}
+                name="sub_category_id"
+                value={values.sub_category_id}
+                onChange={handleChange}
+                options={subCategory}
+              />
+              <ErrorMessage name="sub_category_id" />
+            </div>
+
+            <div className="input-container">
+              <AppTextArea
+                label={"Description"}
+                name="description"
+                value={values.description}
+                onChange={handleChange}
+              />
+              <ErrorMessage name="description" />
+            </div>
+
+            <div className="btn-container">
+              <Button
+                title={"Update"}
+                width={false}
+                onClick={isLoading ? null : handleSubmit}
+                spinner={isLoading ? <Spinner size="sm" /> : null}
+              />
+            </div>
+          </div>
+        )}
+      </Form>
+    </>
+  );
+};
+
+export const DeleteFanStar = ({ setDeleteModal, dispatch, setReload, id }) => {
+  const { token } = useSelector((state) => state.auth);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleDelete = async () => {
+    setIsLoading(true);
+
+    try {
+      const { statusCode } = await dispatch(
+        deleteFanStar({
+          token,
+          id,
+        })
+      ).unwrap();
+
+      if (statusCode === 200) {
+        Toast("success", "Video deleted successfully");
+        setReload((prev) => !prev);
+        setDeleteModal(false);
+      }
+    } catch (error) {
+      console.error("Delete Error:", error);
+      Toast("error", error?.message || "Error deleting video");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="text-center">
+      <p className="mb-2 text-gray-700">
+        Are you sure you want to delete this Video?
+      </p>
+      <p className="text-sm text-gray-500 mb-6">
+        This action is irreversible and will permanently remove the Video.
+      </p>
+      <div className="btn-container flex justify-center gap-4">
+        <Button
+          title="No"
+          width={false}
+          onClick={() => setDeleteModal(false)}
+          bgColor="bg-slate-500"
+        />
+        <Button
+          title="Yes"
+          width={false}
+          onClick={handleDelete}
+          spinner={isLoading ? <Spinner size="sm" /> : null}
+        />
+      </div>
+    </div>
   );
 };
 

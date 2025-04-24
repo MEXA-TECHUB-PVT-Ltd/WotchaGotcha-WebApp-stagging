@@ -17,24 +17,55 @@ import { getMondoByUser } from "../../app/features/mondomarket";
 import ThumbnailCard from "../../components/card/ThumbnailCard";
 import LetterCard from "../../components/card/LetterCard";
 import EmojiCard from "../../components/card/EmojiCard";
-import { VideoManiaPlayer } from "../../services/videomania";
-import { PicTourPreviewer } from "../../services/pictours";
-import { OpenLetterPreviewer } from "../../services/openletters";
-import { NewsPreviewer } from "../../services/news";
-import { QafiPreviewer } from "../../services/qafi";
-import { EbicPreviewer } from "../../services/ebic";
-import { SportsPreviewer } from "../../services/sports";
-import { CinematicPlayer } from "../../services/cinematic";
-import { FanStarPlayer } from "../../services/fanstarzone";
-import { KidVidsPlayer } from "../../services/kidvids";
+import {
+  DeleteVideoMania,
+  EditVideoMania,
+  VideoManiaPlayer,
+} from "../../services/videomania";
+import {
+  DeletePicTour,
+  EditPicTour,
+  PicTourPreviewer,
+} from "../../services/pictours";
+import {
+  DeleteOpenLetter,
+  OpenLetterPreviewer,
+} from "../../services/openletters";
+import { DeleteNews, EditNews, NewsPreviewer } from "../../services/news";
+import { DeleteQafi, EditQafi, QafiPreviewer } from "../../services/qafi";
+import { DeleteEbic, EbicPreviewer, EditEbic } from "../../services/ebic";
+import {
+  DeleteSport,
+  EditSports,
+  SportsPreviewer,
+} from "../../services/sports";
+import {
+  CinematicPlayer,
+  DeleteCinematic,
+  EditCinematic,
+} from "../../services/cinematic";
+import {
+  DeleteFanStar,
+  EditFanStar,
+  FanStarPlayer,
+} from "../../services/fanstarzone";
+import {
+  DeleteKidVids,
+  EditKidVids,
+  KidVidsPlayer,
+} from "../../services/kidvids";
 import { TvProgmaxPlayer } from "../../services/tvprogmax";
 import { LearningHobbiesPlayer } from "../../services/learninghobbies";
 import { MondoDetailsViewer } from "../../services/mondomarket";
+import Modal from "../../components/modal/Modal";
+import { use } from "react";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
+
+  const [reload, setReload] = useState(false);
 
   const [currentVideo, setCurrentVideo] = useState(null);
   const [currentPicTour, setCurrentPicTour] = useState(null);
@@ -77,6 +108,34 @@ const Profile = () => {
   const [tvprogmaxModal, setTvProgMaxModal] = useState(false);
   const [learningandhobbiesModal, setLearningAndHobbiesModal] = useState(false);
   const [mondomarketModal, setMondoMarketModal] = useState(false);
+
+  const [deleteVideoModal, setDeleteVideoModal] = useState(false);
+  const [deletePicTourModal, setDeletePicTourModal] = useState(false);
+  const [deleteNewsModal, setDeleteNewsModal] = useState(false);
+  const [deleteLetterModal, setDeleteLetterModal] = useState(false);
+  const [deleteQafiModal, setDeleteQafiModal] = useState(false);
+  const [deleteEbicModal, setDeleteEbicModal] = useState(false);
+  const [deleteSportsModal, setDeleteSportsModal] = useState(false);
+  const [deleteCinematicModal, setDeleteCinematicModal] = useState(false);
+  const [deleteFanStarModal, setDeleteFanStarModal] = useState(false);
+  const [deleteKidVidsModal, setDeleteKidVidsModal] = useState(false);
+  const [deleteTvProgMaxModal, setDeleteTvProgMaxModal] = useState(false);
+  const [deleteLearningModal, setDeleteLearningModal] = useState(false);
+  const [deleteMondoMarketModal, setDeleteMondoMarketModal] = useState(false);
+
+  const [editVideoModal, setEditVideoModal] = useState(false);
+  const [editPicTourModal, setEditPicTourModal] = useState(false);
+  const [editNewsModal, setEditNewsModal] = useState(false);
+  const [editLetterModal, setEditLetterModal] = useState(false);
+  const [editQafiModal, setEditQafiModal] = useState(false);
+  const [editEbicModal, setEditEbicModal] = useState(false);
+  const [editSportsModal, setEditSportsModal] = useState(false);
+  const [editCinematicModal, setEditCinematicModal] = useState(false);
+  const [editFanStarModal, setEditFanStarModal] = useState(false);
+  const [editKidVidsModal, setEditKidVidsModal] = useState(false);
+  const [editTvProgMaxModal, setEditTvProgMaxModal] = useState(false);
+  const [editLearningModal, setEditLearningModal] = useState(false);
+  const [editMondoMarketModal, setEditMondoMarketModal] = useState(false);
 
   const resetStates = () => {
     setCurrentVideo(null);
@@ -169,7 +228,7 @@ const Profile = () => {
 
   useEffect(() => {
     fetchProfileData();
-  }, [token, user?.id]);
+  }, [token, user?.id, reload]);
 
   const countCardData = [
     { id: 1, total: videos?.totalVideos || 0, title: "Video Mania" },
@@ -196,7 +255,7 @@ const Profile = () => {
       <ImageCard
         image={user?.image}
         title={user?.username}
-        subTitle={user?.email}
+        Title={user?.email}
       />
 
       {/* ----------------------------------------------- */}
@@ -219,8 +278,17 @@ const Profile = () => {
           {videos?.Videos?.map((v) => (
             <ThumbnailCard
               key={v?.video_id}
+              for_modify={true}
               image={v?.thumbnail}
               title={v?.description}
+              onEdit={() => {
+                setCurrentVideo(v);
+                setEditVideoModal(true);
+              }}
+              onDelete={() => {
+                setCurrentVideo(v);
+                setDeleteVideoModal(true);
+              }}
               onClick={() => {
                 resetStates();
                 setCurrentVideo(v);
@@ -242,6 +310,15 @@ const Profile = () => {
             <ThumbnailCard
               key={p?.pic_tour_id}
               image={p?.image}
+              for_modify={true}
+              onEdit={() => {
+                setCurrentPicTour(p);
+                setEditPicTourModal(true);
+              }}
+              onDelete={() => {
+                setCurrentPicTour(p);
+                setDeletePicTourModal(true);
+              }}
               title={p?.description}
               onClick={() => {
                 resetStates();
@@ -268,6 +345,11 @@ const Profile = () => {
               subject={letter?.subject_place}
               address={letter?.address}
               signImage={letter?.signature_image}
+              for_modify={true}
+              onDelete={() => {
+                setCurrentLetter(letter);
+                setDeleteLetterModal(true);
+              }}
               onClick={() => {
                 resetStates();
                 setCurrentLetter(letter);
@@ -289,7 +371,16 @@ const Profile = () => {
             <ThumbnailCard
               key={n?.news_id}
               image={n?.image}
+              for_modify={true}
               title={n?.description}
+              onDelete={() => {
+                setCurrentNews(n);
+                setDeleteNewsModal(true);
+              }}
+              onEdit={() => {
+                setCurrentNews(n);
+                setEditNewsModal(true);
+              }}
               onClick={() => {
                 resetStates();
                 setCurrentNews(n);
@@ -311,7 +402,16 @@ const Profile = () => {
             <ThumbnailCard
               key={q?.qafi_id}
               image={q?.image}
+              for_modify={true}
               title={q?.description}
+              onDelete={() => {
+                setCurrentQafi(q);
+                setDeleteQafiModal(true);
+              }}
+              onEdit={() => {
+                setCurrentQafi(q);
+                setEditQafiModal(true);
+              }}
               onClick={() => {
                 resetStates();
                 setCurrentQafi(q);
@@ -333,7 +433,16 @@ const Profile = () => {
             <EmojiCard
               key={e?.gebc_id}
               image={e?.image}
+              for_modify={true}
               title={e?.description}
+              onDelete={() => {
+                setCurrentEbic(e);
+                setDeleteEbicModal(true);
+              }}
+              onEdit={() => {
+                setCurrentEbic(e);
+                setEditEbicModal(true);
+              }}
               onClick={() => {
                 resetStates();
                 setCurrentEbic(e);
@@ -355,7 +464,16 @@ const Profile = () => {
             <ThumbnailCard
               key={p?.sport_id}
               image={p?.image}
+              for_modify={true}
               title={p?.description}
+              onDelete={() => {
+                setCurrentSports(p);
+                setDeleteSportsModal(true);
+              }}
+              onEdit={() => {
+                setCurrentSports(p);
+                setEditSportsModal(true);
+              }}
               onClick={() => {
                 resetStates();
                 setCurrentSports(p);
@@ -377,7 +495,16 @@ const Profile = () => {
             <ThumbnailCard
               key={c?.video_id}
               image={c?.thumbnail}
+              for_modify={true}
               title={c?.description}
+              onDelete={() => {
+                setCurrentCinematic(c);
+                setDeleteCinematicModal(true);
+              }}
+              onEdit={() => {
+                setCurrentCinematic(c);
+                setEditCinematicModal(true);
+              }}
               onClick={() => {
                 resetStates();
                 setCurrentCinematic(c);
@@ -399,7 +526,16 @@ const Profile = () => {
             <ThumbnailCard
               key={fan?.video_id}
               image={fan?.thumbnail}
+              for_modify={true}
               title={fan?.description}
+              onDelete={() => {
+                setCurrentFanStar(fan);
+                setDeleteFanStarModal(true);
+              }}
+              onEdit={() => {
+                setCurrentFanStar(fan);
+                setEditFanStarModal(true);
+              }}
               onClick={() => {
                 resetStates();
                 setCurrentFanStar(fan);
@@ -421,7 +557,16 @@ const Profile = () => {
             <ThumbnailCard
               key={kid?.video_id}
               image={kid?.thumbnail}
+              for_modify={true}
               title={kid?.description}
+              onDelete={() => {
+                setCurrentKidVids(kid);
+                setDeleteKidVidsModal(true);
+              }}
+              onEdit={() => {
+                setCurrentKidVids(kid);
+                setEditKidVidsModal(true);
+              }}
               onClick={() => {
                 resetStates();
                 setCurrentKidVids(kid);
@@ -443,6 +588,7 @@ const Profile = () => {
             <ThumbnailCard
               key={tv?.video_id}
               image={tv?.thumbnail}
+              for_modify={true}
               title={tv?.description}
               onClick={() => {
                 resetStates();
@@ -465,6 +611,7 @@ const Profile = () => {
             <ThumbnailCard
               key={learning?.video_id}
               image={learning?.thumbnail}
+              for_modify={true}
               title={learning?.description}
               onClick={() => {
                 resetStates();
@@ -487,6 +634,7 @@ const Profile = () => {
             <ThumbnailCard
               key={mondo?.id}
               image={mondo?.images[0].image}
+              for_modify={true}
               title={mondo?.title}
               onClick={() => {
                 resetStates();
@@ -626,6 +774,350 @@ const Profile = () => {
         }}
         token={token}
       />
+
+      {/* ------------------------------------------------- */}
+      {/* Video Mania Modals  */}
+      {/* ------------------------------------------------- */}
+
+      <Modal
+        isOpen={deleteVideoModal}
+        onClose={() => {
+          setDeleteVideoModal(false);
+          setCurrentVideo(null);
+        }}
+        title="Delete Confirmation"
+      >
+        <DeleteVideoMania
+          setDeleteModal={setDeleteVideoModal}
+          id={currentVideo?.video_id}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={editVideoModal}
+        onClose={() => {
+          setEditVideoModal(false);
+          setCurrentVideo(null);
+        }}
+        title="Edit"
+      >
+        <EditVideoMania
+          setEditModal={setEditVideoModal}
+          video={currentVideo}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      {/* ------------------------------------------------- */}
+      {/* Pic Tour Modals  */}
+      {/* ------------------------------------------------- */}
+
+      <Modal
+        isOpen={deletePicTourModal}
+        onClose={() => {
+          setDeletePicTourModal(false);
+          setCurrentPicTour(null);
+        }}
+        title="Delete Confirmation"
+      >
+        <DeletePicTour
+          setDeleteModal={setDeletePicTourModal}
+          id={currentPicTour?.pic_tour_id}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={editPicTourModal}
+        onClose={() => {
+          setEditPicTourModal(false);
+          setCurrentPicTour(null);
+        }}
+        title="Edit"
+      >
+        <EditPicTour
+          setEditModal={setEditPicTourModal}
+          picTour={currentPicTour}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      {/* ------------------------------------------------- */}
+      {/* Letter Modals  */}
+      {/* ------------------------------------------------- */}
+
+      <Modal
+        isOpen={deleteLetterModal}
+        onClose={() => {
+          setDeleteLetterModal(false);
+          setCurrentLetter(null);
+        }}
+        title="Delete Confirmation"
+      >
+        <DeleteOpenLetter
+          setDeleteModal={setDeleteLetterModal}
+          id={currentLetter?.post_id}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      {/* ------------------------------------------------- */}
+      {/* News Modals  */}
+      {/* ------------------------------------------------- */}
+
+      <Modal
+        isOpen={deleteNewsModal}
+        onClose={() => {
+          setDeleteNewsModal(false);
+          setCurrentNews(null);
+        }}
+        title="Delete Confirmation"
+      >
+        <DeleteNews
+          setDeleteModal={setDeleteNewsModal}
+          id={currentNews?.news_id}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={editNewsModal}
+        onClose={() => {
+          setEditNewsModal(false);
+          setCurrentNews(null);
+        }}
+        title="Edit"
+      >
+        <EditNews
+          setEditModal={setEditNewsModal}
+          news={currentNews}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      {/* ------------------------------------------------- */}
+      {/* Qafi Modals  */}
+      {/* ------------------------------------------------- */}
+
+      <Modal
+        isOpen={deleteQafiModal}
+        onClose={() => {
+          setDeleteQafiModal(false);
+          setCurrentQafi(null);
+        }}
+        title="Delete Confirmation"
+      >
+        <DeleteQafi
+          setDeleteModal={setDeleteQafiModal}
+          id={currentQafi?.qafi_id}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={editQafiModal}
+        onClose={() => {
+          setEditQafiModal(false);
+          setCurrentQafi(null);
+        }}
+        title="Edit"
+      >
+        <EditQafi
+          setEditModal={setEditQafiModal}
+          qafi={currentQafi}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      {/* ------------------------------------------------- */}
+      {/* Ebic Modals  */}
+      {/* ------------------------------------------------- */}
+
+      <Modal
+        isOpen={deleteEbicModal}
+        onClose={() => {
+          setDeleteEbicModal(false);
+          setCurrentEbic(null);
+        }}
+        title="Delete Confirmation"
+      >
+        <DeleteEbic
+          setDeleteModal={setDeleteEbicModal}
+          id={currentEbic?.gebc_id}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={editEbicModal}
+        onClose={() => {
+          setEditEbicModal(false);
+          setCurrentEbic(null);
+        }}
+        title="Edit"
+      >
+        <EditEbic
+          setEditModal={setEditEbicModal}
+          ebic={currentEbic}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      {/* ------------------------------------------------- */}
+      {/* Sports Modals  */}
+      {/* ------------------------------------------------- */}
+
+      <Modal
+        isOpen={deleteSportsModal}
+        onClose={() => {
+          setDeleteSportsModal(false);
+          setCurrentSports(null);
+        }}
+        title="Delete Confirmation"
+      >
+        <DeleteSport
+          setDeleteModal={setDeleteSportsModal}
+          id={currentSports?.sport_id}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={editSportsModal}
+        onClose={() => {
+          setEditSportsModal(false);
+          setCurrentSports(null);
+        }}
+        title="Edit"
+      >
+        <EditSports
+          setEditModal={setEditSportsModal}
+          sport={currentSports}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      {/* ------------------------------------------------- */}
+      {/* Cinematic Modals  */}
+      {/* ------------------------------------------------- */}
+
+      <Modal
+        isOpen={deleteCinematicModal}
+        onClose={() => {
+          setDeleteCinematicModal(false);
+          setCurrentCinematic(null);
+        }}
+        title="Delete Confirmation"
+      >
+        <DeleteCinematic
+          setDeleteModal={setDeleteCinematicModal}
+          id={currentCinematic?.video_id}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={editCinematicModal}
+        onClose={() => {
+          setEditCinematicModal(false);
+          setCurrentCinematic(null);
+        }}
+        title="Edit"
+      >
+        <EditCinematic
+          setEditModal={setEditCinematicModal}
+          cinematic={currentCinematic}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      {/* ------------------------------------------------- */}
+      {/* Fan Star Modals  */}
+      {/* ------------------------------------------------- */}
+
+      <Modal
+        isOpen={deleteFanStarModal}
+        onClose={() => {
+          setDeleteFanStarModal(false);
+          setCurrentFanStar(null);
+        }}
+        title="Delete Confirmation"
+      >
+        <DeleteFanStar
+          setDeleteModal={setDeleteFanStarModal}
+          id={currentFanStar?.video_id}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={editFanStarModal}
+        onClose={() => {
+          setEditFanStarModal(false);
+          setCurrentFanStar(null);
+        }}
+        title="Edit"
+      >
+        <EditFanStar
+          setEditModal={setEditFanStarModal}
+          fanStar={currentFanStar}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      {/* ------------------------------------------------- */}
+      {/* KidVids Modals  */}
+      {/* ------------------------------------------------- */}
+
+      <Modal
+        isOpen={deleteKidVidsModal}
+        onClose={() => {
+          setDeleteKidVidsModal(false);
+          setCurrentKidVids(null);
+        }}
+        title="Delete Confirmation"
+      >
+        <DeleteKidVids
+          setDeleteModal={setDeleteKidVidsModal}
+          id={currentKidVids?.video_id}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={editKidVidsModal}
+        onClose={() => {
+          setEditKidVidsModal(false);
+          setCurrentKidVids(null);
+        }}
+        title="Edit"
+      >
+        <EditKidVids
+          setEditModal={setEditKidVidsModal}
+          kidVids={currentKidVids}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
 
       {/* ============================================================ */}
       {/* END OF THE CODE */}

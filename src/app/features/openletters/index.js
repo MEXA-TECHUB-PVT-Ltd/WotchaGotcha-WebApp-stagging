@@ -122,6 +122,44 @@ export const addLetter = createAsyncThunk(
   }
 );
 
+export const deleteLetter = createAsyncThunk(
+  "letter/delete",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.delete(`/letter/deleteLetter/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updateLetter = createAsyncThunk(
+  "letter/updatePostLetter",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.delete(
+        `/letter/updatePostLetter`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const searchLetters = createAsyncThunk(
   "letter/searchLetters",
   async ({ token, searchQuery }, { rejectWithValue }) => {

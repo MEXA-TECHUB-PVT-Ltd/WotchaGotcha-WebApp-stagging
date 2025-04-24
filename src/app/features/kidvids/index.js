@@ -119,6 +119,40 @@ export const addKidVids = createAsyncThunk(
   }
 );
 
+export const deleteKidVids = createAsyncThunk(
+  "kidVids/delete",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.delete(`/kidVids/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updateKidVids = createAsyncThunk(
+  "kidVids/update",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.put(`/kidVids/update`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const getKidVidsLikes = createAsyncThunk(
   "/kidVids/all-likes",
   async ({ token, id }, { rejectWithValue }) => {

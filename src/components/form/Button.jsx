@@ -8,14 +8,19 @@ const Button = ({
   title,
   width = false,
   spinner = null,
+  bgColor
 }) => {
   const theme = useSelector((state) => state.theme);
+
+  const bg_color = bgColor ? bgColor : theme?.bgColor;
+
+
 
   return (
     <button
       type="submit"
       onClick={onClick}
-      className={`px-4 py-1 ${theme?.bgColor} ${
+      className={`px-4 py-1 ${bg_color} ${
         width && "w-full py-2"
       } rounded text-white cursor-pointer flex-center gap-2`}
     >

@@ -119,6 +119,40 @@ export const addQafi = createAsyncThunk(
   }
 );
 
+export const deleteQafi = createAsyncThunk(
+  "/qafi/deleteQafi",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.delete(`/qafi/deleteQafi/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updateQafi = createAsyncThunk(
+  "qafi/updateQafi",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.put(`/qafi/updateQafi`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const getQafiLikes = createAsyncThunk(
   "/qafi/getAllLikesByQafi",
   async ({ token, id }, { rejectWithValue }) => {
@@ -284,8 +318,7 @@ const qafiSlice = createSlice({
       .addCase(searchQafi.rejected, (state, action) => {
         state.isSearching = false;
         state.error = action?.payload;
-      })
-      
+      });
   },
 });
 

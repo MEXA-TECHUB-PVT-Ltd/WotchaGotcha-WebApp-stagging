@@ -22,6 +22,8 @@ import {
   likeUnlikeEbic,
   addEbic,
   getEbicSubCategoryByCategory,
+  deleteEbic,
+  updateEbic,
 } from "../../app/features/ebic";
 import ImagePreviewer from "../../components/previewers/ImagePreviewer";
 import Modal from "../../components/modal/Modal";
@@ -170,6 +172,206 @@ export const AddEbic = ({ setAddModal, dispatch, setReload, categoryId }) => {
         )}
       </Form>
     </>
+  );
+};
+
+export const EditEbic = ({ setEditModal, dispatch, setReload, ebic }) => {
+  console.log(ebic);
+  const { token } = useSelector((state) => state.auth);
+  const { mode, bgColor } = useSelector((state) => state.theme);
+
+  const [subCategory, setSubCategory] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEmojiModalOpen, setIsEmojiModalOpen] = useState(false);
+
+  const handleAddEbic = async (data, { resetForm }) => {
+    setIsLoading(true);
+    try {
+      if (!data?.image) {
+        Toast("error", "Please Select an Emoji");
+        setIsLoading(false);
+        return;
+      }
+
+      const { statusCode } = await dispatch(
+        updateEbic({ token, payload: data })
+      ).unwrap();
+
+      if (statusCode === 200) {
+        Toast("success", "Ebic updated successfully");
+        setReload((prev) => !prev);
+        setEditModal(false);
+        resetForm();
+      }
+    } catch (error) {
+      console.error("Upload Error:", error);
+      Toast("error", error?.message || "Error updating ebic");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchSubCategories = async () => {
+      if (ebic?.category_id) {
+        const { AllCategories } = await dispatch(
+          getEbicSubCategoryByCategory({ token, id: ebic?.category_id })
+        ).unwrap();
+
+        setSubCategory(AllCategories);
+      }
+    };
+
+    fetchSubCategories();
+  }, []);
+
+  return (
+    <>
+      <Form
+        initialValues={{
+          id: ebic?.gebc_id || "",
+          description: ebic?.description || "",
+          category: ebic?.category_id,
+          sub_category: ebic?.sub_category_id || "",
+          image: ebic?.image || "",
+        }}
+        validationSchema={Yup.object().shape({
+          description: Yup.string().required("Ebic is required"),
+          sub_category: Yup.string().required("Sub Category is required"),
+          image: Yup.string().optional(),
+        })}
+        onSubmit={handleAddEbic}
+      >
+        {({ handleSubmit, values, handleChange, setFieldValue }) => (
+          <div className="flex-col-center gap-5 w-full">
+            <div
+              className={`relative capture-container`}
+              onClick={() => setIsEmojiModalOpen(true)}
+            >
+              {values.image ? (
+                <>
+                  <div
+                    className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
+                  >
+                    Change Emoji
+                  </div>
+                  <span className="text-6xl cursor-pointer">
+                    {values.image}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <FaRegSmile size={30} />
+                  <p>Select an Emoji</p>
+                </>
+              )}
+            </div>
+
+            <div className="input-container">
+              <AppTextArea
+                label={"Ebic"}
+                name="description"
+                value={values.description}
+                onChange={handleChange}
+              />
+              <ErrorMessage name="description" />
+            </div>
+
+            <div className="input-container">
+              <AppSelect
+                label={"Sub Category"}
+                name="sub_category"
+                value={values.sub_category}
+                onChange={handleChange}
+                options={subCategory}
+              />
+              <ErrorMessage name="sub_category" />
+            </div>
+
+            <div className="btn-container">
+              <Button
+                title={"Update"}
+                width={false}
+                onClick={isLoading ? null : handleSubmit}
+                spinner={isLoading ? <Spinner size="sm" /> : null}
+              />
+            </div>
+
+            <Modal
+              isOpen={isEmojiModalOpen}
+              onClose={() => setIsEmojiModalOpen(false)}
+            >
+              <Picker
+                data={data}
+                onEmojiSelect={(emoji) => {
+                  setFieldValue("image", emoji.native);
+                  setIsEmojiModalOpen(false);
+                }}
+                perLine={window.screen.width > 768 ? 13 : 8}
+                emojiSize={24}
+                previewPosition="none"
+                theme={`${mode === "dark" ? "dark" : "light"}`}
+              />
+            </Modal>
+          </div>
+        )}
+      </Form>
+    </>
+  );
+};
+
+export const DeleteEbic = ({ setDeleteModal, dispatch, setReload, id }) => {
+  const { token } = useSelector((state) => state.auth);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleDelete = async () => {
+    setIsLoading(true);
+
+    try {
+      const { statusCode } = await dispatch(
+        deleteEbic({
+          token,
+          id,
+        })
+      ).unwrap();
+
+      if (statusCode === 200) {
+        Toast("success", "Ebic deleted successfully");
+        setReload((prev) => !prev);
+        setDeleteModal(false);
+      }
+    } catch (error) {
+      console.error("Delete Error:", error);
+      Toast("error", error?.message || "Error deleting ebic");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="text-center">
+      <p className="mb-2 text-gray-700">
+        Are you sure you want to delete this EBIC?
+      </p>
+      <p className="text-sm text-gray-500 mb-6">
+        This action is irreversible and will permanently remove the EBIC.
+      </p>
+      <div className="btn-container flex justify-center gap-4">
+        <Button
+          title="No"
+          width={false}
+          onClick={() => setDeleteModal(false)}
+          bgColor="bg-slate-500"
+        />
+        <Button
+          title="Yes"
+          width={false}
+          onClick={handleDelete}
+          spinner={isLoading ? <Spinner size="sm" /> : null}
+        />
+      </div>
+    </div>
   );
 };
 
