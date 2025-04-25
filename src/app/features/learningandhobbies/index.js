@@ -122,6 +122,40 @@ export const addLearningHobbies = createAsyncThunk(
   }
 );
 
+export const deleteLearningHobbies = createAsyncThunk(
+  "learningHobbies/delete",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.delete(`/learningHobbies/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updateLearningHobbies = createAsyncThunk(
+  "learningHobbies/update",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.put(`/learningHobbies/update`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const getLearningHobbiesLikes = createAsyncThunk(
   "/learningHobbies/all-likes",
   async ({ token, id }, { rejectWithValue }) => {

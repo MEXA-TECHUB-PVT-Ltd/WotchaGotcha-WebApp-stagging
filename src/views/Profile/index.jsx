@@ -29,6 +29,7 @@ import {
 } from "../../services/pictours";
 import {
   DeleteOpenLetter,
+  EditOpenLetter,
   OpenLetterPreviewer,
 } from "../../services/openletters";
 import { DeleteNews, EditNews, NewsPreviewer } from "../../services/news";
@@ -54,9 +55,21 @@ import {
   EditKidVids,
   KidVidsPlayer,
 } from "../../services/kidvids";
-import { TvProgmaxPlayer } from "../../services/tvprogmax";
-import { LearningHobbiesPlayer } from "../../services/learninghobbies";
-import { MondoDetailsViewer } from "../../services/mondomarket";
+import {
+  DeleteTvProgMax,
+  EditTvProgmax,
+  TvProgmaxPlayer,
+} from "../../services/tvprogmax";
+import {
+  DeleteLearningHobbies,
+  EditLearningHobbies,
+  LearningHobbiesPlayer,
+} from "../../services/learninghobbies";
+import {
+  DeleteMondo,
+  EditMondoItem,
+  MondoDetailsViewer,
+} from "../../services/mondomarket";
 import Modal from "../../components/modal/Modal";
 import { use } from "react";
 
@@ -350,6 +363,10 @@ const Profile = () => {
                 setCurrentLetter(letter);
                 setDeleteLetterModal(true);
               }}
+              onEdit={() => {
+                setCurrentLetter(letter);
+                setEditLetterModal(true);
+              }}
               onClick={() => {
                 resetStates();
                 setCurrentLetter(letter);
@@ -590,6 +607,14 @@ const Profile = () => {
               image={tv?.thumbnail}
               for_modify={true}
               title={tv?.description}
+              onDelete={() => {
+                setCurrentTvProgMax(tv);
+                setDeleteTvProgMaxModal(true);
+              }}
+              onEdit={() => {
+                setCurrentTvProgMax(tv);
+                setEditTvProgMaxModal(true);
+              }}
               onClick={() => {
                 resetStates();
                 setCurrentTvProgMax(tv);
@@ -613,6 +638,14 @@ const Profile = () => {
               image={learning?.thumbnail}
               for_modify={true}
               title={learning?.description}
+              onDelete={() => {
+                setCurrentLearningHobbies(learning);
+                setDeleteLearningModal(true);
+              }}
+              onEdit={() => {
+                setCurrentLearningHobbies(learning);
+                setEditLearningModal(true);
+              }}
               onClick={() => {
                 resetStates();
                 setCurrentLearningHobbies(learning);
@@ -636,6 +669,14 @@ const Profile = () => {
               image={mondo?.images[0].image}
               for_modify={true}
               title={mondo?.title}
+              onDelete={() => {
+                setCurrentMondoMarket(mondo);
+                setDeleteMondoMarketModal(true);
+              }}
+              onEdit={() => {
+                setCurrentMondoMarket(mondo);
+                setEditMondoMarketModal(true);
+              }}
               onClick={() => {
                 resetStates();
                 setCurrentMondoMarket(mondo);
@@ -862,6 +903,22 @@ const Profile = () => {
         <DeleteOpenLetter
           setDeleteModal={setDeleteLetterModal}
           id={currentLetter?.post_id}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={editLetterModal}
+        onClose={() => {
+          setEditLetterModal(false);
+          setCurrentLetter(null);
+        }}
+        title="Edit"
+      >
+        <EditOpenLetter
+          setEditModal={setEditLetterModal}
+          letter={currentLetter}
           dispatch={dispatch}
           setReload={setReload}
         />
@@ -1114,6 +1171,114 @@ const Profile = () => {
         <EditKidVids
           setEditModal={setEditKidVidsModal}
           kidVids={currentKidVids}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      {/* ------------------------------------------------- */}
+      {/* TV Progmax Modals  */}
+      {/* ------------------------------------------------- */}
+
+      <Modal
+        isOpen={deleteTvProgMaxModal}
+        onClose={() => {
+          setDeleteTvProgMaxModal(false);
+          setCurrentTvProgMax(null);
+        }}
+        title="Delete Confirmation"
+      >
+        <DeleteTvProgMax
+          setDeleteModal={setDeleteTvProgMaxModal}
+          id={currentTvProgMax?.video_id}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={editTvProgMaxModal}
+        onClose={() => {
+          setEditTvProgMaxModal(false);
+          setCurrentTvProgMax(null);
+        }}
+        title="Edit"
+      >
+        <EditTvProgmax
+          setEditModal={setEditTvProgMaxModal}
+          tvProgmax={currentTvProgMax}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      {/* ------------------------------------------------- */}
+      {/* Learning and Hobbies Modals  */}
+      {/* ------------------------------------------------- */}
+
+      <Modal
+        isOpen={deleteLearningModal}
+        onClose={() => {
+          setDeleteLearningModal(false);
+          setCurrentLearningHobbies(null);
+        }}
+        title="Delete Confirmation"
+      >
+        <DeleteLearningHobbies
+          setDeleteModal={setDeleteLearningModal}
+          id={currentLearningHobbies?.video_id}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={editLearningModal}
+        onClose={() => {
+          setEditLearningModal(false);
+          setCurrentLearningHobbies(null);
+        }}
+        title="Edit"
+      >
+        <EditLearningHobbies
+          setEditModal={setEditLearningModal}
+          learning={currentLearningHobbies}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      {/* ------------------------------------------------- */}
+      {/* Mondo Market Modals  */}
+      {/* ------------------------------------------------- */}
+
+      <Modal
+        isOpen={deleteMondoMarketModal}
+        onClose={() => {
+          setDeleteMondoMarketModal(false);
+          setCurrentMondoMarket(null);
+        }}
+        title="Delete Confirmation"
+      >
+        <DeleteMondo
+          setDeleteModal={setDeleteMondoMarketModal}
+          id={currentMondoMarket?.id}
+          dispatch={dispatch}
+          setReload={setReload}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={editMondoMarketModal}
+        onClose={() => {
+          setEditMondoMarketModal(false);
+          setCurrentMondoMarket(null);
+        }}
+        title="Edit"
+      >
+        <EditMondoItem
+          setEditModal={setEditMondoMarketModal}
+          item={currentMondoMarket}
           dispatch={dispatch}
           setReload={setReload}
         />

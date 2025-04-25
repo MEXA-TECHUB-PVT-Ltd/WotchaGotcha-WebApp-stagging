@@ -193,6 +193,40 @@ export const addMondoMarketItem = createAsyncThunk(
   }
 );
 
+export const deleteItem = createAsyncThunk(
+  "item/deleteitem",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.delete(`/item/deleteitem/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updateItem = createAsyncThunk(
+  "item/updateItem",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.put(`/item/updateItem`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const toggleAlert = createAsyncThunk(
   "item/toggleAlert",
   async ({ token, payload }, { rejectWithValue }) => {

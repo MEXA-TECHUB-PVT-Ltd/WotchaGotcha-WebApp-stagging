@@ -143,8 +143,25 @@ export const updateLetter = createAsyncThunk(
   "letter/updatePostLetter",
   async ({ token, payload }, { rejectWithValue }) => {
     try {
-      const { data } = await client.delete(
-        `/letter/updatePostLetter`,
+      const { data } = await client.put(`/letter/updatePostLetter`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updateLetterMedia = createAsyncThunk(
+  "letter/updatePostLetterImages",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.put(
+        `/letter/updatePostLetterImages`,
         payload,
         {
           headers: {
