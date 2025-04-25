@@ -18,10 +18,12 @@ import { copyLink } from "../../utils/copyLink";
 import {
   addCommentOnOnNews,
   addOnNews,
+  deleteNews,
   getOnNewsComments,
   getOnNewsLikes,
   getOnNewsSubCategoryByCategory,
   likeUnlikeOnNews,
+  updateOnNews,
 } from "../../app/features/onnews";
 import ImagePreviewer from "../../components/previewers/ImagePreviewer";
 
@@ -176,6 +178,213 @@ export const AddNews = ({ setAddModal, dispatch, setReload, categoryId }) => {
         )}
       </Form>
     </>
+  );
+};
+
+export const EditNews = ({ setEditModal, dispatch, setReload, news }) => {
+  const { token } = useSelector((state) => state.auth);
+  const { bgColor } = useSelector((state) => state.theme);
+
+  const imageRef = useRef(null);
+
+  const [subCategory, setSubCategory] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleAddNews = async (data, { resetForm }) => {
+    setIsLoading(true);
+    try {
+      if (!data?.image) {
+        Toast("error", "Please upload an image");
+        setIsLoading(false);
+        return;
+      }
+
+      const image = await uploadImage(data?.image);
+      if (!image) throw new Error("Failed to upload image.");
+
+      const payload = { ...data, image };
+      const { statusCode } = await dispatch(
+        updateOnNews({ token, payload })
+      ).unwrap();
+
+      if (statusCode === 200) {
+        Toast("success", "News updated successfully");
+        setReload((prev) => !prev);
+        setEditModal(false);
+        resetForm();
+      }
+    } catch (error) {
+      console.error("Update Error:", error);
+      Toast("error", error?.message || "Error updating news");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchSubCategories = async () => {
+      if (news?.category_id) {
+        const { AllCategories } = await dispatch(
+          getOnNewsSubCategoryByCategory({ token, id: news?.category_id })
+        ).unwrap();
+
+        setSubCategory(AllCategories);
+      }
+    };
+
+    fetchSubCategories();
+  }, []);
+
+  return (
+    <>
+      <Form
+        initialValues={{
+          id: news?.news_id || "",
+          description: news?.description || "",
+          category: news?.category_id || "",
+          sub_category: news?.sub_category_id || "",
+          image: news?.image || "",
+        }}
+        validationSchema={Yup.object().shape({
+          description: Yup.string().required("News is required"),
+          sub_category: Yup.string().required("Sub Category is required"),
+          image: Yup.string().optional(),
+        })}
+        onSubmit={handleAddNews}
+      >
+        {({ handleSubmit, values, handleChange, setFieldValue }) => (
+          <div className="flex-col-start gap-5">
+            <div className="w-full flex gap-5 items-center justify-center">
+              <div
+                className={`relative capture-container`}
+                onClick={() => imageRef.current.click()}
+              >
+                <input
+                  name="image"
+                  ref={imageRef}
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    setFieldValue("image", file);
+                  }}
+                  accept="image/*"
+                  hidden
+                />
+                {!values?.image ? (
+                  <>
+                    <FaPlusCircle size={25} />
+                    <p>Upload Image</p>
+                  </>
+                ) : (
+                  <>
+                    <div
+                      className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
+                    >
+                      Change Image
+                    </div>
+                    <img
+                      style={{ imageRendering: "-webkit-optimize-contrast" }}
+                      src={
+                        values.image instanceof File
+                          ? URL.createObjectURL(values?.image)
+                          : values.image
+                      }
+                      alt="Image"
+                      className="h-full w-full"
+                    />
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div className="input-container">
+              <AppTextArea
+                label={"News"}
+                name="description"
+                value={values.description}
+                onChange={handleChange}
+              />
+              <ErrorMessage name="description" />
+            </div>
+
+            <div className="input-container">
+              <AppSelect
+                label={"Sub Category"}
+                name="sub_category"
+                value={values.sub_category}
+                onChange={handleChange}
+                options={subCategory}
+              />
+              <ErrorMessage name="sub_category" />
+            </div>
+
+            <div className="btn-container">
+              <Button
+                title={"Update"}
+                width={false}
+                onClick={isLoading ? null : handleSubmit}
+                spinner={isLoading ? <Spinner size="sm" /> : null}
+              />
+            </div>
+          </div>
+        )}
+      </Form>
+    </>
+  );
+};
+
+export const DeleteNews = ({ setDeleteModal, dispatch, setReload, id }) => {
+  const { token } = useSelector((state) => state.auth);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleDelete = async () => {
+    setIsLoading(true);
+
+    try {
+      const { statusCode } = await dispatch(
+        deleteNews({
+          token,
+          id,
+        })
+      ).unwrap();
+
+      if (statusCode === 200) {
+        Toast("success", "News deleted successfully");
+        setReload((prev) => !prev);
+        setDeleteModal(false);
+      }
+    } catch (error) {
+      console.error("Delete Error:", error);
+      Toast("error", error?.message || "Error deleting news");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="text-center">
+      <p className="mb-2 text-gray-700">
+        Are you sure you want to delete this News?
+      </p>
+      <p className="text-sm text-gray-500 mb-6">
+        This action is irreversible and will permanently remove the News.
+      </p>
+      <div className="btn-container flex justify-center gap-4">
+        <Button
+          title="No"
+          width={false}
+          onClick={() => setDeleteModal(false)}
+          bgColor="bg-slate-500"
+        />
+        <Button
+          title="Yes"
+          width={false}
+          onClick={handleDelete}
+          spinner={isLoading ? <Spinner size="sm" /> : null}
+        />
+      </div>
+    </div>
   );
 };
 

@@ -122,8 +122,42 @@ export const addVideoMania = createAsyncThunk(
   }
 );
 
+export const deleteVideoMania = createAsyncThunk(
+  "/xpi/deleteXpiVideo",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.delete(`/xpi/deleteXpiVideo/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updateVideoMania = createAsyncThunk(
+  "/xpi/updateXpiVideo",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.put(`/xpi/updateXpiVideo`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const getVideoAllLikes = createAsyncThunk(
-  "/xpi/createXpiVideo",
+  "/xpi/getAllLikesByVideo",
   async ({ token, id }, { rejectWithValue }) => {
     try {
       const { data } = await client.get(`/xpi/getAllLikesByVideo/${id}`, {
@@ -157,7 +191,7 @@ export const likeUnlikeVideo = createAsyncThunk(
 );
 
 export const getVideoAllComments = createAsyncThunk(
-  "/xpi/createXpiVideo",
+  "/xpi/getAllCommentsByVideo",
   async ({ token, id }, { rejectWithValue }) => {
     try {
       const { data } = await client.get(`/xpi/getAllCommentsByVideo/${id}`, {

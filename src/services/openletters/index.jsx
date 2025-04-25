@@ -19,6 +19,7 @@ import ProfileCard from "../../components/card/ProfileCard";
 import {
   addLetter,
   addSignature,
+  deleteLetter,
   getLetterSubByCategory,
 } from "../../app/features/openletters";
 import videoIcon from "../../assets/videoIcon.svg";
@@ -467,6 +468,67 @@ export const AddOpenLetter = ({
         )}
       </Form>
     </>
+  );
+};
+
+
+export const DeleteOpenLetter = ({
+  setDeleteModal,
+  dispatch,
+  setReload,
+  id,
+}) => {
+  const { token } = useSelector((state) => state.auth);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleDelete = async () => {
+    setIsLoading(true);
+
+    try {
+      const { statusCode } = await dispatch(
+        deleteLetter({
+          token,
+          id,
+        })
+      ).unwrap();
+
+      if (statusCode === 200) {
+        Toast("success", "Letter deleted successfully");
+        setReload((prev) => !prev);
+        setDeleteModal(false);
+      }
+    } catch (error) {
+      console.error("Delete Error:", error);
+      Toast("error", error?.message || "Error deleting letter");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="text-center">
+      <p className="mb-2 text-gray-700">
+        Are you sure you want to delete this Letter?
+      </p>
+      <p className="text-sm text-gray-500 mb-6">
+        This action is irreversible and will permanently remove the Letter.
+      </p>
+      <div className="btn-container flex justify-center gap-4">
+        <Button
+          title="No"
+          width={false}
+          onClick={() => setDeleteModal(false)}
+          bgColor="bg-slate-500"
+        />
+        <Button
+          title="Yes"
+          width={false}
+          onClick={handleDelete}
+          spinner={isLoading ? <Spinner size="sm" /> : null}
+        />
+      </div>
+    </div>
   );
 };
 

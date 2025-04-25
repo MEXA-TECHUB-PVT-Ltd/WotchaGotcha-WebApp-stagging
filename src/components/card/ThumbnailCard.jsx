@@ -1,9 +1,30 @@
 import React from "react";
 import { nameElipse } from "../../utils/common/nameElipse";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { useSelector } from "react-redux";
 
-const ThumbnailCard = ({ image, title, onClick }) => {
+const ThumbnailCard = ({
+  image,
+  title,
+  onClick,
+  for_modify = false,
+  onEdit,
+  onDelete,
+}) => {
+  const { textColor } = useSelector((state) => state.theme);
+
   return (
-    <div className="thumbnail-container" onClick={onClick}>
+    <div className="thumbnail-container relative" onClick={onClick}>
+      {for_modify && (
+        <div
+          className="absolute top-0 right-1 flex gap-2 z-10"
+          onClick={(e) => e.stopPropagation()} // Prevent click bubbling to main card
+        >
+          <FaEdit onClick={onEdit} size={25} className={textColor} />
+          <MdDelete onClick={onDelete} size={25} className="text-red-600" />
+        </div>
+      )}
       <img
         style={{ imageRendering: "-webkit-optimize-contrast" }}
         src={image}

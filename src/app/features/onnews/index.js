@@ -119,6 +119,40 @@ export const addOnNews = createAsyncThunk(
   }
 );
 
+export const deleteNews = createAsyncThunk(
+  "news/deleteNews",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.delete(`/news/deleteNews/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updateOnNews = createAsyncThunk(
+  "news/updateNews",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.put(`/news/updateNews`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const getOnNewsLikes = createAsyncThunk(
   "/news/getAllLikesByNews",
   async ({ token, id }, { rejectWithValue }) => {

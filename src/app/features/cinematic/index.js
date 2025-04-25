@@ -119,6 +119,40 @@ export const addCinematic = createAsyncThunk(
   }
 );
 
+export const deleteCinematic = createAsyncThunk(
+  "cinematics/delete/",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.delete(`/cinematics/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updateCinematic = createAsyncThunk(
+  "cinematics/update",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.put(`/cinematics/update`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const getCinematicLikes = createAsyncThunk(
   "/cinematics/all-likes",
   async ({ token, id }, { rejectWithValue }) => {

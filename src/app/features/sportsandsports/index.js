@@ -119,6 +119,40 @@ export const addSportsAndSports = createAsyncThunk(
   }
 );
 
+export const deleteSport = createAsyncThunk(
+  "sports/delete",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.delete(`/sports/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updateSport = createAsyncThunk(
+  "sports/update",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.put(`/sports/update`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const getSportsAndSportsLikes = createAsyncThunk(
   "/sports/all-likes",
   async ({ token, id }, { rejectWithValue }) => {
@@ -284,8 +318,7 @@ const sportsAndSportsSlice = createSlice({
       .addCase(searchSportsAndSports.rejected, (state, action) => {
         state.isSearching = false;
         state.error = action?.payload;
-      })
-    
+      });
   },
 });
 

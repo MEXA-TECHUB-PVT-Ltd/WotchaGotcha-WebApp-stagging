@@ -119,6 +119,40 @@ export const addEbic = createAsyncThunk(
   }
 );
 
+export const deleteEbic = createAsyncThunk(
+  "gebc/deleteGEBC",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.delete(`/gebc/deleteGEBC/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updateEbic = createAsyncThunk(
+  "gebc/updateGEBC",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.put(`/gebc/updateGEBC`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const getEbicLikes = createAsyncThunk(
   "/gebc/getAllLikesByGEBC",
   async ({ token, id }, { rejectWithValue }) => {

@@ -18,10 +18,12 @@ import { copyLink } from "../../utils/copyLink";
 import {
   addCommentOnSportsAndSports,
   addSportsAndSports,
+  deleteSport,
   getSportsAndSportsComments,
   getSportsAndSportsLikes,
   getSportsAndSportsSubCategoryByCategory,
   likeUnlikeSportsAndSports,
+  updateSport,
 } from "../../app/features/sportsandsports";
 import ImagePreviewer from "../../components/previewers/ImagePreviewer";
 
@@ -188,6 +190,230 @@ export const AddSports = ({ setAddModal, dispatch, setReload, categoryId }) => {
         )}
       </Form>
     </>
+  );
+};
+
+export const EditSports = ({ setEditModal, dispatch, setReload, sport }) => {
+  const { token } = useSelector((state) => state.auth);
+  const { bgColor } = useSelector((state) => state.theme);
+  const { user } = useSelector((state) => state.user);
+
+  const imageRef = useRef(null);
+
+  const [subCategory, setSubCategory] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleEditSports = async (data, { resetForm }) => {
+    setIsLoading(true);
+    try {
+      if (!data?.image) {
+        Toast("error", "Please upload an image");
+        setIsLoading(false);
+        return;
+      }
+
+      const image = await uploadImage(data?.image);
+      if (!image) throw new Error("Failed to upload image.");
+
+      const payload = { ...data, image };
+      const { statusCode } = await dispatch(
+        updateSport({ token, payload })
+      ).unwrap();
+
+      if (statusCode === 200) {
+        Toast("success", "Sports updated successfully");
+        setReload((prev) => !prev);
+        setEditModal(false);
+        resetForm();
+      }
+    } catch (error) {
+      console.error("Upload Error:", error);
+      Toast("error", error?.message || "Error updating sports");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchSubCategories = async () => {
+      if (sport?.category_id) {
+        const { AllCategories } = await dispatch(
+          getSportsAndSportsSubCategoryByCategory({
+            token,
+            id: sport?.category_id,
+          })
+        ).unwrap();
+
+        setSubCategory(AllCategories);
+      }
+    };
+
+    fetchSubCategories();
+  }, []);
+
+  return (
+    <>
+      <Form
+        initialValues={{
+          id: sport?.sport_id || "",
+          name: sport?.name || "",
+          description: sport?.description || "",
+          category_id: sport?.category_id || "",
+          sub_category_id: sport?.sub_category_id || "",
+          image: sport?.image || "",
+          user_id: user?.id,
+        }}
+        validationSchema={Yup.object().shape({
+          name: Yup.string().required("Name is required"),
+          description: Yup.string().required("Description is required"),
+          sub_category_id: Yup.string().required("Sub Category is required"),
+          image: Yup.string().optional(),
+        })}
+        onSubmit={handleEditSports}
+      >
+        {({ handleSubmit, values, handleChange, setFieldValue }) => (
+          <div className="flex-col-start gap-5">
+            <div className="w-full flex gap-5 items-center justify-center">
+              <div
+                className={`relative capture-container`}
+                onClick={() => imageRef.current.click()}
+              >
+                <input
+                  name="image"
+                  ref={imageRef}
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    setFieldValue("image", file);
+                  }}
+                  accept="image/*"
+                  hidden
+                />
+                {!values?.image ? (
+                  <>
+                    <FaPlusCircle size={25} />
+                    <p>Upload Image</p>
+                  </>
+                ) : (
+                  <>
+                    <div
+                      className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
+                    >
+                      Change Image
+                    </div>
+                    <img
+                      style={{ imageRendering: "-webkit-optimize-contrast" }}
+                      src={
+                        values.image instanceof File
+                          ? URL.createObjectURL(values?.image)
+                          : values.image
+                      }
+                      alt="Image"
+                      className="h-full w-full"
+                    />
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div className="input-container">
+              <AppInput
+                label={"Name"}
+                name="name"
+                value={values.name}
+                onChange={handleChange}
+              />
+              <ErrorMessage name="name" />
+            </div>
+
+            <div className="input-container">
+              <AppSelect
+                label={"Sub Category"}
+                name="sub_category_id"
+                value={values.sub_category_id}
+                onChange={handleChange}
+                options={subCategory}
+              />
+              <ErrorMessage name="sub_category_id" />
+            </div>
+
+            <div className="input-container">
+              <AppTextArea
+                label={"Description"}
+                name="description"
+                value={values.description}
+                onChange={handleChange}
+              />
+              <ErrorMessage name="description" />
+            </div>
+
+            <div className="btn-container">
+              <Button
+                title={"Update"}
+                width={false}
+                onClick={isLoading ? null : handleSubmit}
+                spinner={isLoading ? <Spinner size="sm" /> : null}
+              />
+            </div>
+          </div>
+        )}
+      </Form>
+    </>
+  );
+};
+
+export const DeleteSport = ({ setDeleteModal, dispatch, setReload, id }) => {
+  const { token } = useSelector((state) => state.auth);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleDelete = async () => {
+    setIsLoading(true);
+
+    try {
+      const { statusCode } = await dispatch(
+        deleteSport({
+          token,
+          id,
+        })
+      ).unwrap();
+
+      if (statusCode === 200) {
+        Toast("success", "Sport deleted successfully");
+        setReload((prev) => !prev);
+        setDeleteModal(false);
+      }
+    } catch (error) {
+      console.error("Delete Error:", error);
+      Toast("error", error?.message || "Error deleting sport");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="text-center">
+      <p className="mb-2 text-gray-700">
+        Are you sure you want to delete this Sport?
+      </p>
+      <p className="text-sm text-gray-500 mb-6">
+        This action is irreversible and will permanently remove the Sport.
+      </p>
+      <div className="btn-container flex justify-center gap-4">
+        <Button
+          title="No"
+          width={false}
+          onClick={() => setDeleteModal(false)}
+          bgColor="bg-slate-500"
+        />
+        <Button
+          title="Yes"
+          width={false}
+          onClick={handleDelete}
+          spinner={isLoading ? <Spinner size="sm" /> : null}
+        />
+      </div>
+    </div>
   );
 };
 

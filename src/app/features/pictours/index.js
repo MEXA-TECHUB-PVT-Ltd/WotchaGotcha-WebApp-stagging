@@ -122,6 +122,40 @@ export const addPicTour = createAsyncThunk(
   }
 );
 
+export const deletePicTour = createAsyncThunk(
+  "/picTour/deletePicTour",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.delete(`/picTour/deletePicTour/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updatePicTour = createAsyncThunk(
+  "/picTour/updatePicTour",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.put(`/picTour/updatePicTour`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const getPicTourLikes = createAsyncThunk(
   "/picTour/getAllLikesByPicTour",
   async ({ token, id }, { rejectWithValue }) => {
@@ -294,8 +328,7 @@ const picTourSlice = createSlice({
       .addCase(searchPicTour.rejected, (state, action) => {
         state.isSearhing = false;
         state.error = action?.payload;
-      })
-     
+      });
   },
 });
 
