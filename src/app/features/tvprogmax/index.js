@@ -119,6 +119,40 @@ export const addTvProgmax = createAsyncThunk(
   }
 );
 
+export const deleteTvPrgmax = createAsyncThunk(
+  "tvProgmax/delete",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.delete(`/tvProgmax/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updateTvProgmax = createAsyncThunk(
+  "tvProgmax/update",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.put(`/tvProgmax/update`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const getTvProgmaxLikes = createAsyncThunk(
   "/tvProgmax/all-likes",
   async ({ token, id }, { rejectWithValue }) => {

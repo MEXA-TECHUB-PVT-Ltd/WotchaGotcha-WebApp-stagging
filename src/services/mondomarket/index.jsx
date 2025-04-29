@@ -16,10 +16,12 @@ import {
   addMondoMarketItem,
   bookMarkItem,
   checkAlert,
+  deleteItem,
   getMondoMarketCategories,
   removeBookMarkItem,
   sendOffer,
   toggleAlert,
+  updateItem,
 } from "../../app/features/mondomarket";
 import { useEffect, useRef, useState } from "react";
 import AppInput from "../../components/form/AppInput";
@@ -39,6 +41,7 @@ import {
   IoNotificationsOutline,
 } from "react-icons/io5";
 import { MdOutlineNotificationsActive } from "react-icons/md";
+
 export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
@@ -261,6 +264,315 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
         )}
       </Form>
     </>
+  );
+};
+
+export const EditMondoItem = ({ setEditModal, dispatch, setReload, item }) => {
+  const { user } = useSelector((state) => state.user);
+  const { token } = useSelector((state) => state.auth);
+  const { borderColor } = useSelector((state) => state.theme);
+
+  const conditions = [
+    { id: "new", name: "New" },
+    { id: "used_Like_new", name: "Used - Like New" },
+    { id: "used_Good", name: "Used - Good" },
+    { id: "used_Fair", name: "Used - Fair" },
+  ];
+
+  const regions = [
+    { id: "Africa", name: "Africa" },
+    { id: "Europe", name: "Europe" },
+    { id: "Americas", name: "Americas" },
+    { id: "Asia", name: "Asia" },
+    { id: "Middle East", name: "Middle East" },
+  ];
+
+  const imageRef = useRef(null);
+
+  const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [images, setImages] = useState(item?.images || []);
+
+  const handleEditMondoItem = async (data, { resetForm }) => {
+    setIsLoading(true);
+
+    try {
+      if (!images || images.length < 1) {
+        Toast("error", "Please upload at least one image.");
+        setIsLoading(false);
+        return;
+      }
+
+      const oldImages = images.filter((img) => !(img instanceof File));
+      const newFiles = images.filter((img) => img instanceof File);
+
+      const uploadedNewImages = await Promise.all(
+        newFiles.map((file) => uploadImage(file))
+      );
+
+      const allImages = [
+        ...oldImages.map((img) => img.image),
+        ...uploadedNewImages,
+      ];
+
+      const payload = {
+        ...data,
+        paid_status: true,
+        oldImagesId: item?.images?.map((img) => img.id) || [],
+        newImages: allImages,
+      };
+
+      const { statusCode } = await dispatch(
+        updateItem({ token, payload })
+      ).unwrap();
+
+      if (statusCode === 200) {
+        Toast("success", "Item Updated Successfully");
+        setReload((prev) => !prev);
+        setEditModal(false);
+        resetForm();
+      }
+    } catch (error) {
+      console.error("Update Error:", error);
+      Toast("error", error?.message || "Error updating item");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const { AllCategories } = await dispatch(
+        getMondoMarketCategories({ token })
+      ).unwrap();
+      setCategories(AllCategories);
+    };
+    fetchCategories();
+  }, []);
+
+  return (
+    <>
+      <Form
+        initialValues={{
+          item_id: item?.id,
+          user_id: user?.id,
+          item_category: item?.item_category || "",
+          title: item?.title || "",
+          description: item?.description || "",
+          price: item?.price || "",
+          condition: item?.condition || "",
+          location: item?.location || "",
+          region: item?.region || "",
+        }}
+        validationSchema={Yup.object().shape({
+          item_category: Yup.string().required("Item Category is required"),
+          title: Yup.string().required("Title is required"),
+          description: Yup.string().required("Description is required"),
+          price: Yup.number()
+            .required("Price is required")
+            .min(0, "Price must be greater than or equal to 0"),
+          condition: Yup.string().required("Condition is required"),
+          location: Yup.string().required("Location is required"),
+          region: Yup.string().required("Region is required"),
+        })}
+        onSubmit={handleEditMondoItem}
+      >
+        {({ handleSubmit, values, handleChange }) => (
+          <div className="flex-col-start gap-5">
+            <div className="flex flex-wrap gap-5 items-center">
+              {images.map((image, index) => {
+                const isFile = image instanceof File;
+                const imageUrl = isFile
+                  ? URL.createObjectURL(image)
+                  : image?.image;
+
+                return (
+                  <div
+                    key={index}
+                    className={`capture-container ${borderColor} relative`}
+                  >
+                    <img
+                      src={imageUrl}
+                      alt="Preview"
+                      className="h-full w-full object-cover"
+                      onLoad={() => isFile && URL.revokeObjectURL(imageUrl)}
+                    />
+                    <button
+                      type="button"
+                      className="flex bg-red-500 h-5 justify-center p-1 rounded-full text-white w-5 absolute items-center right-0 top-0"
+                      onClick={() =>
+                        setImages(images.filter((_, i) => i !== index))
+                      }
+                    >
+                      X
+                    </button>
+                  </div>
+                );
+              })}
+
+              {images.length < 10 && (
+                <div
+                  className={`capture-container ${borderColor}`}
+                  onClick={() => imageRef.current.click()}
+                >
+                  <input
+                    ref={imageRef}
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={(e) => {
+                      const files = Array.from(e.target.files);
+                      setImages((prev) => [...prev, ...files].slice(0, 10));
+                    }}
+                    hidden
+                  />
+                  <FaPlusCircle size={25} />
+                  <p>Upload Image</p>
+                </div>
+              )}
+            </div>
+
+            <div className="input-container">
+              <AppInput
+                label={"Title"}
+                name="title"
+                value={values.title}
+                onChange={handleChange}
+              />
+              <ErrorMessage name="title" />
+            </div>
+
+            <div className="input-container">
+              <AppSelect
+                label={"Category"}
+                name="item_category"
+                value={values.item_category}
+                onChange={handleChange}
+                options={categories}
+              />
+              <ErrorMessage name="item_category" />
+            </div>
+
+            <div className="input-container">
+              <AppTextArea
+                label={"Description"}
+                name="description"
+                value={values.description}
+                onChange={handleChange}
+              />
+              <ErrorMessage name="description" />
+            </div>
+
+            <div className="input-container">
+              <AppInput
+                label={"Price"}
+                name="price"
+                type="number"
+                value={values.price}
+                onChange={handleChange}
+              />
+              <ErrorMessage name="price" />
+            </div>
+
+            <div className="input-container">
+              <AppSelect
+                label={"Condition"}
+                name="condition"
+                value={values.condition}
+                onChange={handleChange}
+                options={conditions}
+              />
+              <ErrorMessage name="condition" />
+            </div>
+
+            <div className="input-container">
+              <AppInput
+                label={"Location"}
+                name="location"
+                value={values.location}
+                onChange={handleChange}
+              />
+              <ErrorMessage name="location" />
+            </div>
+
+            <div className="input-container">
+              <AppSelect
+                label={"Region"}
+                name="region"
+                value={values.region}
+                onChange={handleChange}
+                options={regions}
+              />
+              <ErrorMessage name="region" />
+            </div>
+
+            <div className="btn-container">
+              <Button
+                title={"Update"}
+                width={false}
+                onClick={isLoading ? null : handleSubmit}
+                spinner={isLoading ? <Spinner size="sm" /> : null}
+              />
+            </div>
+          </div>
+        )}
+      </Form>
+    </>
+  );
+};
+
+export const DeleteMondo = ({ setDeleteModal, dispatch, setReload, id }) => {
+  const { token } = useSelector((state) => state.auth);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleDelete = async () => {
+    setIsLoading(true);
+
+    try {
+      const { statusCode } = await dispatch(
+        deleteItem({
+          token,
+          id,
+        })
+      ).unwrap();
+
+      if (statusCode === 200) {
+        Toast("success", "Item deleted successfully");
+        setReload((prev) => !prev);
+        setDeleteModal(false);
+      }
+    } catch (error) {
+      console.error("Delete Error:", error);
+      Toast("error", error?.message || "Error deleting Item");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="text-center">
+      <p className="mb-2 text-gray-700">
+        Are you sure you want to delete this Item?
+      </p>
+      <p className="text-sm text-gray-500 mb-6">
+        This action is irreversible and will permanently remove the Item.
+      </p>
+      <div className="btn-container flex justify-center gap-4">
+        <Button
+          title="No"
+          width={false}
+          onClick={() => setDeleteModal(false)}
+          bgColor="bg-slate-500"
+        />
+        <Button
+          title="Yes"
+          width={false}
+          onClick={handleDelete}
+          spinner={isLoading ? <Spinner size="sm" /> : null}
+        />
+      </div>
+    </div>
   );
 };
 

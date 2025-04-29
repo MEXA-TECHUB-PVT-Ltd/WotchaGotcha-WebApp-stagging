@@ -105,6 +105,23 @@ export const getLetterByUser = createAsyncThunk(
   }
 );
 
+export const getSpecificLetter = createAsyncThunk(
+  "letter/getAllLetterByUser",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/letter/getSpecificLetter/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const addLetter = createAsyncThunk(
   "letter/createLetter",
   async ({ token, payload }, { rejectWithValue }) => {
@@ -143,8 +160,25 @@ export const updateLetter = createAsyncThunk(
   "letter/updatePostLetter",
   async ({ token, payload }, { rejectWithValue }) => {
     try {
-      const { data } = await client.delete(
-        `/letter/updatePostLetter`,
+      const { data } = await client.put(`/letter/updatePostLetter`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
+export const updateLetterMedia = createAsyncThunk(
+  "letter/updatePostLetterImages",
+  async ({ token, payload }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.put(
+        `/letter/updatePostLetterImages`,
         payload,
         {
           headers: {
