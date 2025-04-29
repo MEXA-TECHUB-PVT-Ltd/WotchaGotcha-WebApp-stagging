@@ -105,6 +105,23 @@ export const getLetterByUser = createAsyncThunk(
   }
 );
 
+export const getSpecificLetter = createAsyncThunk(
+  "letter/getAllLetterByUser",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(`/letter/getSpecificLetter/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
+
 export const addLetter = createAsyncThunk(
   "letter/createLetter",
   async ({ token, payload }, { rejectWithValue }) => {

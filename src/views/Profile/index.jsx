@@ -918,7 +918,7 @@ const Profile = () => {
       >
         <EditOpenLetter
           setEditModal={setEditLetterModal}
-          letter={currentLetter}
+          letterInfo={currentLetter}
           dispatch={dispatch}
           setReload={setReload}
         />
