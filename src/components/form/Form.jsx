@@ -1,10 +1,16 @@
 import React from "react";
 import { Formik } from "formik";
 
-const Form = ({ children, initialValues, validationSchema, onSubmit }) => {
+const Form = ({
+  children,
+  initialValues,
+  validationSchema,
+  onSubmit,
+  ...otherProps
+}) => {
   return (
     <Formik
-      enableReinitialize={true}
+      {...otherProps}
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}

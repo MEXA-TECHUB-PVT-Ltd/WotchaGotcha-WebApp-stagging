@@ -46,27 +46,35 @@ const ImagePreviewer = ({
     [OnCopy, isLoading]
   );
 
-  function handleDownload() {
+  async function handleDownload() {
     try {
-      let downloadUrl = image;
-      if (downloadUrl.startsWith("http://")) {
-        downloadUrl = downloadUrl.replace("http://", "https://");
+      if (!image || typeof image !== "string" || !image.includes("/upload/")) {
+        throw new Error("Invalid image");
       }
 
-      downloadUrl = downloadUrl.replace("/upload/", "/upload/fl_attachment/");
+      let url = image.replace("http://", "https://");
 
-      const link = document.createElement("a");
-      link.href = downloadUrl;
-      link.setAttribute("download", "");
-      document.body.appendChild(link);
+      const response = await fetch(url);
 
-      setTimeout(() => {
-        link.click();
-        document.body.removeChild(link);
-      }, 100);
-    } catch (error) {
-      console.error("Download failed:", error);
-      Toast("error", "Download failed. Please try again.");
+      if (!response.ok) {
+        throw new Error(`Network error: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = "";
+      document.body.appendChild(a);
+      a.click();
+
+      // Clean up
+      window.URL.revokeObjectURL(blobUrl);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error("Download failed:", err);
+      alert("Download failed. Please try again.");
     }
   }
 

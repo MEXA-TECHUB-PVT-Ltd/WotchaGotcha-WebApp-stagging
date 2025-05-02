@@ -90,6 +90,8 @@ export const AddOpenLetter = ({
         video: videoUrl,
       };
 
+      console.log(payload);
+
       const { statusCode } = await dispatch(
         addLetter({ token, payload })
       ).unwrap();
@@ -368,9 +370,12 @@ export const AddOpenLetter = ({
                             hidden
                             onChange={(e) => {
                               const files = Array.from(e.target.files);
-                              setImages((prev) =>
-                                [...prev, ...files].slice(0, 3)
-                              );
+                              setImages((prev) => {
+                                const combined = [...prev, ...files];
+                                return combined.length > 3
+                                  ? combined.slice(0, 3)
+                                  : combined;
+                              });
                             }}
                           />
                           <FaPlusCircle size={25} />
@@ -652,6 +657,7 @@ export const EditOpenLetter = ({
   return (
     <>
       <Form
+        enableReinitialize={true}
         initialValues={{
           letterId: letter?.post_id,
           name: letter?.name || "",

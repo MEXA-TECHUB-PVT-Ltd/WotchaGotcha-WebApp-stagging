@@ -6,6 +6,7 @@ import ProfileCard from "../card/ProfileCard";
 import { useSelector } from "react-redux";
 import AppInput from "../form/AppInput";
 import Previewer from "../modal/Previewer";
+import { FaDownload } from "react-icons/fa";
 
 const VideoPlayer = ({
   video,
