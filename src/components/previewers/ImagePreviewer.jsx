@@ -12,6 +12,7 @@ import ProfileCard from "../card/ProfileCard";
 import { useSelector } from "react-redux";
 import AppInput from "../form/AppInput";
 import Previewer from "../modal/Previewer";
+import { Toast } from "../theme/Toast";
 
 const ImagePreviewer = ({
   image,
@@ -45,24 +46,37 @@ const ImagePreviewer = ({
     [OnCopy, isLoading]
   );
 
-  const handleDownload = async () => {
+  async function handleDownload() {
     try {
-      const downloadUrl = image.replace("/upload/", "/upload/fl_attachment/");
-      const response = await fetch(downloadUrl, { mode: "cors" });
+      if (!image || typeof image !== "string" || !image.includes("/upload/")) {
+        throw new Error("Invalid image");
+      }
+
+      let url = image.replace("http://", "https://");
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Network error: ${response.status}`);
+      }
+
       const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
+      const blobUrl = window.URL.createObjectURL(blob);
 
       const a = document.createElement("a");
       a.href = blobUrl;
-      a.download = "image.jpg";
+      a.download = "";
       document.body.appendChild(a);
       a.click();
+
+      // Clean up
+      window.URL.revokeObjectURL(blobUrl);
       document.body.removeChild(a);
-      URL.revokeObjectURL(blobUrl);
-    } catch (error) {
-      console.error("Download failed", error);
+    } catch (err) {
+      console.error("Download failed:", err);
+      alert("Download failed. Please try again.");
     }
-  };
+  }
 
   const profileTitle = useMemo(
     () => <ProfileCard image={userImage} title={userName} />,
