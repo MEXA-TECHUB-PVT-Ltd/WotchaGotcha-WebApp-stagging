@@ -15,6 +15,8 @@ import {
   searchFanStar,
 } from "../../app/features/fanstarzone";
 import { AddFanStar, FanStarPlayer } from "../../services/fanstarzone";
+import { use } from "react";
+import { useTranslation } from "react-i18next";
 
 const FanStarZone = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,7 +24,7 @@ const FanStarZone = ({ isDashboard = false }) => {
   const [addModal, setAddModal] = useState(false);
   const [videoModal, setVideoModal] = useState(false);
   const [reload, setReload] = useState(false);
-
+  const { t } = useTranslation();
   const [videos, setVideos] = useState([]);
 
   const [topVideo, setTopVideo] = useState(null);
@@ -90,12 +92,12 @@ const FanStarZone = ({ isDashboard = false }) => {
     <Fragment>
       {!isDashboard && (
         <Header
-          title={<BreadCrumb items={[{ label: "Fan Star Zone" }]} />}
-          buttonTitle={"Add"}
+          title={<BreadCrumb items={[{ label: t("fans-stars-zone") }]} />}
+          buttonTitle={t("add")}
           buttonIcon={FaPlus}
           onSearch={onSearch}
           onAddButtonClick={() => setAddModal(true)}
-          searchBy={"name"}
+          searchBy={t("name")}
         />
       )}
 
@@ -143,7 +145,7 @@ const FanStarZone = ({ isDashboard = false }) => {
           </div>
         ) : !topVideo && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Video Found
+            {t("no-found-videos-top")}
           </div>
         ) : null}
       </div>
@@ -171,7 +173,7 @@ const FanStarZone = ({ isDashboard = false }) => {
             </div>
           ) : videos?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
-              No Videos Found
+              {t("no-found-videos")}
             </div>
           ) : null}
         </div>
@@ -198,7 +200,7 @@ const FanStarZone = ({ isDashboard = false }) => {
                     ))
                   ) : (
                     <div className="flex justify-center text-gray-400 my-10">
-                      No Videos Found
+                      {t("no-found-videos")}
                     </div>
                   )}
                 </div>
@@ -206,7 +208,7 @@ const FanStarZone = ({ isDashboard = false }) => {
             ))
           ) : videos?.length === 0 && !isVideoFetching ? (
             <div className="flex justify-center text-gray-400">
-              No Videos Found
+              {t("no-found-videos")}
             </div>
           ) : null}
         </div>

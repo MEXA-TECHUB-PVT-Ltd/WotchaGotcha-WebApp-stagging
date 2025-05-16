@@ -15,10 +15,11 @@ import {
   searchCinematic,
 } from "../../app/features/cinematic";
 import { AddCinematic, CinematicPlayer } from "../../services/cinematic";
+import { useTranslation } from "react-i18next";
 
 const Cinematic = ({ isDashbaord = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
-
+  const { t } = useTranslation();
   const [addModal, setAddModal] = useState(false);
   const [videoModal, setVideoModal] = useState(false);
   const [reload, setReload] = useState(false);
@@ -90,12 +91,12 @@ const Cinematic = ({ isDashbaord = false }) => {
     <Fragment>
       {!isDashbaord && (
         <Header
-          title={<BreadCrumb items={[{ label: "Cinematics" }]} />}
-          buttonTitle={"Add"}
+          title={<BreadCrumb items={[{ label: t("cinematics") }]} />}
+          buttonTitle={t("add")}
           buttonIcon={FaPlus}
           onSearch={onSearch}
           onAddButtonClick={() => setAddModal(true)}
-          searchBy={"name"}
+          searchBy={t("name")}
         />
       )}
 
@@ -172,7 +173,7 @@ const Cinematic = ({ isDashbaord = false }) => {
             </div>
           ) : videos?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
-              No Videos Found
+              {t("no-found-videos")}
             </div>
           ) : null}
         </div>
@@ -199,7 +200,7 @@ const Cinematic = ({ isDashbaord = false }) => {
                     ))
                   ) : (
                     <div className="flex justify-center text-gray-400 my-10">
-                      No Videos Found
+                      {t("no-found-videos")}
                     </div>
                   )}
                 </div>
@@ -207,7 +208,7 @@ const Cinematic = ({ isDashbaord = false }) => {
             ))
           ) : videos?.length === 0 && !isVideoFetching ? (
             <div className="flex justify-center text-gray-400">
-              No Videos Found
+              {t("no-found-videos")}
             </div>
           ) : null}
         </div>

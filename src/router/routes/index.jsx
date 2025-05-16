@@ -16,6 +16,7 @@ import Profile from "../../views/Profile";
 import AboutUs from "../../views/About";
 import TermsAndConditions from "../../views/Terms";
 import PrivacyPolicy from "../../views/Privacy";
+import LiveStreaming from "../../views/LiveStreaming";
 
 export default [
   {
@@ -89,5 +90,9 @@ export default [
   {
     path: "/privacy-policy",
     element: <PrivacyPolicy />,
+  },
+  {
+    path: "/live-streaming",
+    element: <LiveStreaming />,
   },
 ];

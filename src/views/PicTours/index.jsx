@@ -15,10 +15,11 @@ import {
   searchPicTour,
 } from "../../app/features/pictours";
 import { AddPicTour, PicTourPreviewer } from "../../services/pictours";
+import { useTranslation } from "react-i18next";
 
 const PicTours = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
-
+  const { t } = useTranslation();
   const [addModal, setAddModal] = useState(false);
   const [picTourModal, setPicTourModal] = useState(false);
   const [reload, setReload] = useState(false);
@@ -110,12 +111,12 @@ const PicTours = ({ isDashboard = false }) => {
     <Fragment>
       {!isDashboard && (
         <Header
-          title={<BreadCrumb items={[{ label: "Pic Tours" }]} />}
-          buttonTitle={"Add"}
+          title={<BreadCrumb items={[{ label: t("pic-tours") }]} />}
+          buttonTitle={t("add")}
           buttonIcon={FaPlus}
           onSearch={onSearch}
           onAddButtonClick={() => setAddModal(true)}
-          searchBy={"name"}
+          searchBy={t("name")}
         />
       )}
 
