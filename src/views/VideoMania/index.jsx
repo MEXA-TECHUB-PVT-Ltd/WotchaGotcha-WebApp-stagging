@@ -15,6 +15,7 @@ import { Spinner } from "../../components/theme/Loader";
 import { nameElipse } from "../../utils/common/nameElipse";
 import Modal from "../../components/modal/Modal";
 import { AddVideoMania, VideoManiaPlayer } from "../../services/videomania";
+import { useTranslation } from "react-i18next";
 
 const VideoMania = ({ isDashbaord = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,7 +23,7 @@ const VideoMania = ({ isDashbaord = false }) => {
   const [addModal, setAddModal] = useState(false);
   const [videoModal, setVideoModal] = useState(false);
   const [reload, setReload] = useState(false);
-
+  const { t, i18n } = useTranslation();
   const [videos, setVideos] = useState([]);
 
   const [topVideo, setTopVideo] = useState(null);
@@ -94,12 +95,12 @@ const VideoMania = ({ isDashbaord = false }) => {
     <Fragment>
       {!isDashbaord && (
         <Header
-          title={<BreadCrumb items={[{ label: "Video Mania" }]} />}
-          buttonTitle={"Add"}
+          title={<BreadCrumb items={[{ label: t("video-mania") }]} />}
+          buttonTitle={t("add")}
           buttonIcon={FaPlus}
           onSearch={onSearch}
           onAddButtonClick={() => setAddModal(true)}
-          searchBy={"name"}
+          searchBy={t("name")}
         />
       )}
 

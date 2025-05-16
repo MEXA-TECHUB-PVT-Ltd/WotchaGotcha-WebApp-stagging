@@ -8,7 +8,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import "react-quill/dist/quill.snow.css";
-
+import "./i18n"; // <- Import i18n configuration
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Provider store={store}>

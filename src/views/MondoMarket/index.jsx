@@ -17,10 +17,11 @@ import {
 
 import { AddMondoItem, MondoDetailsViewer } from "../../services/mondomarket";
 import Modal from "../../components/modal/Modal";
+import { useTranslation } from "react-i18next";
 
 const MondoMarket = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
-
+  const { t } = useTranslation();
   const [addModal, setAddModal] = useState(false);
   const [mondoModal, setMondoModal] = useState(false);
   const [reload, setReload] = useState(false);
@@ -131,12 +132,12 @@ const MondoMarket = ({ isDashboard = false }) => {
     <Fragment>
       {!isDashboard && (
         <Header
-          title={<BreadCrumb items={[{ label: "Mondo Market" }]} />}
-          buttonTitle={"Add"}
+          title={<BreadCrumb items={[{ label: t("mondo-market") }]} />}
+          buttonTitle={t("add")}
           buttonIcon={FaPlus}
           onSearch={onSearch}
           onAddButtonClick={() => setAddModal(true)}
-          searchBy={"name"}
+          searchBy={t("name")}
         />
       )}
 
@@ -209,7 +210,7 @@ const MondoMarket = ({ isDashboard = false }) => {
             </div>
           ) : items?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
-              No Items Found
+              {t("no-found")}
             </div>
           ) : null}
         </div>
@@ -238,7 +239,7 @@ const MondoMarket = ({ isDashboard = false }) => {
                         />
                       ))
                     ) : (
-                      <div className="text-gray-400">No Items Found</div>
+                      <div className="text-gray-400"> {t("no-found")}</div>
                     )}
                   </div>
                 </div>
@@ -246,7 +247,7 @@ const MondoMarket = ({ isDashboard = false }) => {
             })
           ) : (
             <div className="flex justify-center text-gray-400">
-              No Items Found
+              {t("no-found")}
             </div>
           )}
         </div>

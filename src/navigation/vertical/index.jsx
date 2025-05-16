@@ -21,7 +21,7 @@ import {
   MdStorefront,
   MdVideoCall,
 } from "react-icons/md";
-
+import { RiLiveLine } from "react-icons/ri";
 export default [
   {
     id: "home",
@@ -124,5 +124,11 @@ export default [
     title: "Privacy Policy",
     path: "/privacy-policy",
     icon: <FiShield size={22} />,
+  },
+  {
+    id: "Live Streaming",
+    title: " Live Streaming",
+    path: "/live-streaming",
+    icon: <RiLiveLine size={22} />,
   },
 ];

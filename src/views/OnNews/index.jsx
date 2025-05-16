@@ -16,10 +16,11 @@ import {
   searchOnNews,
 } from "../../app/features/onnews";
 import { AddNews, NewsPreviewer } from "../../services/news";
+import { useTranslation } from "react-i18next";
 
 const OnNews = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
-
+  const { t } = useTranslation();
   const [addModal, setAddModal] = useState(false);
   const [newsModal, setNewsModal] = useState(false);
   const [reload, setReload] = useState(false);
@@ -104,12 +105,12 @@ const OnNews = ({ isDashboard = false }) => {
     <Fragment>
       {!isDashboard && (
         <Header
-          title={<BreadCrumb items={[{ label: "On News" }]} />}
-          buttonTitle={"Add"}
+          title={<BreadCrumb items={[{ label: t("onnews") }]} />}
+          buttonTitle={t("add")}
           buttonIcon={FaPlus}
           onSearch={onSearch}
           onAddButtonClick={() => setAddModal(true)}
-          searchBy={"name"}
+          searchBy={t("name")}
         />
       )}
 
@@ -160,7 +161,7 @@ const OnNews = ({ isDashboard = false }) => {
           </div>
         ) : !topNews && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top News Found
+            {t("no-found-news")}
           </div>
         ) : null}
       </div>
@@ -188,7 +189,7 @@ const OnNews = ({ isDashboard = false }) => {
             </div>
           ) : news?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
-              No Data Found
+              {t("no-found-data")}
             </div>
           ) : null}
         </div>
@@ -217,7 +218,7 @@ const OnNews = ({ isDashboard = false }) => {
                     ))
                   ) : (
                     <div className="flex justify-center text-gray-400 my-10">
-                      No Data Found
+                      {t("no-found-data")}
                     </div>
                   )}
                 </div>
@@ -225,7 +226,7 @@ const OnNews = ({ isDashboard = false }) => {
             ))
           ) : news?.length === 0 && !isNewsFetching ? (
             <div className="flex justify-center text-gray-400">
-              No Data Found
+              {t("no-found-data")}
             </div>
           ) : null}
         </div>

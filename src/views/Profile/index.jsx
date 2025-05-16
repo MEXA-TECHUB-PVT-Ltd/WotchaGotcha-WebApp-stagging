@@ -72,12 +72,13 @@ import {
 } from "../../services/mondomarket";
 import Modal from "../../components/modal/Modal";
 import { use } from "react";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-
+  const { t, i18n } = useTranslation();
   const [reload, setReload] = useState(false);
 
   const [currentVideo, setCurrentVideo] = useState(null);
@@ -244,23 +245,27 @@ const Profile = () => {
   }, [token, user?.id, reload]);
 
   const countCardData = [
-    { id: 1, total: videos?.totalVideos || 0, title: "Video Mania" },
-    { id: 2, total: picTours?.totalTours || 0, title: "Pic Tours" },
-    { id: 3, total: news?.totalNews || 0, title: "On-News" },
-    { id: 4, total: letters?.totalLetters || 0, title: "Open Letters" },
-    { id: 5, total: qafi?.totalQAFIs || 0, title: "QAFI" },
-    { id: 6, total: ebic?.totalGEBCs || 0, title: "EBIC" },
-    { id: 7, total: sports?.totalSports || 0, title: "Sports & Sports" },
-    { id: 8, total: cinematics?.totalVideos || 0, title: "Cinematics" },
-    { id: 9, total: fanstarzone?.totalVideos || 0, title: "Fans Stars Zone" },
-    { id: 10, total: kidvids?.totalVideos || 0, title: "Kid Vids" },
-    { id: 11, total: tvprogmax?.totalVideos || 0, title: "TV Progmax" },
+    { id: 1, total: videos?.totalVideos || 0, title: t("video-mania") },
+    { id: 2, total: picTours?.totalTours || 0, title: t("pic-tours") },
+    { id: 3, total: news?.totalNews || 0, title: t("onnews") },
+    { id: 4, total: letters?.totalLetters || 0, title: t("openletters") },
+    { id: 5, total: qafi?.totalQAFIs || 0, title: t("qafi") },
+    { id: 6, total: ebic?.totalGEBCs || 0, title: t("ebic") },
+    { id: 7, total: sports?.totalSports || 0, title: t("sportsandsports") },
+    { id: 8, total: cinematics?.totalVideos || 0, title: t("cinematics") },
+    {
+      id: 9,
+      total: fanstarzone?.totalVideos || 0,
+      title: t("fans-stars-zone"),
+    },
+    { id: 10, total: kidvids?.totalVideos || 0, title: t("kidvids") },
+    { id: 11, total: tvprogmax?.totalVideos || 0, title: t("tvprogmax") },
     {
       id: 12,
       total: learningandhobbies?.totalVideos || 0,
       title: "Learning & Hobbies",
     },
-    { id: 13, total: mondomarket?.totalItems || 0, title: "Mondo Market" },
+    { id: 13, total: mondomarket?.totalItems || 0, title: t("mondo-market") },
   ];
 
   return (
@@ -286,7 +291,7 @@ const Profile = () => {
       {/* ----------------------------------------------- */}
 
       <div className="mt-10 mb-5">
-        <div className="heading">My Video Mania</div>
+        <div className="heading">{t("myVideoMania")}</div>
         <div className="cards-container">
           {videos?.Videos?.map((v) => (
             <ThumbnailCard
@@ -317,7 +322,7 @@ const Profile = () => {
       {/* ----------------------------------------------- */}
 
       <div className="mt-10 mb-5">
-        <div className="heading">My Pic Tours</div>
+        <div className="heading">{t("myPicTours")}</div>
         <div className="cards-container">
           {picTours?.Tours?.map((p) => (
             <ThumbnailCard
@@ -348,7 +353,7 @@ const Profile = () => {
       {/* ----------------------------------------------- */}
 
       <div className="mt-10 mb-5">
-        <div className="heading">My Open Letters</div>
+        <div className="heading">{t("myOpenLetters")}</div>
         <div className="cards-container">
           {letters?.AllLetter?.map((letter) => (
             <LetterCard
@@ -382,7 +387,7 @@ const Profile = () => {
       {/* ----------------------------------------------- */}
 
       <div className="mt-10 mb-5">
-        <div className="heading">My On-News</div>
+        <div className="heading">{t("myOnNews")}</div>
         <div className="cards-container">
           {news?.News?.map((n) => (
             <ThumbnailCard
@@ -413,7 +418,7 @@ const Profile = () => {
       {/* ----------------------------------------------- */}
 
       <div className="mt-10 mb-5">
-        <div className="heading">My QAFI</div>
+        <div className="heading">{t("myQAFI")}</div>
         <div className="cards-container">
           {qafi?.QAFIs?.map((q) => (
             <ThumbnailCard
@@ -444,7 +449,7 @@ const Profile = () => {
       {/* ----------------------------------------------- */}
 
       <div className="mt-10 mb-5">
-        <div className="heading">My EBIC</div>
+        <div className="heading">{t("myEBIC")}</div>
         <div className="cards-container">
           {ebic?.GEBCs?.map((e) => (
             <EmojiCard
@@ -475,7 +480,7 @@ const Profile = () => {
       {/* ----------------------------------------------- */}
 
       <div className="mt-10 mb-5">
-        <div className="heading">My Sports</div>
+        <div className="heading">{t("mySports")}</div>
         <div className="cards-container">
           {sports?.sports?.map((p) => (
             <ThumbnailCard
@@ -506,7 +511,7 @@ const Profile = () => {
       {/* ----------------------------------------------- */}
 
       <div className="mt-10 mb-5">
-        <div className="heading">My Cinematic</div>
+        <div className="heading">{t("myCinematic")}</div>
         <div className="cards-container">
           {cinematics?.videos?.map((c) => (
             <ThumbnailCard
@@ -537,7 +542,7 @@ const Profile = () => {
       {/* ----------------------------------------------- */}
 
       <div className="mt-10 mb-5">
-        <div className="heading">My Fans_star Zone</div>
+        <div className="heading">{t("myFansStarZone")}</div>
         <div className="cards-container">
           {fanstarzone?.videos?.map((fan) => (
             <ThumbnailCard
@@ -568,7 +573,7 @@ const Profile = () => {
       {/* ----------------------------------------------- */}
 
       <div className="mt-10 mb-5">
-        <div className="heading">My Kid-Vids</div>
+        <div className="heading">{t("myKidVids")}</div>
         <div className="cards-container">
           {kidvids?.videos?.map((kid) => (
             <ThumbnailCard
@@ -599,7 +604,7 @@ const Profile = () => {
       {/* ----------------------------------------------- */}
 
       <div className="mt-10 mb-5">
-        <div className="heading">My TV ProgMax</div>
+        <div className="heading">{t("myTVProgMax")}</div>
         <div className="cards-container">
           {tvprogmax?.videos?.map((tv) => (
             <ThumbnailCard
@@ -630,7 +635,7 @@ const Profile = () => {
       {/* ----------------------------------------------- */}
 
       <div className="mt-10 mb-5">
-        <div className="heading">My Learnings and Hobbies</div>
+        <div className="heading">{t("myLearningsAndHobbies")}</div>
         <div className="cards-container">
           {learningandhobbies?.videos?.map((learning) => (
             <ThumbnailCard
@@ -661,7 +666,7 @@ const Profile = () => {
       {/* ----------------------------------------------- */}
 
       <div className="mt-10 mb-5">
-        <div className="heading">My Mondo Market</div>
+        <div className="heading">{t("myMondoMarket")}</div>
         <div className="cards-container">
           {mondomarket?.AllItems?.map((mondo) => (
             <ThumbnailCard

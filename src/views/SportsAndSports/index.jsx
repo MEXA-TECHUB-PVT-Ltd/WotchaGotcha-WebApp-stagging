@@ -15,10 +15,11 @@ import {
   searchSportsAndSports,
 } from "../../app/features/sportsandsports";
 import { AddSports, SportsPreviewer } from "../../services/sports";
+import { useTranslation } from "react-i18next";
 
 const SportsAndSports = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
-
+  const { t } = useTranslation();
   const [addModal, setAddModal] = useState(false);
   const [sportModal, setSportModal] = useState(false);
   const [reload, setReload] = useState(false);
@@ -103,12 +104,12 @@ const SportsAndSports = ({ isDashboard = false }) => {
     <Fragment>
       {!isDashboard && (
         <Header
-          title={<BreadCrumb items={[{ label: "Sports & Sports" }]} />}
-          buttonTitle={"Add"}
+          title={<BreadCrumb items={[{ label: t("sportsandsports") }]} />}
+          buttonTitle={t("add")}
           buttonIcon={FaPlus}
           onSearch={onSearch}
           onAddButtonClick={() => setAddModal(true)}
-          searchBy={"name"}
+          searchBy={t("name")}
         />
       )}
 
@@ -159,7 +160,7 @@ const SportsAndSports = ({ isDashboard = false }) => {
           </div>
         ) : !topSports && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Sports Found
+            {t("no-found-sports")}
           </div>
         ) : null}
       </div>
@@ -187,7 +188,7 @@ const SportsAndSports = ({ isDashboard = false }) => {
             </div>
           ) : sports?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
-              No Data Found
+              {t("no-found-data")}
             </div>
           ) : null}
         </div>
@@ -214,7 +215,7 @@ const SportsAndSports = ({ isDashboard = false }) => {
                     ))
                   ) : (
                     <div className="flex justify-center text-gray-400 my-10">
-                      No Data Found
+                      {t("no-found-data")}
                     </div>
                   )}
                 </div>
@@ -222,7 +223,7 @@ const SportsAndSports = ({ isDashboard = false }) => {
             ))
           ) : sports?.length === 0 && !isSportsFetching ? (
             <div className="flex justify-center text-gray-400">
-              No Data Found
+              {t("no-found-data")}
             </div>
           ) : null}
         </div>

@@ -8,13 +8,11 @@ const Button = ({
   title,
   width = false,
   spinner = null,
-  bgColor
+  bgColor,
 }) => {
   const theme = useSelector((state) => state.theme);
 
   const bg_color = bgColor ? bgColor : theme?.bgColor;
-
-
 
   return (
     <button
