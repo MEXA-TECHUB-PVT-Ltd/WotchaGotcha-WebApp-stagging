@@ -237,7 +237,7 @@ const OnNews = ({ isDashboard = false }) => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add News"
+        title={t("add_news")}
       >
         <AddNews
           setAddModal={setAddModal}

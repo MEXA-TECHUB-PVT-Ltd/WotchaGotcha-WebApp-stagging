@@ -218,7 +218,7 @@ const FanStarZone = ({ isDashboard = false }) => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add Video"
+        title={t("add_video")}
       >
         <AddFanStar
           setAddModal={setAddModal}

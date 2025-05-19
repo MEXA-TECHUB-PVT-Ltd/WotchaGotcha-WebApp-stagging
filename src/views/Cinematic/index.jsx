@@ -145,7 +145,7 @@ const Cinematic = ({ isDashbaord = false }) => {
           </div>
         ) : !topVideo && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Video Found
+            {t("no_top_video_found")}
           </div>
         ) : null}
       </div>
@@ -218,7 +218,7 @@ const Cinematic = ({ isDashbaord = false }) => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add Video Mania"
+        title={t("add-video")}
       >
         <AddCinematic
           setAddModal={setAddModal}

@@ -41,17 +41,18 @@ import {
   IoNotificationsOutline,
 } from "react-icons/io5";
 import { MdOutlineNotificationsActive } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 
 export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
   const { borderColor } = useSelector((state) => state.theme);
-
+  const { t } = useTranslation();
   const conditions = [
-    { id: "new", name: "New" },
-    { id: "used_Like_new", name: "Used - Like New" },
-    { id: "used_Good", name: "Used - Good" },
-    { id: "used_Fair", name: "Used - Fair" },
+    { id: "new", name: t("new") },
+    { id: "used_Like_new", name: t("used_Like_new") },
+    { id: "used_Good", name: t("used_Good") },
+    { id: "used_Fair", name: t("used_Fair") },
   ];
 
   const imageRef = useRef(null);
@@ -172,14 +173,14 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
                     hidden
                   />
                   <FaPlusCircle size={25} />
-                  <p>Upload Image</p>
+                  <p>{t("upload-image")}</p>
                 </div>
               )}
             </div>
 
             <div className="input-container">
               <AppInput
-                label={"Title"}
+                label={t("title")}
                 name="title"
                 value={values.title}
                 onChange={handleChange}
@@ -189,7 +190,7 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
 
             <div className="input-container">
               <AppSelect
-                label={"Category"}
+                label={t("category")}
                 name="item_category"
                 value={values.item_category}
                 onChange={handleChange}
@@ -210,7 +211,7 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
 
             <div className="input-container">
               <AppInput
-                label={"Price"}
+                label={t("price")}
                 name="price"
                 type="number"
                 value={values.price}
@@ -221,7 +222,7 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
 
             <div className="input-container">
               <AppSelect
-                label={"Condition"}
+                label={t("condition")}
                 name="condition"
                 value={values.condition}
                 onChange={handleChange}
@@ -232,7 +233,7 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
 
             <div className="input-container">
               <AppInput
-                label={"Location"}
+                label={t("location")}
                 name="location"
                 value={values.location}
                 onChange={handleChange}
@@ -242,7 +243,7 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
 
             <div className="input-container">
               <AppSelect
-                label={"Region"}
+                label={t("region")}
                 name="region"
                 value={values.region}
                 onChange={handleChange}
@@ -253,7 +254,7 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
 
             <div className="btn-container">
               <Button
-                title={"Add"}
+                title={t("add")}
                 icon={isLoading ? null : FaPlusCircle}
                 width={false}
                 onClick={isLoading ? null : handleSubmit}
@@ -271,20 +272,20 @@ export const EditMondoItem = ({ setEditModal, dispatch, setReload, item }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
   const { borderColor } = useSelector((state) => state.theme);
-
+  const { t } = useTranslation();
   const conditions = [
-    { id: "new", name: "New" },
-    { id: "used_Like_new", name: "Used - Like New" },
-    { id: "used_Good", name: "Used - Good" },
-    { id: "used_Fair", name: "Used - Fair" },
+    { id: "new", name: t("new") },
+    { id: "used_Like_new", name: t("used_Like_new") },
+    { id: "used_Good", name: t("used_Good") },
+    { id: "used_Fair", name: t("used_Fair") },
   ];
 
   const regions = [
-    { id: "Africa", name: "Africa" },
-    { id: "Europe", name: "Europe" },
-    { id: "Americas", name: "Americas" },
-    { id: "Asia", name: "Asia" },
-    { id: "Middle East", name: "Middle East" },
+    { id: "Africa", name: t("Africa") },
+    { id: "Europe", name: t("Europe") },
+    { id: "Americas", name: t("Americas") },
+    { id: "Asia", name: t("Asia") },
+    { id: "Middle East", name: t("Middle East") },
   ];
 
   const imageRef = useRef(null);
@@ -427,14 +428,14 @@ export const EditMondoItem = ({ setEditModal, dispatch, setReload, item }) => {
                     hidden
                   />
                   <FaPlusCircle size={25} />
-                  <p>Upload Image</p>
+                  <p>{t("upload-image")}</p>
                 </div>
               )}
             </div>
 
             <div className="input-container">
               <AppInput
-                label={"Title"}
+                label={t("title")}
                 name="title"
                 value={values.title}
                 onChange={handleChange}
@@ -444,7 +445,7 @@ export const EditMondoItem = ({ setEditModal, dispatch, setReload, item }) => {
 
             <div className="input-container">
               <AppSelect
-                label={"Category"}
+                label={t("category")}
                 name="item_category"
                 value={values.item_category}
                 onChange={handleChange}
@@ -465,7 +466,7 @@ export const EditMondoItem = ({ setEditModal, dispatch, setReload, item }) => {
 
             <div className="input-container">
               <AppInput
-                label={"Price"}
+                label={t("price")}
                 name="price"
                 type="number"
                 value={values.price}
@@ -476,7 +477,7 @@ export const EditMondoItem = ({ setEditModal, dispatch, setReload, item }) => {
 
             <div className="input-container">
               <AppSelect
-                label={"Condition"}
+                label={t("condition")}
                 name="condition"
                 value={values.condition}
                 onChange={handleChange}
@@ -487,7 +488,7 @@ export const EditMondoItem = ({ setEditModal, dispatch, setReload, item }) => {
 
             <div className="input-container">
               <AppInput
-                label={"Location"}
+                label={t("location")}
                 name="location"
                 value={values.location}
                 onChange={handleChange}
@@ -497,7 +498,7 @@ export const EditMondoItem = ({ setEditModal, dispatch, setReload, item }) => {
 
             <div className="input-container">
               <AppSelect
-                label={"Region"}
+                label={t("region")}
                 name="region"
                 value={values.region}
                 onChange={handleChange}
@@ -508,7 +509,7 @@ export const EditMondoItem = ({ setEditModal, dispatch, setReload, item }) => {
 
             <div className="btn-container">
               <Button
-                title={"Update"}
+                title={t("update")}
                 width={false}
                 onClick={isLoading ? null : handleSubmit}
                 spinner={isLoading ? <Spinner size="sm" /> : null}
@@ -552,12 +553,8 @@ export const DeleteMondo = ({ setDeleteModal, dispatch, setReload, id }) => {
 
   return (
     <div className="text-center">
-      <p className="mb-2 text-gray-700">
-        Are you sure you want to delete this Item?
-      </p>
-      <p className="text-sm text-gray-500 mb-6">
-        This action is irreversible and will permanently remove the Item.
-      </p>
+      <p className="mb-2 text-gray-700">{t("delete_item_confirmation")}</p>
+      <p className="text-sm text-gray-500 mb-6">{t("delete_item_warning")}</p>
       <div className="btn-container flex justify-center gap-4">
         <Button
           title="No"
@@ -581,7 +578,7 @@ export const MondoDetailsViewer = ({ mondo, isOpen, onClose, token }) => {
   const { textColor, bgColor } = useSelector((state) => state.theme);
   const { isLoading } = useSelector((state) => state.mondomarket);
   const { user } = useSelector((state) => state.user);
-
+  const { t, i18n } = useTranslation();
   const [offerModal, setOfferModal] = useState(false);
   const [amount, setAmount] = useState("");
   const [alertSetteled, setAlertSetteled] = useState(false);
@@ -762,7 +759,7 @@ export const MondoDetailsViewer = ({ mondo, isOpen, onClose, token }) => {
                   onClick={() => setOfferModal(true)}
                 >
                   <IoIosSend size={25} />
-                  <span>Send Offer</span>
+                  <span>{t("send-offer")}</span>
                 </div>
                 <div
                   className={`offer-button hover:${bgColor} hover:text-white text-light_text_1 dark:text-dark_text_1`}
@@ -773,7 +770,9 @@ export const MondoDetailsViewer = ({ mondo, isOpen, onClose, token }) => {
                   ) : (
                     <IoNotificationsOutline size={25} />
                   )}
-                  <span>{alertSetteled ? "Remove Alert" : "Set Alert"}</span>
+                  <span>
+                    {alertSetteled ? t("remove-alert") : t("set-alert")}
+                  </span>
                 </div>
 
                 <div
@@ -781,7 +780,7 @@ export const MondoDetailsViewer = ({ mondo, isOpen, onClose, token }) => {
                   onClick={handleBookmarkItem}
                 >
                   <IoBookmarkOutline size={25} />
-                  <span>Bookmark</span>
+                  <span>{t("bookmark")}</span>
                 </div>
               </div>
             </div>
@@ -791,7 +790,7 @@ export const MondoDetailsViewer = ({ mondo, isOpen, onClose, token }) => {
 
       {/* Offer Modal  */}
       <Modal
-        title="Your Offer"
+        title={t("your-offer")}
         isOpen={offerModal}
         onClose={() => {
           setOfferModal(false);
@@ -823,7 +822,7 @@ export const MondoDetailsViewer = ({ mondo, isOpen, onClose, token }) => {
 
         <AppInput
           type="number"
-          placeholder="Enter amount"
+          placeholder={t("enter-amount")}
           value={amount}
           onChange={(e) => {
             const value = e.target.value.replaceAll("-", "");
@@ -832,7 +831,7 @@ export const MondoDetailsViewer = ({ mondo, isOpen, onClose, token }) => {
         />
         <div className="w-full flex justify-center mt-10">
           <Button
-            title="Send"
+            title={t("send")}
             icon={isLoading ? null : IoIosSend}
             onClick={isLoading ? null : handleSendOffer}
             spinner={isLoading ? <Spinner size="sm" /> : null}

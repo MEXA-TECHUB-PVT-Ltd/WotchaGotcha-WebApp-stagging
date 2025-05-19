@@ -22,8 +22,8 @@ const Home = () => {
       <MondoMarket isDashboard={true} />
       <Cinematic isDashbaord={true} />
       <FanStarZone isDashboard={true} />
-      <TvProgMax isDashboard={true} />
       <KidVids isDashboard={true} />
+      <TvProgMax isDashboard={true} />
       <LearningAndHobbies isDashboard={true} />
       <SportsAndSports isDashboard={true} />
       <OnNews isDashboard={true} />

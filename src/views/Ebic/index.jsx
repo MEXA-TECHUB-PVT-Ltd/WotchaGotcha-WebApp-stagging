@@ -16,10 +16,11 @@ import {
   searchEbic,
 } from "../../app/features/ebic";
 import EmojiCard from "../../components/card/EmojiCard";
+import { useTranslation } from "react-i18next";
 
 const Ebic = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
-
+  const { t } = useTranslation();
   const [addModal, setAddModal] = useState(false);
   const [ebicModal, setEbicModal] = useState(false);
   const [reload, setReload] = useState(false);
@@ -185,7 +186,7 @@ const Ebic = ({ isDashboard = false }) => {
             </div>
           ) : ebic?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
-              No Data Found
+              {t("no-found-data")}
             </div>
           ) : null}
         </div>
@@ -214,7 +215,7 @@ const Ebic = ({ isDashboard = false }) => {
                     ))
                   ) : (
                     <div className="flex justify-center text-gray-400 my-10">
-                      No Data Found
+                      {t("no-found-data")}
                     </div>
                   )}
                 </div>
@@ -222,7 +223,7 @@ const Ebic = ({ isDashboard = false }) => {
             ))
           ) : ebic?.length === 0 && !isEbicFetching ? (
             <div className="flex justify-center text-gray-400">
-              No Data Found
+              {t("no-found-data")}
             </div>
           ) : null}
         </div>

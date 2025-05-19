@@ -13,6 +13,8 @@ import { useSelector } from "react-redux";
 import AppInput from "../form/AppInput";
 import Previewer from "../modal/Previewer";
 import { Toast } from "../theme/Toast";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const ImagePreviewer = ({
   image,
@@ -36,7 +38,7 @@ const ImagePreviewer = ({
 }) => {
   const { textColor } = useSelector((state) => state.theme);
   const [seeMore, setSeeMore] = useState(false);
-
+  const { t, i18n } = useTranslation();
   const handleLike = useCallback(
     () => !isLoading && OnLike(),
     [OnLike, isLoading]
@@ -123,7 +125,7 @@ const ImagePreviewer = ({
                           className={`${textColor} cursor-pointer font-medium ml-1`}
                           onClick={() => setSeeMore(!seeMore)}
                         >
-                          {seeMore ? "See less" : "See more"}
+                          {seeMore ? t("see-less") : t("see-more")}
                         </span>
                       </>
                     ) : (
@@ -151,7 +153,9 @@ const ImagePreviewer = ({
                     ) : (
                       <FaRegHeart className="w-5 h-5" />
                     )}
-                    <span className="hidden md:block text-sm">Like</span>
+                    <span className="hidden md:block text-sm">
+                      {t("like")}ike
+                    </span>
                   </button>
 
                   {!isEmoji && (
@@ -161,7 +165,9 @@ const ImagePreviewer = ({
                       aria-label="Copy Link"
                     >
                       <FaCopy className="w-5 h-5" />
-                      <span className="hidden md:block text-sm">Copy Link</span>
+                      <span className="hidden md:block text-sm">
+                        {t("copy-link")}
+                      </span>
                     </button>
                   )}
                 </div>
@@ -183,13 +189,15 @@ const ImagePreviewer = ({
               {userName || userImage ? (
                 profileTitle
               ) : (
-                <span className="text-gray-700 font-bold my-2">Top Image</span>
+                <span className="text-gray-700 font-bold my-2">
+                  {t("top-image")}
+                </span>
               )}
               <div className="w-full h-[1px] bg-gray-200 my-2"></div>
 
               <div className="flex flex-col justify-between flex-1">
                 <div className="flex flex-col gap-3 flex-grow overflow-y-auto max-h-[60vh] h-[74vh] md:max-h-[74vh]">
-                  <div className="font-bold text-lg">Comments</div>
+                  <div className="font-bold text-lg">{t("comments")}</div>
                   {comments.length > 0 ? (
                     comments.map((comment, index) => (
                       <ProfileCard
@@ -201,14 +209,14 @@ const ImagePreviewer = ({
                     ))
                   ) : (
                     <p className="flex justify-center text-gray-400">
-                      No Comments Found
+                      {t("no-comments-found")}
                     </p>
                   )}
                 </div>
 
                 <div className="mt-3 w-full">
                   <AppInput
-                    placeholder="Write a comment..."
+                    placeholder={t("write-a-comment")}
                     rounded="rounded-full"
                     value={commentText}
                     onChange={(e) => setCommentText(e.target.value)}

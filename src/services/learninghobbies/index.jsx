@@ -28,6 +28,7 @@ import {
 } from "../../app/features/learningandhobbies";
 import { copyLink } from "../../utils/copyLink";
 import VideoPlayer from "../../components/previewers/VideoPlayer";
+import { useTranslation } from "react-i18next";
 
 export const AddLearningHobbies = ({
   setAddModal,
@@ -40,7 +41,7 @@ export const AddLearningHobbies = ({
   const { textColor, borderColor, bgColor } = useSelector(
     (state) => state.theme
   );
-
+  const { t } = useTranslation();
   const videoRef = useRef(null);
   const thumbnailRef = useRef(null);
 
@@ -143,14 +144,14 @@ export const AddLearningHobbies = ({
                 {!values?.video ? (
                   <>
                     <FaPlusCircle size={25} />
-                    <p>Upload Video</p>
+                    <p>{t("upload-video")}</p>
                   </>
                 ) : (
                   <>
                     <p
                       className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
                     >
-                      Change Video
+                      {t("change-video")}
                     </p>
                     <img
                       style={{ imageRendering: "-webkit-optimize-contrast" }}
@@ -180,14 +181,14 @@ export const AddLearningHobbies = ({
                 {!values?.thumbnail ? (
                   <>
                     <FaPlusCircle size={25} />
-                    <p>Video Tumbnail</p>
+                    <p>{t("videoT")}</p>
                   </>
                 ) : (
                   <>
                     <p
                       className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
                     >
-                      Change Image
+                      {t("changeImage")}
                     </p>
                     <img
                       style={{ imageRendering: "-webkit-optimize-contrast" }}
@@ -206,7 +207,7 @@ export const AddLearningHobbies = ({
 
             <div className="input-container">
               <AppInput
-                label={"Name"}
+                label={t("nameC")}
                 name="name"
                 value={values.name}
                 onChange={handleChange}
@@ -216,7 +217,7 @@ export const AddLearningHobbies = ({
 
             <div className="input-container">
               <AppSelect
-                label={"Sub Category"}
+                label={t("subC")}
                 name="sub_category_id"
                 value={values.sub_category_id}
                 onChange={handleChange}
@@ -237,7 +238,7 @@ export const AddLearningHobbies = ({
 
             <div className="btn-container">
               <Button
-                title={"Add"}
+                title={t("add")}
                 icon={isLoading ? null : FaPlusCircle}
                 width={false}
                 onClick={isLoading ? null : handleSubmit}
@@ -260,7 +261,7 @@ export const EditLearningHobbies = ({
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
   const { bgColor } = useSelector((state) => state.theme);
-
+  const { t } = useTranslation();
   const videoRef = useRef(null);
   const thumbnailRef = useRef(null);
 
@@ -367,14 +368,14 @@ export const EditLearningHobbies = ({
                 {!values?.video ? (
                   <>
                     <FaPlusCircle size={25} />
-                    <p>Upload Video</p>
+                    <p>{t("upload-video")}</p>
                   </>
                 ) : (
                   <>
                     <p
                       className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
                     >
-                      Change Video
+                      {t("change-video")}
                     </p>
                     <img
                       style={{ imageRendering: "-webkit-optimize-contrast" }}
@@ -404,14 +405,14 @@ export const EditLearningHobbies = ({
                 {!values?.thumbnail ? (
                   <>
                     <FaPlusCircle size={25} />
-                    <p>Video Tumbnail</p>
+                    <p>{t("videoT")}</p>
                   </>
                 ) : (
                   <>
                     <p
                       className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
                     >
-                      Change Image
+                      {t("changeImage")}
                     </p>
                     <img
                       style={{ imageRendering: "-webkit-optimize-contrast" }}
@@ -430,7 +431,7 @@ export const EditLearningHobbies = ({
 
             <div className="input-container">
               <AppInput
-                label={"Name"}
+                label={t("nameC")}
                 name="name"
                 value={values.name}
                 onChange={handleChange}
@@ -440,7 +441,7 @@ export const EditLearningHobbies = ({
 
             <div className="input-container">
               <AppSelect
-                label={"Sub Category"}
+                label={t("subC")}
                 name="sub_category_id"
                 value={values.sub_category_id}
                 onChange={handleChange}
@@ -461,7 +462,7 @@ export const EditLearningHobbies = ({
 
             <div className="btn-container">
               <Button
-                title={"Update"}
+                title={t("update")}
                 width={false}
                 onClick={isLoading ? null : handleSubmit}
                 spinner={isLoading ? <Spinner size="sm" /> : null}
@@ -510,12 +511,8 @@ export const DeleteLearningHobbies = ({
 
   return (
     <div className="text-center">
-      <p className="mb-2 text-gray-700">
-        Are you sure you want to delete this Video?
-      </p>
-      <p className="text-sm text-gray-500 mb-6">
-        This action is irreversible and will permanently remove the Video.
-      </p>
+      <p className="mb-2 text-gray-700">{t("delete_video_confirmation")}</p>
+      <p className="text-sm text-gray-500 mb-6">{t("delete_video_warning")}</p>
       <div className="btn-container flex justify-center gap-4">
         <Button
           title="No"

@@ -149,7 +149,7 @@ const VideoMania = ({ isDashbaord = false }) => {
           </div>
         ) : !topVideo && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Video Found
+            {t("no-found-videos-top")}
           </div>
         ) : null}
       </div>
@@ -177,7 +177,7 @@ const VideoMania = ({ isDashbaord = false }) => {
             </div>
           ) : videos?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
-              No Videos Found
+              {t("no-found-videos")}
             </div>
           ) : null}
         </div>
@@ -206,7 +206,7 @@ const VideoMania = ({ isDashbaord = false }) => {
             ))
           ) : videos?.length === 0 && !isVideoFetching ? (
             <div className="flex justify-center text-gray-400">
-              No Videos Found
+              {t("no-found-videos")}
             </div>
           ) : null}
         </div>
@@ -216,7 +216,7 @@ const VideoMania = ({ isDashbaord = false }) => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add Video Mania"
+        title={t("add-video")}
       >
         <AddVideoMania
           setAddModal={setAddModal}

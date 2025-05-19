@@ -181,7 +181,7 @@ const MondoMarket = ({ isDashboard = false }) => {
           </div>
         ) : !topMondo && !isTopFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Mondo Market Found
+            {t("no-top-mondo-market-found")}
           </div>
         ) : null}
       </div>
@@ -257,7 +257,7 @@ const MondoMarket = ({ isDashboard = false }) => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title={"Add Item"}
+        title={t("add-item")}
       >
         <AddMondoItem
           setAddModal={setAddModal}
