@@ -139,14 +139,14 @@ export const AddTvProgmax = ({
                 {!values?.video ? (
                   <>
                     <FaPlusCircle size={25} />
-                    <p>Upload Video</p>
+                    <p>{t("upload-video")}</p>
                   </>
                 ) : (
                   <>
                     <p
                       className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
                     >
-                      Change Video
+                      {t("change-video")}
                     </p>
                     <img
                       style={{ imageRendering: "-webkit-optimize-contrast" }}
@@ -176,14 +176,14 @@ export const AddTvProgmax = ({
                 {!values?.thumbnail ? (
                   <>
                     <FaPlusCircle size={25} />
-                    <p>Video Tumbnail</p>
+                    <p>{t("videoT")}</p>
                   </>
                 ) : (
                   <div className="py-2 relative">
                     <p
                       className={`px-2 ${bgColor} rounded-full text-white absolute top-0 left-1`}
                     >
-                      Change Image
+                      {t("changeImage")}
                     </p>
                     <img
                       style={{ imageRendering: "-webkit-optimize-contrast" }}
@@ -202,7 +202,7 @@ export const AddTvProgmax = ({
 
             <div className="input-container">
               <AppInput
-                label={"Name"}
+                label={t("nameC")}
                 name="name"
                 value={values.name}
                 onChange={handleChange}
@@ -212,7 +212,7 @@ export const AddTvProgmax = ({
 
             <div className="input-container">
               <AppSelect
-                label={"Sub Category"}
+                label={t("subC")}
                 name="sub_category_id"
                 value={values.sub_category_id}
                 onChange={handleChange}
@@ -233,7 +233,7 @@ export const AddTvProgmax = ({
 
             <div className="btn-container">
               <Button
-                title={"Add"}
+                title={t("add")}
                 icon={isLoading ? null : FaPlusCircle}
                 width={false}
                 onClick={isLoading ? null : handleSubmit}
@@ -256,7 +256,7 @@ export const EditTvProgmax = ({
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
   const { borderColor, bgColor } = useSelector((state) => state.theme);
-
+  const { t } = useTranslation();
   const videoRef = useRef(null);
   const thumbnailRef = useRef(null);
 
@@ -363,14 +363,14 @@ export const EditTvProgmax = ({
                 {!values?.video ? (
                   <>
                     <FaPlusCircle size={25} />
-                    <p>Upload Video</p>
+                    <p>{t("upload-video")}</p>
                   </>
                 ) : (
                   <>
                     <p
                       className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
                     >
-                      Change Video
+                      {t("change-video")}
                     </p>
                     <img
                       style={{ imageRendering: "-webkit-optimize-contrast" }}
@@ -400,14 +400,14 @@ export const EditTvProgmax = ({
                 {!values?.thumbnail ? (
                   <>
                     <FaPlusCircle size={25} />
-                    <p>Video Tumbnail</p>
+                    <p>{t("videoT")}</p>
                   </>
                 ) : (
                   <div className="py-2 relative">
                     <p
                       className={`px-2 ${bgColor} rounded-full text-white absolute top-0 left-1`}
                     >
-                      Change Image
+                      {t("changeImage")}
                     </p>
                     <img
                       style={{ imageRendering: "-webkit-optimize-contrast" }}
@@ -426,7 +426,7 @@ export const EditTvProgmax = ({
 
             <div className="input-container">
               <AppInput
-                label={"Name"}
+                label={t("nameC")}
                 name="name"
                 value={values.name}
                 onChange={handleChange}
@@ -436,7 +436,7 @@ export const EditTvProgmax = ({
 
             <div className="input-container">
               <AppSelect
-                label={"Sub Category"}
+                label={t("subC")}
                 name="sub_category_id"
                 value={values.sub_category_id}
                 onChange={handleChange}
@@ -457,7 +457,7 @@ export const EditTvProgmax = ({
 
             <div className="btn-container">
               <Button
-                title={"Update"}
+                title={t("update")}
                 width={false}
                 onClick={isLoading ? null : handleSubmit}
                 spinner={isLoading ? <Spinner size="sm" /> : null}
@@ -477,7 +477,7 @@ export const DeleteTvProgMax = ({
   id,
 }) => {
   const { token } = useSelector((state) => state.auth);
-
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async () => {
@@ -506,12 +506,8 @@ export const DeleteTvProgMax = ({
 
   return (
     <div className="text-center">
-      <p className="mb-2 text-gray-700">
-        Are you sure you want to delete this Video?
-      </p>
-      <p className="text-sm text-gray-500 mb-6">
-        This action is irreversible and will permanently remove the Video.
-      </p>
+      <p className="mb-2 text-gray-700">{t("delete_video_confirmation")}</p>
+      <p className="text-sm text-gray-500 mb-6">{t("delete_video_warning")}</p>
       <div className="btn-container flex justify-center gap-4">
         <Button
           title="No"

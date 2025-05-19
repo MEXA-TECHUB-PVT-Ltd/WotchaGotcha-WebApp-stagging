@@ -16,10 +16,11 @@ import {
   searchLetters,
 } from "../../app/features/openletters";
 import LetterCard from "../../components/card/LetterCard";
+import { useTranslation } from "react-i18next";
 
 const OpenLetters = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
-
+  const { t } = useTranslation();
   const [addModal, setAddModal] = useState(false);
   const [letterModal, setLetterModal] = useState(false);
   const [reload, setReload] = useState(false);
@@ -185,7 +186,7 @@ const OpenLetters = ({ isDashboard = false }) => {
             </div>
           ) : letters?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
-              No Data Found
+              {t("no-found-data")}
             </div>
           ) : null}
         </div>
@@ -214,7 +215,7 @@ const OpenLetters = ({ isDashboard = false }) => {
                     ))
                   ) : (
                     <div className="flex justify-center text-gray-400 my-10">
-                      No Data Found
+                      {t("no-found-data")}
                     </div>
                   )}
                 </div>
@@ -222,7 +223,7 @@ const OpenLetters = ({ isDashboard = false }) => {
             ))
           ) : letters?.length === 0 && !isLetterFetching ? (
             <div className="flex justify-center text-gray-400">
-              No Data Found
+              {t("no-found-data")}
             </div>
           ) : null}
         </div>

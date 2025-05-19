@@ -234,7 +234,7 @@ const SportsAndSports = ({ isDashboard = false }) => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add Sports"
+        title={t("add-sports")}
       >
         <AddSports
           setAddModal={setAddModal}

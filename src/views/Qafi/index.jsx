@@ -16,9 +16,10 @@ import {
   searchQafi,
 } from "../../app/features/qafi";
 import { AddQafi, QafiPreviewer } from "../../services/qafi";
+import { useTranslation } from "react-i18next";
 const Qafi = ({ isDashboard = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
-
+  const { t } = useTranslation();
   const [addModal, setAddModal] = useState(false);
   const [qafiModal, setQafiModal] = useState(false);
   const [reload, setReload] = useState(false);
@@ -187,7 +188,7 @@ const Qafi = ({ isDashboard = false }) => {
             </div>
           ) : qafi?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
-              No Data Found
+              {t("no-found-data")}
             </div>
           ) : null}
         </div>
@@ -216,7 +217,7 @@ const Qafi = ({ isDashboard = false }) => {
                     ))
                   ) : (
                     <div className="flex justify-center text-gray-400 my-10">
-                      No Data Found
+                      {t("no-found-data")}
                     </div>
                   )}
                 </div>
@@ -224,7 +225,7 @@ const Qafi = ({ isDashboard = false }) => {
             ))
           ) : qafi?.length === 0 && !isQafiFetching ? (
             <div className="flex justify-center text-gray-400">
-              No Data Found
+              {t("no-found-data")}
             </div>
           ) : null}
         </div>

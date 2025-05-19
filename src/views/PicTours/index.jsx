@@ -196,7 +196,7 @@ const PicTours = ({ isDashboard = false }) => {
             </div>
           ) : picTours?.Tours?.length === 0 && !isSearching ? (
             <div className="flex justify-center text-gray-400">
-              No Data Found
+              {t("no-found-data")}
             </div>
           ) : null}
         </div>
@@ -223,7 +223,7 @@ const PicTours = ({ isDashboard = false }) => {
                     ))
                   ) : (
                     <div className="flex justify-center text-gray-400 my-10">
-                      No Data Found
+                      {t("no-found-data")}
                     </div>
                   )}
                 </div>
@@ -231,7 +231,7 @@ const PicTours = ({ isDashboard = false }) => {
             ))
           ) : picTours?.length === 0 && !isPicTourFetching ? (
             <div className="flex justify-center text-gray-400">
-              No Data Found
+              {t("no-found-data")}
             </div>
           ) : null}
         </div>
@@ -242,7 +242,7 @@ const PicTours = ({ isDashboard = false }) => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add Pic Tour"
+        title={t("add-pic-tour")}
       >
         <AddPicTour
           setAddModal={setAddModal}
