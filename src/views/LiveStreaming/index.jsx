@@ -7,7 +7,7 @@ const APP_ID = "54420f0ddc634ba9a2197db415385753";
 const SERVER_URL = "http://192.168.18.26:5000";
 const socket = io("http://localhost:5000");
 function LiveStreaming() {
-  // const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [comment, setComment] = useState("");
   const [viewerCount, setViewerCount] = useState(0);
   const [comments, setComments] = useState([
@@ -128,7 +128,7 @@ function LiveStreaming() {
           {/* Right side: Comments */}
           <div className="w-4/12 flex flex-col gap-4">
             <div className="bg-gray-100 p-4 relative rounded-xl h-[470px] w-80 flex flex-col">
-              <h2 className="text-lg font-medium mb-2">Comments</h2>
+              <h2 className="text-lg font-medium mb-2">{t("comments")}</h2>
 
               <ul className="flex-1 overflow-y-auto space-y-4 max-h-64 mb-4 pr-2">
                 {comments.map((c) => (
@@ -146,7 +146,7 @@ function LiveStreaming() {
                 ))}
               </ul>
 
-              <div className="flex items-center absolute bottom-3 gap-2">
+              {/* <div className="flex items-center absolute bottom-3 gap-2">
                 <input
                   type="text"
                   value={comment}
@@ -161,7 +161,7 @@ function LiveStreaming() {
                   Send
                   <IoSend size={20} className="text-white" />
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

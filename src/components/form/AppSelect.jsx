@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
 const AppSelect = ({
@@ -13,7 +14,7 @@ const AppSelect = ({
   ...otherProps
 }) => {
   const theme = useSelector((state) => state.theme);
-
+  const { t } = useTranslation();
   return (
     <div className="text-light_text_1 w-full dark:text-dark_text_1">
       {label && (
@@ -36,7 +37,7 @@ const AppSelect = ({
         >
           {/* Placeholder or default option */}
           <option value="" disabled>
-            Select an option
+            {t("selectanoption")}
           </option>
           {/* Dynamically render options */}
           {options.map((option) => (

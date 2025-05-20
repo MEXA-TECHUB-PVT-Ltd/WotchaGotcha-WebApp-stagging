@@ -139,5 +139,243 @@
   "add_news": "Ajouter une actualité",
   "news": "Actualités",
   "delete_news_confirmation": "Êtes-vous sûr de vouloir supprimer cette actualité ?",
-  "delete_news_warning": "Cette action est irréversible et supprimera définitivement cette actualité."
+  "delete_news_warning": "Cette action est irréversible et supprimera définitivement cette actualité.",
+
+  "noTopQafiFound": "Aucun Qafi de haut niveau trouvé",
+  "addQafi": "Ajouter un Qafi",
+
+  "deleteQafiConfirmationTitle": "Êtes-vous sûr de vouloir supprimer ce QAFI ?",
+  "deleteQafiConfirmationDescription": "Cette action est irréversible et supprimera définitivement le QAFI.",
+  "noTopEbicFound": "Aucun Ebic de haut niveau trouvé",
+  "addEbic": "Ajouter un Ebic",
+  "changeEmoji": "Changer l’émoji",
+  "selectEmoji": "Sélectionnez un émoji",
+
+  "deleteConfirmationTitle": "Êtes-vous sûr de vouloir supprimer ceci",
+  "deleteConfirmationDescription": "Cette action est irréversible et supprimera définitivement le",
+  "openLetters": "Lettres ouvertes",
+  "noTopLetterFound": "Aucune lettre de haut niveau trouvée",
+  "addLetter": "Ajouter une lettre",
+  "senderInformations": "Informations de l’expéditeur",
+
+  "stepSenderInformations": "Informations de l’expéditeur",
+  "stepLetterDetails": "Détails de la lettre",
+  "stepESignature": "Signature électronique",
+  "stepRelevantMedia": "Médias pertinents",
+
+  "address": "Adresse",
+  "contactNumber": "Numéro de téléphone",
+
+  "subject": "Sujet",
+  "introduction": "Introduction",
+  "body": "Corps du texte",
+  "greetings": "Salutations",
+  "drawSignature": "Dessinez votre signature",
+  "clear": "Effacer",
+  "imagesMax3": "Images (max 3)",
+  "videoMax1": "Vidéo (max 1)",
+  "back": "Dos",
+  "next": "Suivant",
+  "post": "Poste",
+  "videoNotSupported": "Votre navigateur ne prend pas en charge la vidéo.",
+
+  "aboutUs": "À propos de nous",
+  "wotchGotcha": "WotchGotcha",
+  "description1": " est une plateforme numérique dynamique conçue pour favoriser la créativité, l'expression de soi et la narration communautaire.",
+  "description2": "Qu'il s'agisse de partager une vidéo captivante dans",
+  "videoMania": "Video Mania",
+  "description3": "capturer des moments à travers",
+  "picTour": "Pic Tour",
+  "description4": "exprimer des pensées via",
+  "openLetter": "Lettres ouvertes",
+  "description5": "ou de s'engager avec un contenu unique dans des modules tels que",
+  "gebc": "GEBC",
+  "fanStars": "Fan Stars",
+  "tvProgMax": "TV ProgMax",
+  "description6": "et plus encore — WotchGotcha offre un espace pour que les utilisateurs créent, partagent et se connectent.",
+  "mission1": "Notre mission est de donner une voix à tous — des créateurs et fans aux conteurs et utilisateurs quotidiens — via une interface sécurisée et intuitive.",
+  "mission2": "Nous combinons l'engagement multimédia avec l'interaction sociale pour offrir une expérience personnalisée et riche en contenu à chaque visiteur.",
+  "mission3": "Avec un accent sur l'inclusivité, l'utilisabilité et l'innovation,",
+  "wotchGotcha2": "WotchGotcha",
+  "mission4": "n'est pas qu'une plateforme — c'est votre scène numérique pour mettre en valeur ce qui compte pour vous.",
+
+  "termsAndConditions": "Conditions Générales",
+  "welcomeText": "Bienvenue sur",
+  "platformName": "WotchGotcha",
+  "termsIntro": "Ces Conditions Générales (\"Conditions\") régissent votre utilisation de notre site web et de nos services. En accédant ou en utilisant WotchGotcha, vous acceptez d'être lié par ces Conditions.",
+  "termsDisagree": "Si vous n'acceptez pas ces Conditions, veuillez ne pas utiliser la plateforme.",
+
+  "section1Title": "1. Éligibilité",
+  "section1Content": "Vous devez avoir au moins 13 ans pour utiliser WotchGotcha. En utilisant la plateforme, vous confirmez que vous remplissez les conditions d'éligibilité.",
+
+  "section2Title": "2. Comptes Utilisateurs",
+  "section2List": [
+    "Vous êtes responsable de la confidentialité de vos identifiants de compte.",
+    "Vous acceptez de fournir des informations exactes et complètes lors de l'inscription.",
+    "Vous êtes seul responsable de toute activité se produisant sous votre compte."
+  ],
+
+  "section3Title": "3. Contenu Utilisateur",
+  "section3Intro": "Vous pouvez télécharger des vidéos, images, lettres ouvertes, commentaires et autres contenus (\"Contenu Utilisateur\") sous les conditions suivantes :",
+  "section3List": [
+    "Vous possédez ou avez les droits sur le contenu que vous téléchargez.",
+    "Votre contenu ne doit pas contenir de matériel illégal, nuisible ou offensant.",
+    "WotchGotcha se réserve le droit de supprimer ou de restreindre tout contenu qui viole ces conditions."
+  ],
+  "section3License": "En soumettant du contenu, vous accordez à WotchGotcha une licence non exclusive et gratuite pour utiliser, afficher et distribuer votre contenu sur la plateforme.",
+
+  "section4Title": "4. Activités Interdites",
+  "section4Intro": "En utilisant WotchGotcha, vous acceptez de ne pas :",
+  "section4List": [
+    "Violer toute loi ou réglementation applicable",
+    "Usurper l'identité d'une autre personne ou entité",
+    "Télécharger des virus, logiciels malveillants ou autres codes nuisibles",
+    "Harceler, menacer ou abuser d'autres utilisateurs",
+    "Utiliser des bots, scrapers ou outils similaires pour l'extraction de données"
+  ],
+
+  "section5Title": "5. Confidentialité",
+  "section5Content": "Votre utilisation de la plateforme est également régie par notre",
+  "privacyPolicy": "Politique de Confidentialité",
+
+  "section6Title": "6. Propriété Intellectuelle",
+  "section6Content": "Tout le contenu, les fonctionnalités et la fonctionnalité de WotchGotcha (à l'exclusion du contenu utilisateur) sont la propriété de nos soins ou de nos concédants et sont protégés par les lois sur le droit d'auteur et les marques.",
+
+  "section7Title": "7. Résiliation",
+  "section7Content": "Nous pouvons suspendre ou résilier votre compte à tout moment en cas de violation de ces Conditions ou de toute loi applicable, avec ou sans préavis.",
+
+  "section8Title": "8. Limitation de Responsabilité",
+  "section8Intro": "WotchGotcha est fourni \"en l'état\" et \"selon disponibilité.\" Nous ne sommes pas responsables des dommages résultant de :",
+  "section8List": [
+    "Votre utilisation ou incapacité à utiliser la plateforme",
+    "Le contenu publié par les utilisateurs ou tiers",
+    "Tout problème technique ou erreur sur la plateforme"
+  ],
+
+  "section9Title": "9. Modifications des Conditions",
+  "section9Content": "Nous pouvons mettre à jour ces Conditions périodiquement. L'utilisation continue de la plateforme après les modifications implique votre acceptation des Conditions mises à jour.",
+
+  "section10Title": "10. Droit Applicable",
+  "section10Content": "Ces Conditions sont régies et interprétées conformément aux lois de [Insérer pays/État].",
+
+  "section11Title": "11. Contactez-nous",
+  "section11Intro": "Si vous avez des questions concernant ces Conditions, veuillez contacter :",
+  "contactEmailLabel": "Email :",
+  "contactEmail": "support@wotchgotcha.com",
+
+  "privacyPolicyTitle-P": "Politique de Confidentialité",
+  "introParagraph-P": "WotchGotcha (\"nous\", \"notre\", ou \"nos\") respecte votre vie privée et s'engage à protéger les informations personnelles que vous fournissez via notre plateforme. Cette Politique de Confidentialité explique comment nous collectons, utilisons, divulguons et protégeons vos informations lorsque vous utilisez notre application web.",
+
+  "section1Title-P": "1. Informations que Nous Collectons",
+  "section1aTitle-P": "a. Informations Personnelles",
+  "section1aContent-P": "Nous pouvons collecter les détails personnels que vous fournissez directement, notamment :",
+  "section1aList-P": [
+    "Nom, adresse e-mail, numéro de téléphone et adresse",
+    "Images de profil téléchargées, signatures et contenus (ex. : vidéos, photos, lettres ouvertes)"
+  ],
+  "section1bTitle-P": "b. Données d'Utilisation",
+  "section1bContent-P": "Les informations collectées automatiquement peuvent inclure :",
+  "section1bList-P": [
+    "Adresse IP, type de navigateur, type d'appareil",
+    "Pages visitées, heure d'accès, sites référents"
+  ],
+  "section1cTitle-P": "c. Données de Contenu",
+  "section1cContent-P": "Informations que vous téléchargez ou soumettez, notamment :",
+  "section1cList-P": [
+    "Vidéos, images, commentaires, likes, lettres ouvertes",
+    "Catégories et tags associés à votre contenu"
+  ],
+
+  "section2Title-P": "2. Comment Nous Utilisons Vos Informations",
+  "section2List-P": [
+    "Pour créer et gérer des comptes utilisateurs",
+    "Pour personnaliser l'expérience utilisateur et l'affichage du contenu",
+    "Pour permettre le partage, le like et le commentaire de contenu généré par les utilisateurs",
+    "Pour améliorer les fonctionnalités et performances de notre plateforme",
+    "Pour communiquer avec vous concernant les mises à jour, le support et les changements"
+  ],
+
+  "section3Title-P": "3. Partage de Vos Informations",
+  "section3Intro-P": "Nous ne vendons ni ne louons vos informations personnelles. Cependant, nous pouvons partager vos données avec :",
+  "section3List-P": [
+    "Des prestataires de services aidant aux opérations et à l'analyse",
+    "Les autorités légales, si requis par la loi",
+    "D'autres utilisateurs, uniquement dans la mesure où vous partagez publiquement du contenu"
+  ],
+
+  "section4Title-P": "4. Sécurité des Données",
+  "section4Intro-P": "Nous prenons des mesures raisonnables pour protéger vos informations en utilisant :",
+  "section4List-P": [
+    "Des serveurs sécurisés et des transmissions cryptées",
+    "Des audits de sécurité réguliers et un accès restreint"
+  ],
+  "section4Note-P": "Cependant, aucune méthode de transmission n'est sécurisée à 100 % et nous ne pouvons garantir une sécurité absolue.",
+
+  "section5Title-P": "5. Droits des Utilisateurs",
+  "section5Intro-P": "Vous avez le droit de :",
+  "section5List-P": [
+    "Accéder et consulter vos données personnelles",
+    "Mettre à jour ou supprimer les informations de votre compte",
+    "Demander la suppression de tout contenu téléchargé",
+    "Se désabonner des emails marketing ou de notification"
+  ],
+
+  "section6Title-P": "6. Cookies et Suivi",
+  "section6Intro-P": "Nous pouvons utiliser des cookies ou technologies similaires pour :",
+  "section6List-P": [
+    "Améliorer l'expérience utilisateur",
+    "Analyser les habitudes d'utilisation",
+    "Se souvenir des préférences utilisateur"
+  ],
+  "section6Note-P": "Vous pouvez désactiver les cookies via les paramètres de votre navigateur.",
+
+  "section7Title-P": "7. Confidentialité des Enfants",
+  "section7Content-P": "Notre plateforme n'est pas destinée aux utilisateurs de moins de 13 ans. Nous ne collectons pas sciemment d'informations personnelles auprès des enfants.",
+
+  "section8Title-P": "8. Modifications de Cette Politique",
+  "section8Intro-P": "Nous pouvons mettre à jour cette Politique de Confidentialité à tout moment. Les modifications seront communiquées via :",
+  "section8List-P": ["Email (si inscrit)", "Notification sur la plateforme"],
+
+  "section9Title-P": "9. Contactez-Nous",
+  "section9Intro-P": "Pour toute question concernant cette Politique de Confidentialité, veuillez contacter :",
+  "contactEmailLabel-P": "Email :",
+  "contactEmail-P": "support@wotchgotcha.com",
+
+  "validationMessagesName": "Le nom est requis",
+  "validationMessagesDescription": "La description est requise",
+  "validationMessagesSubCategory": "La sous-catégorie est requise",
+  "noTourFound": "Aucune visite Top Pick trouvée",
+
+  "validationMessagesItemCategory": "La catégorie de l'article est requise",
+  "validationMessagesTitle": "Le titre est requis",
+  "validationMessagesPriceRequired": "Le prix est requis",
+  "validationMessagesPriceMin": "Le prix doit être supérieur ou égal à 0",
+  "validationMessagesCondition": "L'état est requis",
+  "validationMessagesLocation": "L'emplacement est requis",
+  "validationMessagesRegion": "La région est requise",
+  "selectanoption": "Sélectionnez une option",
+  "newsis": "Les nouvelles sont obligatoires",
+  "qafiis": "Qafi est requis",
+  "ebicis": "Ebic est requis",
+  "otp": "Saisissez ci-dessous l'OTP que nous avons envoyé à votre adresse e-mail",
+  "otp_length": "Doit être exactement 1 chiffre",
+  "required": "Requis",
+  "OTPisrequired": "OTP est requis",
+
+  "passwordRequired": "Le mot de passe est obligatoire",
+  "passwordMin": "Le mot de passe doit contenir au moins 8 caractères",
+  "passwordMax": "Le mot de passe ne peut pas dépasser 20 caractères",
+  "passwordLetter": "Le mot de passe doit contenir au moins une lettre",
+  "passwordNumber": "Le mot de passe doit contenir au moins un chiffre",
+  "passwordSpecial": "Le mot de passe doit contenir au moins un caractère spécial",
+  "confirmPasswordRequired": "Veuillez confirmer votre mot de passe",
+  "passwordsMustMatch": "Les mots de passe doivent correspondre",
+
+  "resetPasswordTitle": "Réinitialiser le mot de passe",
+  "resetPasswordDescription": "Entrez votre nouveau mot de passe ci-dessous. Ce sera le mot de passe que vous utiliserez pour vous connecter.",
+  "updateButton": "Mettre à jour",
+  "passwordLabel": "Mot de passe",
+  "passwordPlaceholder": "********",
+  "confirmPasswordLabel": "Confirmez le mot de passe",
+  "confirmPasswordPlaceholder": "********"
 }

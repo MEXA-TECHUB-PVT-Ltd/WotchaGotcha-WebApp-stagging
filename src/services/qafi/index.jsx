@@ -26,12 +26,13 @@ import {
   updateQafi,
 } from "../../app/features/qafi";
 import ImagePreviewer from "../../components/previewers/ImagePreviewer";
+import { useTranslation } from "react-i18next";
 
 export const AddQafi = ({ setAddModal, dispatch, setReload, categoryId }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
   const { bgColor } = useSelector((state) => state.theme);
-
+  const { t } = useTranslation();
   const imageRef = useRef(null);
 
   const [subCategory, setSubCategory] = useState([]);
@@ -93,8 +94,10 @@ export const AddQafi = ({ setAddModal, dispatch, setReload, categoryId }) => {
           user_id: user?.id,
         }}
         validationSchema={Yup.object().shape({
-          description: Yup.string().required("Qafi is required"),
-          sub_category: Yup.string().required("Sub Category is required"),
+          description: Yup.string().required("qafiis"),
+          sub_category: Yup.string().required(
+            t("validationMessagesSubCategory")
+          ),
           image: Yup.string().optional(),
         })}
         onSubmit={handleAddQafi}
@@ -120,14 +123,14 @@ export const AddQafi = ({ setAddModal, dispatch, setReload, categoryId }) => {
                 {!values?.image ? (
                   <>
                     <FaPlusCircle size={25} />
-                    <p>Upload Image</p>
+                    <p>{t("upload-image")}</p>
                   </>
                 ) : (
                   <>
                     <div
                       className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
                     >
-                      Change Image
+                      {t("changeImage")}
                     </div>
                     <img
                       style={{ imageRendering: "-webkit-optimize-contrast" }}
@@ -156,7 +159,7 @@ export const AddQafi = ({ setAddModal, dispatch, setReload, categoryId }) => {
 
             <div className="input-container">
               <AppSelect
-                label={"Sub Category"}
+                label={t("subC")}
                 name="sub_category"
                 value={values.sub_category}
                 onChange={handleChange}
@@ -167,7 +170,7 @@ export const AddQafi = ({ setAddModal, dispatch, setReload, categoryId }) => {
 
             <div className="btn-container">
               <Button
-                title={"Add"}
+                title={t("add")}
                 icon={isLoading ? null : FaPlusCircle}
                 width={false}
                 onClick={isLoading ? null : handleSubmit}
@@ -184,7 +187,7 @@ export const AddQafi = ({ setAddModal, dispatch, setReload, categoryId }) => {
 export const EditQafi = ({ setEditModal, dispatch, setReload, qafi }) => {
   const { token } = useSelector((state) => state.auth);
   const { bgColor } = useSelector((state) => state.theme);
-
+  const { t } = useTranslation();
   const imageRef = useRef(null);
 
   const [subCategory, setSubCategory] = useState([]);
@@ -246,8 +249,10 @@ export const EditQafi = ({ setEditModal, dispatch, setReload, qafi }) => {
           image: qafi?.image || "",
         }}
         validationSchema={Yup.object().shape({
-          description: Yup.string().required("Qafi is required"),
-          sub_category: Yup.string().required("Sub Category is required"),
+          description: Yup.string().required("qafiis"),
+          sub_category: Yup.string().required(
+            t("validationMessagesSubCategory")
+          ),
           image: Yup.string().optional(),
         })}
         onSubmit={handleAddQafi}
@@ -273,14 +278,14 @@ export const EditQafi = ({ setEditModal, dispatch, setReload, qafi }) => {
                 {!values?.image ? (
                   <>
                     <FaPlusCircle size={25} />
-                    <p>Upload Image</p>
+                    <p>{t("upload-image")}</p>
                   </>
                 ) : (
                   <>
                     <div
                       className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
                     >
-                      Change Image
+                      {t("changeImage")}
                     </div>
                     <img
                       style={{ imageRendering: "-webkit-optimize-contrast" }}
@@ -309,7 +314,7 @@ export const EditQafi = ({ setEditModal, dispatch, setReload, qafi }) => {
 
             <div className="input-container">
               <AppSelect
-                label={"Sub Category"}
+                label={t("subC")}
                 name="sub_category"
                 value={values.sub_category}
                 onChange={handleChange}
@@ -320,7 +325,7 @@ export const EditQafi = ({ setEditModal, dispatch, setReload, qafi }) => {
 
             <div className="btn-container">
               <Button
-                title={"Update"}
+                title={t("update")}
                 width={false}
                 onClick={isLoading ? null : handleSubmit}
                 spinner={isLoading ? <Spinner size="sm" /> : null}
@@ -364,21 +369,19 @@ export const DeleteQafi = ({ setDeleteModal, dispatch, setReload, id }) => {
 
   return (
     <div className="text-center">
-      <p className="mb-2 text-gray-700">
-        Are you sure you want to delete this QAFI?
-      </p>
+      <p className="mb-2 text-gray-700">{t("deleteQafiConfirmationTitle")}</p>
       <p className="text-sm text-gray-500 mb-6">
-        This action is irreversible and will permanently remove the QAFI.
+        {t("deleteQafiConfirmationDescription")}
       </p>
       <div className="btn-container flex justify-center gap-4">
         <Button
-          title="No"
+          title={t("no")}
           width={false}
           onClick={() => setDeleteModal(false)}
           bgColor="bg-slate-500"
         />
         <Button
-          title="Yes"
+          title={t("yes")}
           width={false}
           onClick={handleDelete}
           spinner={isLoading ? <Spinner size="sm" /> : null}

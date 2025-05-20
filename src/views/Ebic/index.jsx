@@ -105,12 +105,12 @@ const Ebic = ({ isDashboard = false }) => {
     <Fragment>
       {!isDashboard && (
         <Header
-          title={<BreadCrumb items={[{ label: "EBIC" }]} />}
-          buttonTitle={"Add"}
+          title={<BreadCrumb items={[{ label: t("ebic") }]} />}
+          buttonTitle={t("add")}
           buttonIcon={FaPlus}
           onSearch={onSearch}
           onAddButtonClick={() => setAddModal(true)}
-          searchBy={"name"}
+          searchBy={t("name")}
         />
       )}
 
@@ -158,7 +158,7 @@ const Ebic = ({ isDashboard = false }) => {
           </div>
         ) : !topEbic && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Ebic Found
+            {t("noTopEbicFound")}
           </div>
         ) : null}
       </div>
@@ -234,7 +234,7 @@ const Ebic = ({ isDashboard = false }) => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add Ebic"
+        title={t("addEbic")}
       >
         <AddEbic
           setAddModal={setAddModal}

@@ -94,8 +94,10 @@ export const AddNews = ({ setAddModal, dispatch, setReload, categoryId }) => {
           user_id: user?.id,
         }}
         validationSchema={Yup.object().shape({
-          description: Yup.string().required("News is required"),
-          sub_category: Yup.string().required("Sub Category is required"),
+          description: Yup.string().required(t("newsis")),
+          sub_category: Yup.string().required(
+            t("validationMessagesSubCategory")
+          ),
           image: Yup.string().optional(),
         })}
         onSubmit={handleAddNews}
@@ -247,8 +249,10 @@ export const EditNews = ({ setEditModal, dispatch, setReload, news }) => {
           image: news?.image || "",
         }}
         validationSchema={Yup.object().shape({
-          description: Yup.string().required("News is required"),
-          sub_category: Yup.string().required("Sub Category is required"),
+          description: Yup.string().required(t("newsis")),
+          sub_category: Yup.string().required(
+            t("validationMessagesSubCategory")
+          ),
           image: Yup.string().optional(),
         })}
         onSubmit={handleAddNews}
