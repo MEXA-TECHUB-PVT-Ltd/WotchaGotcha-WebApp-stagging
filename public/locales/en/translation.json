@@ -141,5 +141,244 @@
   "add_news": "Add News",
   "news": "News",
   "delete_news_confirmation": "Are you sure you want to delete this News?",
-  "delete_news_warning": "This action is irreversible and will permanently remove the News."
+  "delete_news_warning": "This action is irreversible and will permanently remove the News.",
+  "noTopQafiFound": "No Top Qafi Found",
+  "addQafi": "Add Qafi",
+
+  "deleteQafiConfirmationTitle": "Are you sure you want to delete this QAFI?",
+  "deleteQafiConfirmationDescription": "This action is irreversible and will permanently remove the QAFI.",
+  "noTopEbicFound": "No Top Ebic Found",
+  "addEbic": "Add Ebic",
+  "changeEmoji": "Change Emoji",
+  "selectEmoji": "Select an Emoji",
+  "deleteConfirmationTitle": "Are you sure you want to delete this",
+  "deleteConfirmationDescription": "This action is irreversible and will permanently remove the",
+  "openLetters": "Open Letters",
+  "noTopLetterFound": "No Top Letter Found",
+  "addLetter": "Add Letter",
+
+  "stepSenderInformations": "Sender Informations",
+  "stepLetterDetails": "Letter Details",
+  "stepESignature": "E-Signature",
+  "stepRelevantMedia": "Relevant Media",
+
+  "address": "Address",
+  "contactNumber": "Contact Number",
+
+  "subject": "Subject",
+  "introduction": "Introduction",
+  "body": "Body",
+  "greetings": "Greetings",
+  "drawSignature": "Draw your signature",
+  "clear": "Clear",
+  "imagesMax3": "Images (max 3)",
+  "videoMax1": "Video (max 1)",
+  "next": "Next",
+  "post": "Post",
+  "back": "Back",
+  "videoNotSupported": "Your browser does not support the video.",
+
+  "aboutUs": "About Us",
+  "wotchGotcha": "WotchGotcha",
+  "description1": " is a dynamic digital platform built to empower creativity, self-expression, and community storytelling.",
+  "description2": "Whether it's sharing a compelling video in",
+  "videoMania": "Video Mania",
+  "description3": "capturing moments through",
+  "picTour": "Pic Tour",
+  "description4": "expressing thoughts via",
+  "openLetter": "Open Letters",
+  "description5": "or engaging with unique content across modules like",
+  "gebc": "GEBC",
+  "fanStars": "Fan Stars",
+  "tvProgMax": "TV ProgMax",
+  "description6": "and more — WotchGotcha provides a space for users to create, share, and connect.",
+  "mission1": "Our mission is to give voice to everyone — from creators and fans to storytellers and everyday users — through a secure and intuitive interface.",
+  "mission2": "We combine multimedia engagement with social interaction to bring a personalized, content-rich experience for every visitor.",
+  "mission3": "With a focus on inclusivity, usability, and innovation,",
+  "wotchGotcha2": "WotchGotcha",
+  "mission4": "is not just a platform — it's your digital stage to showcase what matters to you.",
+
+  "termsAndConditions": "Terms and Conditions",
+  "welcomeText": "Welcome to",
+  "platformName": "WotchGotcha",
+  "termsIntro": "These Terms and Conditions (\"Terms\") govern your use of our website and services. By accessing or using WotchGotcha, you agree to be bound by these Terms.",
+  "termsDisagree": "If you do not agree with these Terms, please do not use the platform.",
+
+  "section1Title": "1. Eligibility",
+  "section1Content": "You must be at least 13 years old to use WotchGotcha. By using the platform, you confirm that you meet the eligibility requirements.",
+
+  "section2Title": "2. User Accounts",
+  "section2List": [
+    "You are responsible for maintaining the confidentiality of your account credentials.",
+    "You agree to provide accurate and complete information during registration.",
+    "You are solely responsible for any activity that occurs under your account."
+  ],
+
+  "section3Title": "3. User Content",
+  "section3Intro": "You may upload videos, images, open letters, comments, and other content (\"User Content\") under the following conditions:",
+  "section3List": [
+    "You own or have rights to the content you upload.",
+    "Your content must not contain illegal, harmful, or offensive material.",
+    "WotchGotcha has the right to remove or restrict any content that violates these terms."
+  ],
+  "section3License": "By submitting content, you grant WotchGotcha a non-exclusive, royalty-free license to use, display, and distribute your content within the platform.",
+
+  "section4Title": "4. Prohibited Activities",
+  "section4Intro": "While using WotchGotcha, you agree not to:",
+  "section4List": [
+    "Violate any applicable laws or regulations",
+    "Impersonate another person or entity",
+    "Upload viruses, malware, or other harmful code",
+    "Harass, threaten, or abuse other users",
+    "Use bots, scrapers, or similar tools for data extraction"
+  ],
+
+  "section5Title": "5. Privacy",
+  "section5Content": "Your use of the platform is also governed by our",
+  "privacyPolicy": "Privacy Policy",
+
+  "section6Title": "6. Intellectual Property",
+  "section6Content": "All content, features, and functionality on WotchGotcha (excluding user content) are owned by us or our licensors and protected by copyright and trademark laws.",
+
+  "section7Title": "7. Termination",
+  "section7Content": "We may suspend or terminate your account at any time for violations of these Terms or any applicable laws, with or without prior notice.",
+
+  "section8Title": "8. Limitation of Liability",
+  "section8Intro": "WotchGotcha is provided \"as-is\" and \"as-available.\" We are not liable for any damages resulting from:",
+  "section8List": [
+    "Your use or inability to use the platform",
+    "Content posted by users or third parties",
+    "Any technical issues or errors on the platform"
+  ],
+
+  "section9Title": "9. Modifications to the Terms",
+  "section9Content": "We may update these Terms periodically. Continued use of the platform after changes implies your acceptance of the updated Terms.",
+
+  "section10Title": "10. Governing Law",
+  "section10Content": "These Terms shall be governed by and construed in accordance with the laws of [Insert Country/State].",
+
+  "section11Title": "11. Contact Us",
+  "section11Intro": "If you have any questions about these Terms, please contact:",
+  "contactEmailLabel": "Email:",
+  "contactEmail": "support@wotchgotcha.com",
+
+  "privacyPolicyTitle-P": "Privacy Policy",
+  "introParagraph-P": "WotchGotcha (\"we\", \"our\", or \"us\") respects your privacy and is committed to protecting the personal information you provide through our platform. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our web application.",
+
+  "section1Title-P": "1. Information We Collect",
+  "section1aTitle-P": "a. Personal Information",
+  "section1aContent-P": "We may collect personal details you provide directly, including:",
+  "section1aList-P": [
+    "Name, email address, phone number, and address",
+    "Uploaded profile images, signatures, and content (e.g., videos, photos, open letters)"
+  ],
+  "section1bTitle-P": "b. Usage Data",
+  "section1bContent-P": "Automatically collected information may include:",
+  "section1bList-P": [
+    "IP address, browser type, device type",
+    "Pages visited, access time, referring websites"
+  ],
+  "section1cTitle-P": "c. Content Data",
+  "section1cContent-P": "Information you upload or submit including:",
+  "section1cList-P": [
+    "Videos, images, comments, likes, open letters",
+    "Categories and tags associated with your content"
+  ],
+
+  "section2Title-P": "2. How We Use Your Information",
+  "section2List-P": [
+    "To create and manage user accounts",
+    "To personalize user experience and content display",
+    "To enable user-generated content sharing, liking, and commenting",
+    "To improve our platform’s functionality and performance",
+    "To communicate with you regarding updates, support, and changes"
+  ],
+
+  "section3Title-P": "3. Sharing Your Information",
+  "section3Intro-P": "We do not sell or rent your personal information. However, we may share your data with:",
+  "section3List-P": [
+    "Service providers assisting in operations and analytics",
+    "Legal authorities, if required by law",
+    "Other users, only to the extent you publicly share content"
+  ],
+
+  "section4Title-P": "4. Data Security",
+  "section4Intro-P": "We take reasonable steps to protect your information using:",
+  "section4List-P": [
+    "Secure servers and encrypted transmissions",
+    "Regular security audits and restricted access"
+  ],
+  "section4Note-P": "However, no method of transmission is 100% secure, and we cannot guarantee absolute security.",
+
+  "section5Title-P": "5. User Rights",
+  "section5Intro-P": "You have the right to:",
+  "section5List-P": [
+    "Access and review your personal data",
+    "Update or delete your account information",
+    "Request the removal of any uploaded content",
+    "Opt-out of marketing or notification emails"
+  ],
+
+  "section6Title-P": "6. Cookies and Tracking",
+  "section6Intro-P": "We may use cookies or similar technologies to:",
+  "section6List-P": [
+    "Enhance user experience",
+    "Analyze usage patterns",
+    "Remember user preferences"
+  ],
+  "section6Note-P": "You may disable cookies through your browser settings.",
+
+  "section7Title-P": "7. Children’s Privacy",
+  "section7Content-P": "Our platform is not intended for users under the age of 13. We do not knowingly collect personal information from children.",
+
+  "section8Title-P": "8. Changes to This Policy",
+  "section8Intro-P": "We may update this Privacy Policy at any time. Changes will be notified via:",
+  "section8List-P": ["Email (if registered)", "Notification on the platform"],
+
+  "section9Title-P": "9. Contact Us",
+  "section9Intro-P": "For any questions regarding this Privacy Policy, please contact:",
+  "contactEmailLabel-P": "Email:",
+  "contactEmail-P": "support@wotchgotcha.com",
+
+  "validationMessagesName": "Name is required",
+  "validationMessagesDescription": "Description is required",
+  "validationMessagesSubCategory": "Sub Category is required",
+
+  "noTourFound": "No Top Pic Tour Found",
+
+  "validationMessagesItemCategory": "Item Category is required",
+  "validationMessagesTitle": "Title is required",
+
+  "validationMessagesPriceRequired": "Price is required",
+  "validationMessagesPriceMin": "Price must be greater than or equal to 0",
+  "validationMessagesCondition": "Condition is required",
+  "validationMessagesLocation": "Location is required",
+  "validationMessagesRegion": "Region is required",
+
+  "selectanoption": " Select an option",
+  "newsis": "News is required",
+  "qafiis": " Qafi is required",
+  "ebicis": "Ebic is required",
+
+  "otp": "Enter the OTP below that we have sent to your email",
+  "otp_length": "Must be exactly 1 digit",
+  "required": "Required",
+  "OTPisrequired": "OTP is required",
+
+  "passwordRequired": "Password is required",
+  "passwordMin": "Password must be at least 8 characters",
+  "passwordMax": "Password cannot exceed 20 characters",
+  "passwordLetter": "Password must contain at least one letter",
+  "passwordNumber": "Password must contain at least one number",
+  "passwordSpecial": "Password must contain at least one special character",
+  "confirmPasswordRequired": "Please confirm your password",
+  "passwordsMustMatch": "Passwords must match",
+
+  "resetPasswordTitle": "Reset Password",
+  "resetPasswordDescription": "Enter your new password below. This will be the password you use to log in.",
+  "updateButton": "Update",
+  "passwordLabel": "Password",
+  "passwordPlaceholder": "********",
+  "confirmPasswordLabel": "Confirm Password",
+  "confirmPasswordPlaceholder": "********"
 }

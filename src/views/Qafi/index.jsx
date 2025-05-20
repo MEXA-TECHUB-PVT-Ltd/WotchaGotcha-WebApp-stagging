@@ -23,7 +23,6 @@ const Qafi = ({ isDashboard = false }) => {
   const [addModal, setAddModal] = useState(false);
   const [qafiModal, setQafiModal] = useState(false);
   const [reload, setReload] = useState(false);
-
   const [qafi, setQafi] = useState([]);
 
   const [topQafi, setTopQafi] = useState(null);
@@ -105,11 +104,11 @@ const Qafi = ({ isDashboard = false }) => {
       {!isDashboard && (
         <Header
           title={<BreadCrumb items={[{ label: "QAFI" }]} />}
-          buttonTitle={"Add"}
+          buttonTitle={t("add")}
           buttonIcon={FaPlus}
           onSearch={onSearch}
           onAddButtonClick={() => setAddModal(true)}
-          searchBy={"name"}
+          searchBy={t("name")}
         />
       )}
 
@@ -160,7 +159,7 @@ const Qafi = ({ isDashboard = false }) => {
           </div>
         ) : !topQafi && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Qafi Found
+            {t("noTopQafiFound")}
           </div>
         ) : null}
       </div>
@@ -236,7 +235,7 @@ const Qafi = ({ isDashboard = false }) => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add Qafi"
+        title={t("addQafi")}
       >
         <AddQafi
           setAddModal={setAddModal}

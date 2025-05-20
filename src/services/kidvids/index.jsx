@@ -112,9 +112,14 @@ export const AddKidVids = ({
           user_id: user?.id,
         }}
         validationSchema={Yup.object().shape({
-          name: Yup.string().required("Name is required"),
-          description: Yup.string().required("Description is required"),
-          sub_category_id: Yup.string().required("Sub Category is required"),
+          name: Yup.string().required(t("validationMessagesName")),
+          description: Yup.string().required(
+            t("validationMessagesDescription")
+          ),
+
+          sub_category_id: Yup.string().required(
+            t("validationMessagesSubCategory")
+          ),
           video: Yup.string().optional(),
           thumbnail: Yup.string().optional(),
         })}
@@ -328,9 +333,14 @@ export const EditKidVids = ({ setEditModal, dispatch, setReload, kidVids }) => {
           user_id: user?.id,
         }}
         validationSchema={Yup.object().shape({
-          name: Yup.string().required("Name is required"),
-          description: Yup.string().required("Description is required"),
-          sub_category_id: Yup.string().required("Sub Category is required"),
+          name: Yup.string().required(t("validationMessagesName")),
+          description: Yup.string().required(
+            t("validationMessagesDescription")
+          ),
+
+          sub_category_id: Yup.string().required(
+            t("validationMessagesSubCategory")
+          ),
           video: Yup.string().optional(),
           thumbnail: Yup.string().optional(),
         })}
@@ -499,13 +509,13 @@ export const DeleteKidVids = ({ setDeleteModal, dispatch, setReload, id }) => {
       <p className="text-sm text-gray-500 mb-6">{t("delete_video_warning")}</p>
       <div className="btn-container flex justify-center gap-4">
         <Button
-          title="No"
+          title={t("no")}
           width={false}
           onClick={() => setDeleteModal(false)}
           bgColor="bg-slate-500"
         />
         <Button
-          title="Yes"
+          title={t("yes")}
           width={false}
           onClick={handleDelete}
           spinner={isLoading ? <Spinner size="sm" /> : null}

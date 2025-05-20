@@ -168,7 +168,7 @@ const PicTours = ({ isDashboard = false }) => {
           </div>
         ) : !topPicTour && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Pic Tour Found
+            {t("noTourFound")}
           </div>
         ) : null}
       </div>

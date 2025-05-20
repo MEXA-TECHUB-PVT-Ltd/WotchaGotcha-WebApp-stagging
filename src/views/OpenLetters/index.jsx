@@ -106,12 +106,12 @@ const OpenLetters = ({ isDashboard = false }) => {
     <Fragment>
       {!isDashboard && (
         <Header
-          title={<BreadCrumb items={[{ label: "Open Letters" }]} />}
-          buttonTitle={"Add"}
+          title={<BreadCrumb items={[{ label: t("openLetters") }]} />}
+          buttonTitle={t("add")}
           buttonIcon={FaPlus}
           onSearch={onSearch}
           onAddButtonClick={() => setAddModal(true)}
-          searchBy={"name"}
+          searchBy={t("name")}
         />
       )}
 
@@ -156,7 +156,7 @@ const OpenLetters = ({ isDashboard = false }) => {
           />
         ) : !topLetter && !isFetching ? (
           <div className="flex justify-center text-gray-400">
-            No Top Letter Found
+            {t("noTopLetterFound")}
           </div>
         ) : null}
       </div>
@@ -234,7 +234,7 @@ const OpenLetters = ({ isDashboard = false }) => {
       <Modal
         isOpen={addModal}
         onClose={() => setAddModal(false)}
-        title="Add Letter"
+        title={t("addLetter")}
       >
         <AddOpenLetter
           setAddModal={setAddModal}

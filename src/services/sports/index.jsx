@@ -95,9 +95,14 @@ export const AddSports = ({ setAddModal, dispatch, setReload, categoryId }) => {
           user_id: user?.id,
         }}
         validationSchema={Yup.object().shape({
-          name: Yup.string().required("Name is required"),
-          description: Yup.string().required("Description is required"),
-          sub_category_id: Yup.string().required("Sub Category is required"),
+          name: Yup.string().required(t("validationMessagesName")),
+          description: Yup.string().required(
+            t("validationMessagesDescription")
+          ),
+
+          sub_category_id: Yup.string().required(
+            t("validationMessagesSubCategory")
+          ),
           image: Yup.string().optional(),
         })}
         onSubmit={handleAddSports}
@@ -180,7 +185,7 @@ export const AddSports = ({ setAddModal, dispatch, setReload, categoryId }) => {
 
             <div className="btn-container">
               <Button
-                ttitle={t("add")}
+                title={t("add")}
                 icon={isLoading ? null : FaPlusCircle}
                 width={false}
                 onClick={isLoading ? null : handleSubmit}
@@ -265,9 +270,14 @@ export const EditSports = ({ setEditModal, dispatch, setReload, sport }) => {
           user_id: user?.id,
         }}
         validationSchema={Yup.object().shape({
-          name: Yup.string().required("Name is required"),
-          description: Yup.string().required("Description is required"),
-          sub_category_id: Yup.string().required("Sub Category is required"),
+          name: Yup.string().required(t("validationMessagesName")),
+          description: Yup.string().required(
+            t("validationMessagesDescription")
+          ),
+
+          sub_category_id: Yup.string().required(
+            t("validationMessagesSubCategory")
+          ),
           image: Yup.string().optional(),
         })}
         onSubmit={handleEditSports}

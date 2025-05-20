@@ -146,7 +146,7 @@ function LiveStreaming() {
                 ))}
               </ul>
 
-              <div className="flex items-center absolute bottom-3 gap-2">
+              {/* <div className="flex items-center absolute bottom-3 gap-2">
                 <input
                   type="text"
                   value={comment}
@@ -161,7 +161,7 @@ function LiveStreaming() {
                   Send
                   <IoSend size={20} className="text-white" />
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

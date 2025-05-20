@@ -121,15 +121,19 @@ export const AddMondoItem = ({ setAddModal, dispatch, setReload, regions }) => {
           region: "",
         }}
         validationSchema={Yup.object().shape({
-          item_category: Yup.string().required("Item Category is required"),
-          title: Yup.string().required("Title is required"),
-          description: Yup.string().required("Description is required"),
+          item_category: Yup.string().required(
+            t("validationMessagesItemCategory")
+          ),
+          title: Yup.string().required(t("validationMessagesTitle")),
+          description: Yup.string().required(
+            t("validationMessagesDescription")
+          ),
           price: Yup.number()
-            .required("Price is required")
-            .min(0, "Price must be greater than or equal to 0"),
-          condition: Yup.string().required("Condition is required"),
-          location: Yup.string().required("Location is required"),
-          region: Yup.string().required("Region is required"),
+            .required(t("validationMessagesPriceRequired"))
+            .min(0, t("validationMessagesPriceMin")),
+          condition: Yup.string().required(t("validationMessagesCondition")),
+          location: Yup.string().required(t("validationMessagesLocation")),
+          region: Yup.string().required(t("validationMessagesRegion")),
         })}
         onSubmit={handleAddMondoItem}
       >
@@ -366,15 +370,19 @@ export const EditMondoItem = ({ setEditModal, dispatch, setReload, item }) => {
           region: item?.region || "",
         }}
         validationSchema={Yup.object().shape({
-          item_category: Yup.string().required("Item Category is required"),
-          title: Yup.string().required("Title is required"),
-          description: Yup.string().required("Description is required"),
+          item_category: Yup.string().required(
+            t("validationMessagesItemCategory")
+          ),
+          title: Yup.string().required(t("validationMessagesTitle")),
+          description: Yup.string().required(
+            t("validationMessagesDescription")
+          ),
           price: Yup.number()
-            .required("Price is required")
-            .min(0, "Price must be greater than or equal to 0"),
-          condition: Yup.string().required("Condition is required"),
-          location: Yup.string().required("Location is required"),
-          region: Yup.string().required("Region is required"),
+            .required(t("validationMessagesPriceRequired"))
+            .min(0, t("validationMessagesPriceMin")),
+          condition: Yup.string().required(t("validationMessagesCondition")),
+          location: Yup.string().required(t("validationMessagesLocation")),
+          region: Yup.string().required(t("validationMessagesRegion")),
         })}
         onSubmit={handleEditMondoItem}
       >
@@ -557,13 +565,13 @@ export const DeleteMondo = ({ setDeleteModal, dispatch, setReload, id }) => {
       <p className="text-sm text-gray-500 mb-6">{t("delete_item_warning")}</p>
       <div className="btn-container flex justify-center gap-4">
         <Button
-          title="No"
+          title={t("no")}
           width={false}
           onClick={() => setDeleteModal(false)}
           bgColor="bg-slate-500"
         />
         <Button
-          title="Yes"
+          title={t("yes")}
           width={false}
           onClick={handleDelete}
           spinner={isLoading ? <Spinner size="sm" /> : null}

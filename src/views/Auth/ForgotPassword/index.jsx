@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 
 const ForgotPassword = () => {
   const laguage = localStorage.getItem("i18nextLng");
+  const { t, i18n } = useTranslation();
   const [language, setLanguage] = useState(
     laguage == "en" ? "English" : "French"
   );
@@ -26,7 +27,7 @@ const ForgotPassword = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.auth);
-  const { t, i18n } = useTranslation();
+
   const handleSendCode = async (data, { resetForm }) => {
     data.role = "user";
     try {

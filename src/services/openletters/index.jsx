@@ -24,6 +24,8 @@ import {
   updateLetterMedia,
 } from "../../app/features/openletters";
 import videoIcon from "../../assets/videoIcon.svg";
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 export const AddOpenLetter = ({
   setAddModal,
@@ -33,7 +35,7 @@ export const AddOpenLetter = ({
 }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-
+  const { t } = useTranslation();
   const imageRef = useRef(null);
   const sigCanvas = useRef(null);
   const videoRef = useRef(null);
@@ -189,13 +191,13 @@ export const AddOpenLetter = ({
           <>
             <span className="w-full flex justify-center font-bold text-lg dark:text-dark_text_1 text-dark_bg_5 pr-1">
               {step === 1
-                ? "Sender Informations "
+                ? t("stepSenderInformations")
                 : step === 2
-                ? "Letter Details "
+                ? t("stepLetterDetails")
                 : step === 3
-                ? "E-Signature "
+                ? t("stepESignature")
                 : step === 4
-                ? "Relevant Media "
+                ? t("stepRelevantMedia")
                 : null}
               ({step}/4)
             </span>
@@ -206,7 +208,7 @@ export const AddOpenLetter = ({
                 {/* Name Input */}
                 <div className="input-container">
                   <AppInput
-                    label="Name"
+                    label={t("nameC")} // assuming you already have this key
                     name="name"
                     value={values.name}
                     onChange={handleChange}
@@ -216,7 +218,7 @@ export const AddOpenLetter = ({
                 {/* Address Input */}
                 <div className="input-container">
                   <AppInput
-                    label="Address"
+                    label={t("address")} // new translation key
                     name="address"
                     value={values.address}
                     onChange={handleChange}
@@ -227,7 +229,7 @@ export const AddOpenLetter = ({
                 <div className="input-container">
                   <AppInput
                     type="number"
-                    label="Contact Number"
+                    label={t("contactNumber")} // new translation key
                     name="contact_no"
                     value={values.contact_no}
                     onChange={handleChange}
@@ -238,7 +240,7 @@ export const AddOpenLetter = ({
                 <div className="input-container">
                   <AppInput
                     type="email"
-                    label="Email"
+                    label={t("email")} // new translation key
                     name="email"
                     value={values.email}
                     onChange={handleChange}
@@ -248,7 +250,7 @@ export const AddOpenLetter = ({
                 {/* Sub Category Select */}
                 <div className="input-container">
                   <AppSelect
-                    label="Sub Category"
+                    label={t("subC")} // assuming you have this key
                     name="disc_sub_category"
                     value={values.disc_sub_category}
                     onChange={handleChange}
@@ -263,7 +265,7 @@ export const AddOpenLetter = ({
               <div className="flex-col-start gap-5">
                 <div className="input-container">
                   <AppInput
-                    label="Subject"
+                    label={t("subject")} // new translation key
                     name="subject_place"
                     value={values.subject_place}
                     onChange={handleChange}
@@ -272,7 +274,7 @@ export const AddOpenLetter = ({
 
                 <div className="input-container">
                   <AppInput
-                    label="Introduction"
+                    label={t("introduction")} // new translation key
                     name="introduction"
                     value={values.introduction}
                     onChange={handleChange}
@@ -281,7 +283,7 @@ export const AddOpenLetter = ({
 
                 <div className="input-container">
                   <AppTextArea
-                    label="Body"
+                    label={t("body")} // new translation key
                     name="body"
                     value={values.body}
                     onChange={handleChange}
@@ -290,7 +292,7 @@ export const AddOpenLetter = ({
 
                 <div className="input-container">
                   <AppTextArea
-                    label="Greetings"
+                    label={t("greetings")} // new translation key
                     name="greetings"
                     value={values.greetings}
                     onChange={handleChange}
@@ -299,11 +301,11 @@ export const AddOpenLetter = ({
               </div>
             )}
 
-            {/* /* step 3   */}
+            {/* step 3  */}
             {step === 3 && (
               <div className="flex flex-col w-full justify-center mt-5 gap-1 relative">
                 <h2 className="text-dark_bg_5 dark:text-dark_bg_5">
-                  Draw your signature
+                  {t("drawSignature")} {/* new translation key */}
                 </h2>
                 <SignatureCanvas
                   penColor="black"
@@ -320,20 +322,19 @@ export const AddOpenLetter = ({
                   className="absolute top-3 right-0 bg-red-500 text-white px-2 py-1 w-30 rounded"
                   onClick={handleClear}
                 >
-                  Clear
+                  {t("clear")} {/* new translation key */}
                 </button>
               </div>
             )}
 
             {/* step 4  */}
-
             {step === 4 && (
               <div className="flex flex-col w-full justify-center mt-5">
                 {/* Images Section  */}
                 {!values?.video && (
                   <div className="mt-2 mb-5 flex flex-col gap-2">
                     <h2 className="text-dark_bg_5 dark:text-dark_bg_5">
-                      Images (max 3)
+                      {t("imagesMax3")} {/* new translation key */}
                     </h2>
 
                     <div className="flex flex-wrap gap-5 items-center">
@@ -389,7 +390,7 @@ export const AddOpenLetter = ({
                 {images?.length === 0 && (
                   <div className="mt-2 mb-5 flex flex-col gap-2">
                     <h2 className="text-dark_bg_5 dark:text-dark_bg_5">
-                      Video (max 1)
+                      {t("videoMax1")} {/* new translation key */}
                     </h2>
                     {!values?.video ? (
                       <div
@@ -444,7 +445,7 @@ export const AddOpenLetter = ({
             <div className="btn-container mt-5 gap-2">
               {step !== 1 && (
                 <Button
-                  title={"Back"}
+                  title={t("back")}
                   icon={MdSkipPrevious}
                   width={false}
                   onClick={() => {
@@ -454,7 +455,7 @@ export const AddOpenLetter = ({
               )}
 
               <Button
-                title={step === 4 ? "Post" : "Next"}
+                title={step === 4 ? t("post") : t("next")}
                 icon={!isLoading && step === 4 && FaRegCheckCircle}
                 lastIcon={step !== 4 && MdSkipNext}
                 width={false}
@@ -485,7 +486,7 @@ export const EditOpenLetter = ({
 }) => {
   const { user } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
-
+  const { t } = useTranslation();
   const imageRef = useRef(null);
   const sigCanvas = useRef(null);
   const videoRef = useRef(null);
@@ -683,13 +684,13 @@ export const EditOpenLetter = ({
           <>
             <span className="w-full flex justify-center font-bold text-lg dark:text-dark_text_1 text-dark_bg_5 pr-1">
               {step === 1
-                ? "Sender Informations "
+                ? t("stepSenderInformations")
                 : step === 2
-                ? "Letter Details "
+                ? t("stepLetterDetails")
                 : step === 3
-                ? "E-Signature "
+                ? t("stepESignature")
                 : step === 4
-                ? "Relevant Media "
+                ? t("stepRelevantMedia")
                 : null}
               ({step}/4)
             </span>
@@ -700,7 +701,7 @@ export const EditOpenLetter = ({
                 {/* Name Input */}
                 <div className="input-container">
                   <AppInput
-                    label="Name"
+                    label={t("nameC")} // "Nom"
                     name="name"
                     value={values.name}
                     onChange={handleChange}
@@ -710,7 +711,7 @@ export const EditOpenLetter = ({
                 {/* Address Input */}
                 <div className="input-container">
                   <AppInput
-                    label="Address"
+                    label={t("address")} // "Adresse"
                     name="address"
                     value={values.address}
                     onChange={handleChange}
@@ -721,7 +722,7 @@ export const EditOpenLetter = ({
                 <div className="input-container">
                   <AppInput
                     type="number"
-                    label="Contact Number"
+                    label={t("contactNumber")} // "Numéro de téléphone"
                     name="contact_no"
                     value={values.contact_no}
                     onChange={handleChange}
@@ -732,7 +733,7 @@ export const EditOpenLetter = ({
                 <div className="input-container">
                   <AppInput
                     type="email"
-                    label="Email"
+                    label={t("email")} // "Email"
                     name="email"
                     value={values.email}
                     onChange={handleChange}
@@ -742,7 +743,7 @@ export const EditOpenLetter = ({
                 {/* Sub Category Select */}
                 <div className="input-container">
                   <AppSelect
-                    label="Sub Category"
+                    label={t("subC")} // "Sous-catégorie"
                     name="disc_sub_category"
                     value={values.disc_sub_category}
                     onChange={handleChange}
@@ -757,7 +758,7 @@ export const EditOpenLetter = ({
               <div className="flex-col-start gap-5">
                 <div className="input-container">
                   <AppInput
-                    label="Subject"
+                    label={t("subject")} // "Sujet"
                     name="subject_place"
                     value={values.subject_place}
                     onChange={handleChange}
@@ -766,7 +767,7 @@ export const EditOpenLetter = ({
 
                 <div className="input-container">
                   <AppInput
-                    label="Introduction"
+                    label={t("introduction")} // "Introduction"
                     name="introduction"
                     value={values.introduction}
                     onChange={handleChange}
@@ -775,7 +776,7 @@ export const EditOpenLetter = ({
 
                 <div className="input-container">
                   <AppTextArea
-                    label="Body"
+                    label={t("body")} // "Corps du texte"
                     name="body"
                     value={values.body}
                     onChange={handleChange}
@@ -784,7 +785,7 @@ export const EditOpenLetter = ({
 
                 <div className="input-container">
                   <AppTextArea
-                    label="Greetings"
+                    label={t("greetings")} // "Salutations"
                     name="greetings"
                     value={values.greetings}
                     onChange={handleChange}
@@ -793,11 +794,11 @@ export const EditOpenLetter = ({
               </div>
             )}
 
-            {/* /* step 3   */}
+            {/* step 3   */}
             {step === 3 && (
               <div className="flex flex-col w-full justify-center mt-5 gap-1 relative">
                 <h2 className="text-dark_bg_5 dark:text-dark_bg_5">
-                  Draw your signature
+                  {t("drawSignature")} {/* "Dessinez votre signature" */}
                 </h2>
                 <SignatureCanvas
                   penColor="black"
@@ -814,20 +815,19 @@ export const EditOpenLetter = ({
                   className="absolute top-3 right-0 bg-red-500 text-white px-2 py-1 w-30 rounded"
                   onClick={handleClear}
                 >
-                  Clear
+                  {t("clear")} {/* "Effacer" */}
                 </button>
               </div>
             )}
 
             {/* step 4  */}
-
             {step === 4 && (
               <div className="flex flex-col w-full justify-center mt-5">
                 {/* Images Section  */}
                 {!values?.video && (
                   <div className="mt-2 mb-5 flex flex-col gap-2">
                     <h2 className="text-dark_bg_5 dark:text-dark_bg_5">
-                      Images (max 3)
+                      {t("imagesMax3")} {/* "Images (max 3)" */}
                     </h2>
 
                     <div className="flex flex-wrap gap-5 items-center">
@@ -911,7 +911,7 @@ export const EditOpenLetter = ({
                   ).length === 0) && (
                   <div className="mt-2 mb-5 flex flex-col gap-2">
                     <h2 className="text-dark_bg_5 dark:text-dark_bg_5">
-                      Video (max 1)
+                      {t("videoMax1")} {/* "Vidéo (max 1)" */}
                     </h2>
                     {!values?.video ? (
                       <div
@@ -966,7 +966,7 @@ export const EditOpenLetter = ({
             <div className="btn-container mt-5 gap-2">
               {step !== 1 && (
                 <Button
-                  title={"Back"}
+                  title={t("back")}
                   icon={MdSkipPrevious}
                   width={false}
                   onClick={() => {
@@ -976,7 +976,7 @@ export const EditOpenLetter = ({
               )}
 
               <Button
-                title={step === 4 ? "Post" : "Next"}
+                title={step === 4 ? t("post") : t("next")}
                 icon={!isLoading && step === 4 && FaRegCheckCircle}
                 lastIcon={step !== 4 && MdSkipNext}
                 width={false}
@@ -1036,20 +1036,20 @@ export const DeleteOpenLetter = ({
   return (
     <div className="text-center">
       <p className="mb-2 text-gray-700">
-        Are you sure you want to delete this Letter?
+        {t("deleteConfirmationTitle")} Letter?
       </p>
       <p className="text-sm text-gray-500 mb-6">
-        This action is irreversible and will permanently remove the Letter.
+        {t("deleteConfirmationDescription")} Letter.
       </p>
       <div className="btn-container flex justify-center gap-4">
         <Button
-          title="No"
+          title={t("no")}
           width={false}
           onClick={() => setDeleteModal(false)}
           bgColor="bg-slate-500"
         />
         <Button
-          title="Yes"
+          title={t("yes")}
           width={false}
           onClick={handleDelete}
           spinner={isLoading ? <Spinner size="sm" /> : null}
@@ -1087,7 +1087,7 @@ export const OpenLetterPreviewer = ({ letter, isOpen, onClose }) => {
       {/* Letter Subject */}
       {letter?.subject_place && (
         <div className="mt-5 flex items-center gap-2">
-          <span className="text-base font-semibold">Subject:</span>
+          <span className="text-base font-semibold">{t("subject")}:</span>
           <p className="text-sm text-gray-700 dark:text-dark_text_1 break-all whitespace-pre-line">
             {letter.subject_place}
           </p>
@@ -1156,7 +1156,7 @@ export const OpenLetterPreviewer = ({ letter, isOpen, onClose }) => {
             className="w-60 h-40 object-cover rounded-md"
           >
             <source src={letter?.video} type="video/mp4" />
-            Your browser does not support the video.
+            {t("videoNotSupported")}
           </video>
         </div>
       ) : null}

@@ -114,9 +114,13 @@ export const AddCinematic = ({
           user_id: user?.id,
         }}
         validationSchema={Yup.object().shape({
-          name: Yup.string().required("Name is required"),
-          description: Yup.string().required("Description is required"),
-          sub_category_id: Yup.string().required("Sub Category is required"),
+          name: Yup.string().required(t("validationMessagesName")),
+          description: Yup.string().required(
+            t("validationMessagesDescription")
+          ),
+          sub_category_id: Yup.string().required(
+            t("validationMessagesSubCategory")
+          ),
           video: Yup.string().optional(),
           thumbnail: Yup.string().optional(),
         })}
@@ -150,7 +154,7 @@ export const AddCinematic = ({
                     <p
                       className={`px-2 ${bgColor} rounded-full text-white absolute top-0`}
                     >
-                      Change Video
+                      {t("change-video")}
                     </p>
                     <img
                       style={{ imageRendering: "-webkit-optimize-contrast" }}
@@ -338,9 +342,14 @@ export const EditCinematic = ({
           user_id: user?.id,
         }}
         validationSchema={Yup.object().shape({
-          name: Yup.string().required("Name is required"),
-          description: Yup.string().required("Description is required"),
-          sub_category_id: Yup.string().required("Sub Category is required"),
+          name: Yup.string().required(t("validationMessagesName")),
+          description: Yup.string().required(
+            t("validationMessagesDescription")
+          ),
+
+          sub_category_id: Yup.string().required(
+            t("validationMessagesSubCategory")
+          ),
           video: Yup.string().optional(),
           thumbnail: Yup.string().optional(),
         })}
@@ -516,13 +525,13 @@ export const DeleteCinematic = ({
       </p>
       <div className="btn-container flex justify-center gap-4">
         <Button
-          title="No"
+          title={t("no")}
           width={false}
           onClick={() => setDeleteModal(false)}
           bgColor="bg-slate-500"
         />
         <Button
-          title="Yes"
+          title={t("yes")}
           width={false}
           onClick={handleDelete}
           spinner={isLoading ? <Spinner size="sm" /> : null}

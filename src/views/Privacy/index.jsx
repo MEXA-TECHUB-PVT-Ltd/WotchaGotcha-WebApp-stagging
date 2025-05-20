@@ -1,161 +1,153 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const PrivacyPolicy = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="p-6 md:p-12 font-sans text-gray-800 space-y-6">
-      <h1 className="text-3xl font-bold text-black">Privacy Policy</h1>
+      <h1 className="text-3xl font-bold text-black">
+        {t("privacyPolicyTitle-P")}
+      </h1>
 
-      <p>
-        WotchGotcha ("we", "our", or "us") respects your privacy and is
-        committed to protecting the personal information you provide through our
-        platform. This Privacy Policy explains how we collect, use, disclose,
-        and safeguard your information when you use our web application.
-      </p>
+      <p>{t("introParagraph-P")}</p>
 
       <section>
         <h2 className="text-2xl font-bold text-black mt-8">
-          1. Information We Collect
+          {t("section1Title-P")}
         </h2>
 
         <div>
           <h3 className="text-xl font-semibold text-black mt-4">
-            a. Personal Information
+            {t("section1aTitle-P")}
           </h3>
-          <p>
-            We may collect personal details you provide directly, including:
-          </p>
+          <p>{t("section1aContent-P")}</p>
           <ul className="list-disc list-inside ml-4 space-y-1">
-            <li>Name, email address, phone number, and address</li>
-            <li>
-              Uploaded profile images, signatures, and content (e.g., videos,
-              photos, open letters)
-            </li>
+            {t("section1aList-P", { returnObjects: true }).map(
+              (item, index) => (
+                <li key={`1a-${index}`}>{item}</li>
+              )
+            )}
           </ul>
         </div>
 
         <div>
           <h3 className="text-xl font-semibold text-black mt-4">
-            b. Usage Data
+            {t("section1bTitle-P")}
           </h3>
-          <p>Automatically collected information may include:</p>
+          <p>{t("section1bContent-P")}</p>
           <ul className="list-disc list-inside ml-4 space-y-1">
-            <li>IP address, browser type, device type</li>
-            <li>Pages visited, access time, referring websites</li>
+            {t("section1bList-P", { returnObjects: true }).map(
+              (item, index) => (
+                <li key={`1b-${index}`}>{item}</li>
+              )
+            )}
           </ul>
         </div>
 
         <div>
           <h3 className="text-xl font-semibold text-black mt-4">
-            c. Content Data
+            {t("section1cTitle-P")}
           </h3>
-          <p>Information you upload or submit including:</p>
+          <p>{t("section1cContent-P")}</p>
           <ul className="list-disc list-inside ml-4 space-y-1">
-            <li>Videos, images, comments, likes, open letters</li>
-            <li>Categories and tags associated with your content</li>
+            {t("section1cList-P", { returnObjects: true }).map(
+              (item, index) => (
+                <li key={`1c-${index}`}>{item}</li>
+              )
+            )}
           </ul>
         </div>
       </section>
 
       <section>
         <h2 className="text-2xl font-bold text-black mt-8">
-          2. How We Use Your Information
+          {t("section2Title-P")}
         </h2>
         <ul className="list-disc list-inside ml-4 space-y-1">
-          <li>To create and manage user accounts</li>
-          <li>To personalize user experience and content display</li>
-          <li>
-            To enable user-generated content sharing, liking, and commenting
-          </li>
-          <li>To improve our platform’s functionality and performance</li>
-          <li>
-            To communicate with you regarding updates, support, and changes
-          </li>
+          {t("section2List-P", { returnObjects: true }).map((item, index) => (
+            <li key={`2-${index}`}>{item}</li>
+          ))}
         </ul>
       </section>
 
       <section>
         <h2 className="text-2xl font-bold text-black mt-8">
-          3. Sharing Your Information
+          {t("section3Title-P")}
         </h2>
-        <p>
-          We do not sell or rent your personal information. However, we may
-          share your data with:
-        </p>
+        <p>{t("section3Intro-P")}</p>
         <ul className="list-disc list-inside ml-4 space-y-1">
-          <li>Service providers assisting in operations and analytics</li>
-          <li>Legal authorities, if required by law</li>
-          <li>Other users, only to the extent you publicly share content</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-bold text-black mt-8">4. Data Security</h2>
-        <p>We take reasonable steps to protect your information using:</p>
-        <ul className="list-disc list-inside ml-4 space-y-1">
-          <li>Secure servers and encrypted transmissions</li>
-          <li>Regular security audits and restricted access</li>
-        </ul>
-        <p className="mt-2">
-          However, no method of transmission is 100% secure, and we cannot
-          guarantee absolute security.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-bold text-black mt-8">5. User Rights</h2>
-        <p>You have the right to:</p>
-        <ul className="list-disc list-inside ml-4 space-y-1">
-          <li>Access and review your personal data</li>
-          <li>Update or delete your account information</li>
-          <li>Request the removal of any uploaded content</li>
-          <li>Opt-out of marketing or notification emails</li>
+          {t("section3List-P", { returnObjects: true }).map((item, index) => (
+            <li key={`3-${index}`}>{item}</li>
+          ))}
         </ul>
       </section>
 
       <section>
         <h2 className="text-2xl font-bold text-black mt-8">
-          6. Cookies and Tracking
+          {t("section4Title-P")}
         </h2>
-        <p>We may use cookies or similar technologies to:</p>
+        <p>{t("section4Intro-P")}</p>
         <ul className="list-disc list-inside ml-4 space-y-1">
-          <li>Enhance user experience</li>
-          <li>Analyze usage patterns</li>
-          <li>Remember user preferences</li>
+          {t("section4List-P", { returnObjects: true }).map((item, index) => (
+            <li key={`4-${index}`}>{item}</li>
+          ))}
         </ul>
-        <p className="mt-2">
-          You may disable cookies through your browser settings.
-        </p>
+        <p className="mt-2">{t("section4Note-P")}</p>
       </section>
 
       <section>
         <h2 className="text-2xl font-bold text-black mt-8">
-          7. Children’s Privacy
+          {t("section5Title-P")}
         </h2>
-        <p>
-          Our platform is not intended for users under the age of 13. We do not
-          knowingly collect personal information from children.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-bold text-black mt-8">
-          8. Changes to This Policy
-        </h2>
-        <p>
-          We may update this Privacy Policy at any time. Changes will be
-          notified via:
-        </p>
+        <p>{t("section5Intro-P")}</p>
         <ul className="list-disc list-inside ml-4 space-y-1">
-          <li>Email (if registered)</li>
-          <li>Notification on the platform</li>
+          {t("section5List-P", { returnObjects: true }).map((item, index) => (
+            <li key={`5-${index}`}>{item}</li>
+          ))}
         </ul>
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold text-black mt-8">9. Contact Us</h2>
-        <p>For any questions regarding this Privacy Policy, please contact:</p>
+        <h2 className="text-2xl font-bold text-black mt-8">
+          {t("section6Title-P")}
+        </h2>
+        <p>{t("section6Intro-P")}</p>
+        <ul className="list-disc list-inside ml-4 space-y-1">
+          {t("section6List-P", { returnObjects: true }).map((item, index) => (
+            <li key={`6-${index}`}>{item}</li>
+          ))}
+        </ul>
+        <p className="mt-2">{t("section6Note-P")}</p>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold text-black mt-8">
+          {t("section7Title-P")}
+        </h2>
+        <p>{t("section7Content-P")}</p>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold text-black mt-8">
+          {t("section8Title-P")}
+        </h2>
+        <p>{t("section8Intro-P")}</p>
+        <ul className="list-disc list-inside ml-4 space-y-1">
+          {t("section8List-P", { returnObjects: true }).map((item, index) => (
+            <li key={`8-${index}`}>{item}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold text-black mt-8">
+          {t("section9Title-P")}
+        </h2>
+        <p>{t("section9Intro-P")}</p>
         <p>
-          <span className="font-semibold">Email:</span> support@wotchgotcha.com
+          <span className="font-semibold">{t("contactEmailLabel-P")}</span>{" "}
+          {t("contactEmail-P")}
         </p>
       </section>
     </div>

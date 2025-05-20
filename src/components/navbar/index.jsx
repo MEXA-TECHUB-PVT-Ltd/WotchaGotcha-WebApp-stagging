@@ -143,7 +143,7 @@ const Navbar = () => {
         <div className="relative w-32 ml-2" ref={dropdownRef}>
           <div
             onClick={() => setIsLangOpen(!isLangOpen)}
-            className="flex items-center gap-2 border px-2  py-1 rounded-md cursor-pointer bg-white"
+            className="flex items-center gap-2 border px-2  py-1 rounded-md cursor-pointer  bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white"
           >
             <img
               src={languages.find((l) => l.name === language)?.flag}
@@ -155,7 +155,7 @@ const Navbar = () => {
           </div>
 
           {isLangOpen && (
-            <div className="absolute top-full left-0 mt-1 w-32 bg-white shadow-md rounded-md z-50">
+            <div className="absolute top-full left-0 mt-1 w-32 shadow-md rounded-md z-50 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
               {languages.map((lang) => (
                 <div
                   key={lang.name}
@@ -164,9 +164,9 @@ const Navbar = () => {
                     i18n.changeLanguage(lang.code);
                     setIsLangOpen(false);
                   }}
-                  className={`flex items-center gap-2 px-2 py-1 hover:bg-gray-100 cursor-pointer ${
-                    language === lang.name ? "bg-gray-200" : ""
-                  }`}
+                  className={`flex items-center gap-2 px-2 py-1 cursor-pointer
+          hover:bg-gray-100 dark:hover:bg-gray-700
+          ${language === lang.name ? "bg-gray-200 dark:bg-gray-600" : ""}`}
                 >
                   <img
                     src={lang.flag}

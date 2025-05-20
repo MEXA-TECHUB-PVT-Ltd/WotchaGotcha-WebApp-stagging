@@ -99,9 +99,13 @@ export const AddPicTour = ({
           user_id: user?.id,
         }}
         validationSchema={Yup.object().shape({
-          name: Yup.string().required("Name is required"),
-          description: Yup.string().required("Description is required"),
-          sub_category: Yup.string().required("Sub Category is required"),
+          name: Yup.string().required(t("validationMessagesName")),
+          description: Yup.string().required(
+            t("validationMessagesDescription")
+          ),
+          sub_category: Yup.string().required(
+            t("validationMessagesSubCategory")
+          ),
           image: Yup.string().optional(),
         })}
         onSubmit={handleAddPicTour}
@@ -263,9 +267,13 @@ export const EditPicTour = ({ setEditModal, dispatch, setReload, picTour }) => {
           image: picTour?.image || "",
         }}
         validationSchema={Yup.object().shape({
-          name: Yup.string().required("Name is required"),
-          description: Yup.string().required("Description is required"),
-          sub_category: Yup.string().required("Sub Category is required"),
+          name: Yup.string().required(t("validationMessagesName")),
+          description: Yup.string().required(
+            t("validationMessagesDescription")
+          ),
+          sub_category: Yup.string().required(
+            t("validationMessagesSubCategory")
+          ),
           image: Yup.string().optional(),
         })}
         onSubmit={handleAddPicTour}
