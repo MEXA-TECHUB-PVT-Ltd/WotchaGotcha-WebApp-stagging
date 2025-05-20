@@ -57,7 +57,7 @@ const Sidebar = () => {
           </div>
           <CgClose
             onClick={handleToggleSidebar}
-            size={30}
+            size={60}
             className="cursor-pointer"
           />
         </div>
