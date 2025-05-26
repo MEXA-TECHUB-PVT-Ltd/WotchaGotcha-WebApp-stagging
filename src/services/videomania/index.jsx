@@ -88,11 +88,12 @@ export const AddVideoMania = ({
   useEffect(() => {
     const fetchSubCategories = async () => {
       if (categoryId) {
-        const { AllCategories } = await dispatch(
+        const { Category } = await dispatch(
           getVideoSubCategoryByCategory({ token, id: categoryId })
         ).unwrap();
+        console.log("Category", Category);
 
-        setSubCategory(AllCategories);
+        setSubCategory(Category);
       }
     };
 
