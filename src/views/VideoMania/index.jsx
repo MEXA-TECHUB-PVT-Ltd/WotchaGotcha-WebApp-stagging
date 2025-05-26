@@ -84,7 +84,8 @@ const VideoMania = ({ isDashbaord = false }) => {
       dispatch(getVideosByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
-          setVideos(data?.data);
+          setVideos(data?.Videos);
+          console.log("data>>>====>", data);
         });
     }
 
