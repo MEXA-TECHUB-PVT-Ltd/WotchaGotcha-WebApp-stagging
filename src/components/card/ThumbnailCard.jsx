@@ -1,6 +1,6 @@
 import React from "react";
 import { nameElipse } from "../../utils/common/nameElipse";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaPlayCircle } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useSelector } from "react-redux";
 
@@ -25,12 +25,18 @@ const ThumbnailCard = ({
           <MdDelete onClick={onDelete} size={25} className="text-red-600" />
         </div>
       )}
-      <img
-        style={{ imageRendering: "-webkit-optimize-contrast" }}
-        src={image}
-        alt={"thumbnail"}
-        className="video-thumbnail"
-      />
+      {image ? (
+        <img
+          style={{ imageRendering: "-webkit-optimize-contrast" }}
+          src={image}
+          alt={"thumbnail"}
+          className="video-thumbnail"
+        />
+      ) : (
+        <div className="top-video-card">
+          <FaPlayCircle className={`w-32 h-32  ${textColor}`} />
+        </div>
+      )}
 
       <p>{nameElipse(title, 10)}</p>
     </div>
