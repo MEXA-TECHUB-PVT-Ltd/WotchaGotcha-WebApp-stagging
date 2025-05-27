@@ -217,6 +217,7 @@ export const getPicTourComments = createAsyncThunk(
 export const addCommentOnPicTour = createAsyncThunk(
   "/picTour/sendComment",
   async ({ token, payload }, { rejectWithValue }) => {
+    console.log("payload>>>", payload);
     try {
       const { data } = await client.post(`/picTour/sendComment`, payload, {
         headers: {

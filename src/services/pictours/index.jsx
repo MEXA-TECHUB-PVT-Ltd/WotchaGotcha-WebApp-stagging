@@ -76,11 +76,12 @@ export const AddPicTour = ({
   useEffect(() => {
     const fetchSubCategories = async () => {
       if (categoryId) {
-        const { AllCategories } = await dispatch(
+        const { Category } = await dispatch(
           getPicTourSubCategoryByCategory({ token, id: categoryId })
         ).unwrap();
+        console.log("Category", Category);
 
-        setSubCategory(AllCategories);
+        setSubCategory(Category);
       }
     };
 
@@ -433,6 +434,7 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   const [comments, setComments] = useState([]);
   const [totalComments, setTotalComments] = useState(0);
   const [commentText, setCommentText] = useState("");
+  console.log("IMAGEEee", image);
 
   const handleComment = async () => {
     if (isTop) return Toast("error", "You can't comment on top pic tour");
@@ -443,7 +445,7 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
     try {
       const payload = {
         user_id: user?.id,
-        pic_tours_id: image?.tour_id,
+        pic_tours_id: image?.pic_tour_id,
         comment: commentText,
       };
 
@@ -466,7 +468,7 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   };
 
   const handleLike = async () => {
-    if (!image?.tour_id) return;
+    if (!image?.pic_tour_id) return;
 
     setIsLiked((prev) => !prev);
     setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
@@ -474,7 +476,7 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
     try {
       const payload = {
         user_id: user?.id,
-        pic_tour_id: image?.tour_id,
+        pic_tour_id: image?.pic_tour_id,
       };
 
       const { statusCode } = await dispatch(
@@ -492,11 +494,11 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   };
 
   const getAllLikes = async () => {
-    if (!image?.tour_id) return;
+    if (!image?.pic_tour_id) return;
 
     try {
       const data = await dispatch(
-        getPicTourLikes({ token, id: image?.tour_id })
+        getPicTourLikes({ token, id: image?.pic_tour_id })
       ).unwrap();
 
       setLikes(data?.totalLikes || 0);
@@ -512,11 +514,11 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
   };
 
   const getAllComments = async () => {
-    if (!image?.tour_id) return;
+    if (!image?.pic_tour_id) return;
 
     try {
       const data = await dispatch(
-        getPicTourComments({ token, id: image?.tour_id })
+        getPicTourComments({ token, id: image?.pic_tour_id })
       ).unwrap();
 
       setTotalComments(data?.totalComments || 0);
@@ -532,7 +534,7 @@ export const PicTourPreviewer = ({ image, isOpen, onClose, isTop = false }) => {
       getAllLikes();
       getAllComments();
     }
-  }, [image?.tour_id]);
+  }, [image?.pic_tour_id]);
 
   return (
     <ImagePreviewer

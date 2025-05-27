@@ -309,11 +309,11 @@ export const EditVideoMania = ({
   useEffect(() => {
     const fetchSubCategories = async () => {
       if (video?.video_category) {
-        const { AllCategories } = await dispatch(
+        const { Category } = await dispatch(
           getVideoSubCategoryByCategory({ token, id: video?.video_category })
         ).unwrap();
 
-        setSubCategory(AllCategories);
+        setSubCategory(Category);
       }
     };
 

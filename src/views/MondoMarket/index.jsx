@@ -58,7 +58,7 @@ const MondoMarket = ({ isDashboard = false }) => {
           getMondoByCategory({
             token,
             id: category.id,
-            region: activeRegion?.name,
+            region: activeRegion?.name?.toLowerCase(), // 👈 converted to lowercase
           })
         ).unwrap()
       );
@@ -71,6 +71,7 @@ const MondoMarket = ({ isDashboard = false }) => {
           .flatMap((res) => res.AllItems || [])
           .filter((item) => item?.item_category === category?.id),
       }));
+      console.log("categorizedData>>>>", categorizedData);
 
       setItems(categorizedData);
     } catch (error) {
