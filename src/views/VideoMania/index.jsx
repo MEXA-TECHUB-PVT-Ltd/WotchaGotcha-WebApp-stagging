@@ -91,6 +91,7 @@ const VideoMania = ({ isDashbaord = false }) => {
 
     return () => clearTimeout(timeout);
   }, [activeCategory, reload, searchQuery]);
+  console.log("data>>>====>New", videos);
 
   return (
     <Fragment>
@@ -190,18 +191,16 @@ const VideoMania = ({ isDashbaord = false }) => {
             videos?.map((video) => (
               <div className="mb-5">
                 <div className="heading">{video?.sub_category_name}</div>
-                <div className="cards-container">
-                  {video?.video_result?.Videos?.map((v) => (
-                    <ThumbnailCard
-                      key={v?.video_id}
-                      image={v?.thumbnail}
-                      title={v?.description}
-                      onClick={() => {
-                        setCurrentVideo(v);
-                        setVideoModal(true);
-                      }}
-                    />
-                  ))}
+                <div className="">
+                  <ThumbnailCard
+                    key={video?.video_id}
+                    image={video?.thumbnail}
+                    title={video?.description}
+                    onClick={() => {
+                      setCurrentVideo(video);
+                      setVideoModal(true);
+                    }}
+                  />
                 </div>
               </div>
             ))
