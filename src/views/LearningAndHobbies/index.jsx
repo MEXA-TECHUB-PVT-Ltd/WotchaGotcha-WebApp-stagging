@@ -84,7 +84,7 @@ const LearningAndHobbies = ({ isDashboard = false }) => {
       dispatch(getLearningHobbiesByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
-          setVideos(data?.data);
+          setVideos(data?.Videos);
         });
     }
 
@@ -189,23 +189,17 @@ const LearningAndHobbies = ({ isDashboard = false }) => {
               <div className="mb-5">
                 <div className="heading">{video?.sub_category_name}</div>
                 <div className="cards-container">
-                  {video?.video_result?.videos?.length > 0 ? (
-                    video?.video_result?.videos?.map((v) => (
-                      <ThumbnailCard
-                        key={v?.video_id}
-                        image={v?.thumbnail}
-                        title={v?.name}
-                        onClick={() => {
-                          setCurrentVideo(v);
-                          setVideoModal(true);
-                        }}
-                      />
-                    ))
-                  ) : (
-                    <div className="flex justify-center text-gray-400 my-10">
-                      {t("no-found-videos")}
-                    </div>
-                  )}
+                  {videos?.map((v) => (
+                    <ThumbnailCard
+                      key={v?.video_id}
+                      image={v?.thumbnail}
+                      title={v?.name}
+                      onClick={() => {
+                        setCurrentVideo(v);
+                        setVideoModal(true);
+                      }}
+                    />
+                  ))}
                 </div>
               </div>
             ))
