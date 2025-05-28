@@ -84,7 +84,7 @@ export const AddOpenLetter = ({
         videoUrl = await uploadVideo(data.video);
         if (!videoUrl) throw new Error("Failed to upload video");
       }
-
+      console.log(">>>>>>TTTTT", videoUrl);
       const payload = {
         ...data,
         signature_id: signatureData?.signature_id,
@@ -155,7 +155,7 @@ export const AddOpenLetter = ({
         const { data } = await dispatch(
           getLetterSubByCategory({ token, id: categoryId })
         ).unwrap();
-
+        console.log("object>>>", data);
         setSubCategory(data);
       }
     };

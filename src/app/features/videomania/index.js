@@ -59,7 +59,6 @@ export const getVideoSubCategoryByCategory = createAsyncThunk(
           },
         }
       );
-      console.log("data>>>", data);
 
       return data;
     } catch (error) {

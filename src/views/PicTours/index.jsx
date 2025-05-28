@@ -97,7 +97,9 @@ const PicTours = ({ isDashboard = false }) => {
       dispatch(getPicTourByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
-          setPicTours(data?.data);
+          console.log("Data>>>", data);
+
+          setPicTours(data?.Tours);
         })
         .catch((error) => {
           console.error(error);
@@ -209,23 +211,15 @@ const PicTours = ({ isDashboard = false }) => {
               <div className="mb-5" key={pictour?.id}>
                 <div className="heading">{pictour?.sub_category_name}</div>
                 <div className="cards-container">
-                  {pictour?.tour_result?.Tours?.length > 0 ? (
-                    pictour?.tour_result?.Tours?.map((pic) => (
-                      <ThumbnailCard
-                        key={pic?.tour_id}
-                        image={pic?.image}
-                        title={pic?.name}
-                        onClick={() => {
-                          setCurrentPicTour(pic);
-                          setPicTourModal(true);
-                        }}
-                      />
-                    ))
-                  ) : (
-                    <div className="flex justify-center text-gray-400 my-10">
-                      {t("no-found-data")}
-                    </div>
-                  )}
+                  <ThumbnailCard
+                    key={pictour?.tour_id}
+                    image={pictour?.image}
+                    title={pictour?.name}
+                    onClick={() => {
+                      setCurrentPicTour(pictour);
+                      setPicTourModal(true);
+                    }}
+                  />
                 </div>
               </div>
             ))

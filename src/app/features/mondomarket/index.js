@@ -74,6 +74,7 @@ export const getMondoByCategory = createAsyncThunk(
           region: region,
         },
       });
+      console.log("DAtaaaaaa>>>>", data);
 
       return data;
     } catch (error) {

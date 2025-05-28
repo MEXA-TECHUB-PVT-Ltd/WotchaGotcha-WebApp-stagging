@@ -92,7 +92,8 @@ const OpenLetters = ({ isDashboard = false }) => {
       dispatch(getLetterByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
-          setLetters(data?.data);
+          setLetters(data?.letters);
+          console.log(">>>>>", data);
         })
         .catch((error) => {
           console.error(error);
@@ -199,25 +200,19 @@ const OpenLetters = ({ isDashboard = false }) => {
               <div className="mb-5" key={letter?.id}>
                 <div className="heading">{letter?.sub_category_name}</div>
                 <div className="cards-container">
-                  {letter?.total_result?.letters?.length > 0 ? (
-                    letter?.total_result?.letters?.map((details) => (
-                      <LetterCard
-                        userImage={details?.userimage}
-                        date={details?.post_date}
-                        subject={details?.subject_place}
-                        address={details?.address}
-                        signImage={details?.signature_image}
-                        onClick={() => {
-                          setCurrentLetter(details);
-                          setLetterModal(true);
-                        }}
-                      />
-                    ))
-                  ) : (
-                    <div className="flex justify-center text-gray-400 my-10">
-                      {t("no-found-data")}
-                    </div>
-                  )}
+                  {letters?.map((letter) => (
+                    <LetterCard
+                      userImage={letter?.userimage}
+                      date={letter?.post_date}
+                      subject={letter?.subject_place}
+                      address={letter?.address}
+                      signImage={letter?.signature_image}
+                      onClick={() => {
+                        setCurrentLetter(letter);
+                        setLetterModal(true);
+                      }}
+                    />
+                  ))}
                 </div>
               </div>
             ))
