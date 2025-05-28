@@ -91,11 +91,11 @@ export const AddLearningHobbies = ({
   useEffect(() => {
     const fetchSubCategories = async () => {
       if (categoryId) {
-        const { AllCategories } = await dispatch(
+        const { Category } = await dispatch(
           getLearningHobbiesSubCategoriesByCategory({ token, id: categoryId })
         ).unwrap();
 
-        setSubCategory(AllCategories);
+        setSubCategory(Category);
       }
     };
 
