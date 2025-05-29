@@ -36,6 +36,8 @@ const ImagePreviewer = ({
   isEmoji = false,
   title,
 }) => {
+  console.log("Comments", comments);
+
   const { textColor } = useSelector((state) => state.theme);
   const [seeMore, setSeeMore] = useState(false);
   const { t, i18n } = useTranslation();

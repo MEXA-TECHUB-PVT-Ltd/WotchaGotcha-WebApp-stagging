@@ -91,7 +91,7 @@ const OnNews = ({ isDashboard = false }) => {
       dispatch(getOnNewsByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
-          setNews(data?.data);
+          setNews(data?.News);
         })
         .catch((error) => {
           console.error(error);
@@ -198,32 +198,24 @@ const OnNews = ({ isDashboard = false }) => {
           {isNewsFetching ? (
             <Spinner />
           ) : news?.length > 0 ? (
-            news?.map((news) => (
-              <div className="mb-5" key={news?.id}>
-                <div className="heading">
-                  {news?.sub_category_name || "Others"}
+            <div className="cards-container">
+              {news?.map((news) => (
+                <div className="mb-5" key={news?.id}>
+                  <div className="heading">
+                    {news?.sub_category_name || "Others"}
+                  </div>
+                  <ThumbnailCard
+                    key={news?.news_id}
+                    image={news?.image}
+                    title={news?.username}
+                    onClick={() => {
+                      setCurrentNews(news);
+                      setNewsModal(true);
+                    }}
+                  />
                 </div>
-                <div className="cards-container">
-                  {news?.news_result?.News?.length > 0 ? (
-                    news?.news_result?.News?.map((pic) => (
-                      <ThumbnailCard
-                        key={pic?.news_id}
-                        image={pic?.image}
-                        title={pic?.username}
-                        onClick={() => {
-                          setCurrentNews(pic);
-                          setNewsModal(true);
-                        }}
-                      />
-                    ))
-                  ) : (
-                    <div className="flex justify-center text-gray-400 my-10">
-                      {t("no-found-data")}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))
+              ))}
+            </div>
           ) : news?.length === 0 && !isNewsFetching ? (
             <div className="flex justify-center text-gray-400">
               {t("no-found-data")}

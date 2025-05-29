@@ -72,11 +72,11 @@ export const AddSports = ({ setAddModal, dispatch, setReload, categoryId }) => {
   useEffect(() => {
     const fetchSubCategories = async () => {
       if (categoryId) {
-        const { AllCategories } = await dispatch(
+        const { Category } = await dispatch(
           getSportsAndSportsSubCategoryByCategory({ token, id: categoryId })
         ).unwrap();
 
-        setSubCategory(AllCategories);
+        setSubCategory(Category);
       }
     };
 
@@ -243,14 +243,14 @@ export const EditSports = ({ setEditModal, dispatch, setReload, sport }) => {
   useEffect(() => {
     const fetchSubCategories = async () => {
       if (sport?.category_id) {
-        const { AllCategories } = await dispatch(
+        const { Category } = await dispatch(
           getSportsAndSportsSubCategoryByCategory({
             token,
             id: sport?.category_id,
           })
         ).unwrap();
 
-        setSubCategory(AllCategories);
+        setSubCategory(Category);
       }
     };
 
@@ -436,9 +436,11 @@ export const SportsPreviewer = ({ image, isOpen, onClose }) => {
   const [comments, setComments] = useState([]);
   const [totalComments, setTotalComments] = useState(0);
   const [commentText, setCommentText] = useState("");
+  console.log("image>>", image);
 
   const handleComment = async () => {
     if (!commentText.trim()) return;
+    console.log(">>>>", comments);
 
     const previousComments = [...comments];
 
@@ -501,11 +503,13 @@ export const SportsPreviewer = ({ image, isOpen, onClose }) => {
         getSportsAndSportsLikes({ token, id: image?.sport_id })
       ).unwrap();
 
-      setLikes(data?.likes || 0);
+      console.log("dadaaa", data);
+
+      setLikes(data?.totalLikes || 0);
 
       const userHasLiked =
-        Array.isArray(data?.allLikes) &&
-        data.allLikes.some((like) => like.user_id === user?.id);
+        Array.isArray(data?.AllLikes) &&
+        data.AllLikes.some((like) => like.user_id === user?.id);
 
       setIsLiked(userHasLiked);
     } catch (error) {
@@ -522,6 +526,7 @@ export const SportsPreviewer = ({ image, isOpen, onClose }) => {
       ).unwrap();
 
       setTotalComments(data?.totalComments || 0);
+      console.log("DDD", data);
 
       setComments(data?.comments);
     } catch (error) {

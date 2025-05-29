@@ -91,11 +91,11 @@ export const AddLearningHobbies = ({
   useEffect(() => {
     const fetchSubCategories = async () => {
       if (categoryId) {
-        const { AllCategories } = await dispatch(
+        const { Category } = await dispatch(
           getLearningHobbiesSubCategoriesByCategory({ token, id: categoryId })
         ).unwrap();
 
-        setSubCategory(AllCategories);
+        setSubCategory(Category);
       }
     };
 
@@ -587,6 +587,7 @@ export const LearningHobbiesPlayer = ({ video, isOpen, onClose, dispatch }) => {
   const handleLike = async () => {
     if (!video?.video_id) return;
 
+    // Optimistically update UI
     setIsLiked((prev) => !prev);
     setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
 
@@ -601,10 +602,11 @@ export const LearningHobbiesPlayer = ({ video, isOpen, onClose, dispatch }) => {
       ).unwrap();
 
       if (statusCode === 201) {
-        await getAllLikes();
+        await getAllLikes(); // refresh real data
       }
     } catch (error) {
       console.log(error);
+      // Revert UI update
       setIsLiked((prev) => !prev);
       setLikes((prev) => (isLiked ? prev + 1 : prev - 1));
     }
@@ -614,15 +616,19 @@ export const LearningHobbiesPlayer = ({ video, isOpen, onClose, dispatch }) => {
     if (!video?.video_id) return;
 
     try {
-      const data = await dispatch(
+      const allLikes = await dispatch(
         getLearningHobbiesLikes({ token, id: video.video_id })
-      ).unwrap();
+      ).unwrap(); // <-- assuming it's an array as per your response
 
-      setLikes(data?.likes || 0);
+      // Set total like count
+      console.log("object>>>", allLikes);
+      setLikes(allLikes.totalLikes);
 
-      const userHasLiked =
-        Array.isArray(data?.allLikes) &&
-        data.allLikes.some((like) => like.user_id === user?.id);
+      // Check if current user has liked
+      const userHasLiked = allLikes?.AllLikes?.some(
+        (like) => like.user_id === user?.id
+      );
+      console.log("userHasLiked", userHasLiked);
 
       setIsLiked(userHasLiked);
     } catch (error) {
@@ -640,7 +646,7 @@ export const LearningHobbiesPlayer = ({ video, isOpen, onClose, dispatch }) => {
 
       setTotalComments(data?.totalComments || 0);
 
-      setComments(data?.comments);
+      setComments(data?.AllComents);
     } catch (error) {
       console.error("Error fetching comments:", error);
     }

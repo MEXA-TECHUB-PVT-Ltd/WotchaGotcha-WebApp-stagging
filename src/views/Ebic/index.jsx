@@ -30,6 +30,7 @@ const Ebic = ({ isDashboard = false }) => {
   const [topEbic, setTopEbic] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
   const [currentEbic, setCurrentEbic] = useState(null);
+  console.log("activeCategory>>", activeCategory);
 
   // ** Redux ---
   const dispatch = useDispatch();
@@ -62,7 +63,9 @@ const Ebic = ({ isDashboard = false }) => {
   }, []);
 
   useEffect(() => {
-    dispatch(getTopEbic({ token }))
+    console.log("activeCategory>0000>", activeCategory?.id);
+    if (!activeCategory) return;
+    dispatch(getTopEbic({ token, id: activeCategory?.id }))
       .unwrap()
       .then((data) => {
         setTopEbic(data?.data);
@@ -70,7 +73,7 @@ const Ebic = ({ isDashboard = false }) => {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [activeCategory]);
 
   useEffect(() => {
     if (!activeCategory) return;

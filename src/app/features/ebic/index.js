@@ -45,9 +45,11 @@ export const getEbicSubCategoryByCategory = createAsyncThunk(
 
 export const getTopEbic = createAsyncThunk(
   "/gebc/getTopGebc",
-  async ({ token }, { rejectWithValue }) => {
+  async ({ token, id }, { rejectWithValue }) => {
+    console.log("?>>>>>>>>>>>>", id);
+
     try {
-      const { data } = await client.get(`/gebc/getTopGebc`, {
+      const { data } = await client.get(`/gebc/getTopGebc/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

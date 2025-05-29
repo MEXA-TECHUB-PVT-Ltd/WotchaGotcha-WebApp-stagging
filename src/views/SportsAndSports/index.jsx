@@ -90,7 +90,7 @@ const SportsAndSports = ({ isDashboard = false }) => {
       dispatch(getSportsAndSportsByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
-          setSports(data?.data);
+          setSports(data?.sports);
         })
         .catch((error) => {
           console.error(error);
@@ -197,30 +197,22 @@ const SportsAndSports = ({ isDashboard = false }) => {
           {isSportsFetching ? (
             <Spinner />
           ) : sports?.length > 0 ? (
-            sports?.map((sport) => (
-              <div className="mb-5" key={sport?.id}>
-                <div className="heading">{sport?.sub_category_name}</div>
-                <div className="cards-container">
-                  {sport?.Sport_result?.Sports?.length > 0 ? (
-                    sport?.Sport_result?.Sports?.map((pic) => (
-                      <ThumbnailCard
-                        key={pic?.sports_id}
-                        image={pic?.image}
-                        title={pic?.name}
-                        onClick={() => {
-                          setCurrentSport(pic);
-                          setSportModal(true);
-                        }}
-                      />
-                    ))
-                  ) : (
-                    <div className="flex justify-center text-gray-400 my-10">
-                      {t("no-found-data")}
-                    </div>
-                  )}
+            <div className="cards-container">
+              {sports?.map((sport) => (
+                <div className="mb-5" key={sport?.id}>
+                  <div className="heading">{sport?.sub_category_name}</div>
+                  <ThumbnailCard
+                    key={sport?.sports_id}
+                    image={sport?.image}
+                    title={sport?.name}
+                    onClick={() => {
+                      setCurrentSport(sport);
+                      setSportModal(true);
+                    }}
+                  />
                 </div>
-              </div>
-            ))
+              ))}
+            </div>
           ) : sports?.length === 0 && !isSportsFetching ? (
             <div className="flex justify-center text-gray-400">
               {t("no-found-data")}

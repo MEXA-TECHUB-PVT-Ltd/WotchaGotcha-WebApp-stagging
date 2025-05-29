@@ -226,7 +226,7 @@ export const searchSportsAndSports = createAsyncThunk(
   async ({ token, searchQuery }, { rejectWithValue }) => {
     try {
       const { data } = await client.get(
-        `/sports/searchByTitle?query=${searchQuery}`,
+        `/sports/searchByTitle?name=${searchQuery}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
