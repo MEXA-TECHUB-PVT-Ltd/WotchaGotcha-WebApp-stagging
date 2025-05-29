@@ -404,7 +404,7 @@ export const NewsPreviewer = ({ image, isOpen, onClose }) => {
   const handleComment = async () => {
     if (!commentText.trim()) return;
 
-    const previousComments = [...comments];
+    const previousComments = Array.isArray(comments) ? [...comments] : [];
 
     try {
       const payload = {
@@ -413,9 +413,9 @@ export const NewsPreviewer = ({ image, isOpen, onClose }) => {
         comment: commentText,
       };
 
-      setComments((prev) => [...prev, commentText]);
-
-      console.log("enter");
+      setComments((prev) => {
+        return Array.isArray(prev) ? [...prev, commentText] : [commentText];
+      });
 
       const { statusCode } = await dispatch(
         addCommentOnOnNews({ payload, token })
@@ -429,7 +429,7 @@ export const NewsPreviewer = ({ image, isOpen, onClose }) => {
       }
     } catch (error) {
       setComments(previousComments);
-      console.log(error);
+      console.error("Comment Error:", error);
     }
   };
 
@@ -489,7 +489,7 @@ export const NewsPreviewer = ({ image, isOpen, onClose }) => {
 
       setTotalComments(data?.totalComments || 0);
 
-      setComments(data?.AllComments);
+      setComments(data?.AllComents);
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
