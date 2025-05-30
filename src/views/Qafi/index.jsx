@@ -89,7 +89,7 @@ const Qafi = ({ isDashboard = false }) => {
       dispatch(getQafiByCategory({ token, id: activeCategory?.id }))
         .unwrap()
         .then((data) => {
-          setQafi(data?.data);
+          setQafi(data?.QAFIs);
         })
         .catch((error) => {
           console.error(error);
@@ -202,23 +202,15 @@ const Qafi = ({ isDashboard = false }) => {
                   {qafi?.sub_category_name || "Others"}
                 </div>
                 <div className="cards-container">
-                  {qafi?.QAFI_result?.QAFIs?.length > 0 ? (
-                    qafi?.QAFI_result?.QAFIs?.map((qafi) => (
-                      <ThumbnailCard
-                        key={qafi?.news_id}
-                        image={qafi?.image}
-                        title={qafi?.username}
-                        onClick={() => {
-                          setCurrentQafi(qafi);
-                          setQafiModal(true);
-                        }}
-                      />
-                    ))
-                  ) : (
-                    <div className="flex justify-center text-gray-400 my-10">
-                      {t("no-found-data")}
-                    </div>
-                  )}
+                  <ThumbnailCard
+                    key={qafi?.news_id}
+                    image={qafi?.image}
+                    title={qafi?.username}
+                    onClick={() => {
+                      setCurrentQafi(qafi);
+                      setQafiModal(true);
+                    }}
+                  />
                 </div>
               </div>
             ))

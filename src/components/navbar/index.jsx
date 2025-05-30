@@ -21,6 +21,8 @@ import Button from "../form/Button";
 import { logoutUser } from "../../app/features/auth";
 import { colors } from "../../configs/colors";
 import { useTranslation } from "react-i18next";
+import { DeleteVideoMania } from "../../services/videomania";
+import DeleteAccountModal from "../../services/users/DeleteAccountModal";
 const Navbar = () => {
   //** States */
   const laguage = localStorage.getItem("i18nextLng");
@@ -30,6 +32,7 @@ const Navbar = () => {
   const [isOldPassword, setIsOldPassword] = useState(true);
   const [isPassword, setIsPassword] = useState(true);
   const [isConfirmPassword, setIsConfirmPassword] = useState(true);
+  const [deleteAccountModal, setDeleteAccountModal] = useState(false);
   const [language, setLanguage] = useState(
     laguage == "en" ? "English" : "French"
   );
@@ -224,6 +227,12 @@ const Navbar = () => {
             >
               {t("changePassword")}
             </p>
+            <p
+              className="dropdown-item"
+              onClick={() => setDeleteAccountModal(true)}
+            >
+              {t("deleteAccount")}
+            </p>
             <p className="dropdown-item" onClick={handleLogout}>
               {t("logout")}
             </p>
@@ -248,6 +257,20 @@ const Navbar = () => {
             />
           ))}
         </div>
+      </Modal>
+
+      <Modal
+        isOpen={deleteAccountModal}
+        onClose={() => {
+          setDeleteAccountModal(false);
+          // setCurrentVideo(null);
+        }}
+        title="Delete Confirmation"
+      >
+        <DeleteAccountModal
+          deleteAccountModal={deleteAccountModal}
+          setDeleteAccountModal={setDeleteAccountModal}
+        />
       </Modal>
 
       <Modal
