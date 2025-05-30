@@ -380,5 +380,6 @@
   "passwordLabel": "Password",
   "passwordPlaceholder": "********",
   "confirmPasswordLabel": "Confirm Password",
-  "confirmPasswordPlaceholder": "********"
+  "confirmPasswordPlaceholder": "********",
+  "deleteAccount": "Delete your account"
 }
