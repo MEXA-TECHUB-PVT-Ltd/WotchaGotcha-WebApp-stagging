@@ -51,7 +51,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const theme = useSelector((state) => state.theme);
   const { user, isLoading } = useSelector((state) => state.user);
-
   //** Methods */
 
   const handleToggleTheme = () => {
