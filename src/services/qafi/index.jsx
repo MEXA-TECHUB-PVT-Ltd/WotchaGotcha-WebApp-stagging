@@ -406,7 +406,8 @@ export const QafiPreviewer = ({ image, isOpen, onClose }) => {
   const handleComment = async () => {
     if (!commentText.trim()) return;
 
-    const previousComments = [...comments];
+    // const previousComments = [...comments];
+    const previousComments = Array.isArray(comments) ? [...comments] : [];
 
     try {
       const payload = {
@@ -415,7 +416,10 @@ export const QafiPreviewer = ({ image, isOpen, onClose }) => {
         comment: commentText,
       };
 
-      setComments((prev) => [...prev, commentText]);
+      // setComments((prev) => [...prev, commentText]);
+      setComments((prev) => {
+        return Array.isArray(prev) ? [...prev, commentText] : [commentText];
+      });
 
       const { statusCode } = await dispatch(
         addCommentOnQafi({ payload, token })
