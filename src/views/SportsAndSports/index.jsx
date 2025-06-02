@@ -12,6 +12,7 @@ import {
   getSportsAndSportsByCategory,
   getSportsAndSportsCategories,
   getTopSportsAndSports,
+  getTopSportsAndSportsLikes,
   searchSportsAndSports,
 } from "../../app/features/sportsandsports";
 import { AddSports, SportsPreviewer } from "../../services/sports";
@@ -61,14 +62,32 @@ const SportsAndSports = ({ isDashboard = false }) => {
   }, []);
 
   useEffect(() => {
-    dispatch(getTopSportsAndSports({ token }))
-      .unwrap()
-      .then((data) => {
-        setTopSports(data?.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (!activeCategory) return;
+    const fetchTopSports = async () => {
+      try {
+        const result = await dispatch(
+          getTopSportsAndSports({ token })
+        ).unwrap();
+
+        // if (result?.data?.length > 0) {
+        if (false) {
+          setTopSports(result.data);
+        } else {
+          // Fallback to likes-based data if first is empty
+          const fallback = await dispatch(
+            getTopSportsAndSportsLikes({ token, id: activeCategory?.id })
+          ).unwrap();
+
+          if (fallback?.data) {
+            setTopSports(fallback.data);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching top sports:", error);
+      }
+    };
+
+    fetchTopSports();
   }, []);
 
   useEffect(() => {

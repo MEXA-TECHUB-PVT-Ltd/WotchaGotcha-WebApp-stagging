@@ -83,6 +83,25 @@ export const getTopVideo = createAsyncThunk(
     }
   }
 );
+export const getTopVideoByLikesComments = createAsyncThunk(
+  "/top/app/getTopVideoByLikesComments",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(
+        `/top/app/getTopVideoByLikesComments/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
 
 export const getVideosByCategory = createAsyncThunk(
   "videoCategory/getAllVideosBycategory",

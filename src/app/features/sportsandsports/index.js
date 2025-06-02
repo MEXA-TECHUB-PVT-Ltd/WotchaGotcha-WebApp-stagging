@@ -59,6 +59,25 @@ export const getTopSportsAndSports = createAsyncThunk(
     }
   }
 );
+export const getTopSportsAndSportsLikes = createAsyncThunk(
+  "/top/app/getMostSportByLikeComments",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(
+        `/top/app/getMostSportByLikeComments/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
 
 export const getSportsAndSportsByCategory = createAsyncThunk(
   "sports/getByCategory",

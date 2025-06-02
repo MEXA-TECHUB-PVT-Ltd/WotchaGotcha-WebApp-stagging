@@ -81,6 +81,9 @@
 .video-thumbnail {
   @apply w-44 h-40 object-cover rounded-lg border border-gray-200 overflow-hidden;
 }
+.video-thumbnail-likes {
+  @apply w-32 h-32 object-cover rounded-lg overflow-hidden;
+}
 
 .capture-container {
   @apply w-36 h-36 bg-gray-100 p-2 rounded-lg flex flex-col gap-1 justify-center items-center text-sm cursor-pointer text-center text-gray-700;
