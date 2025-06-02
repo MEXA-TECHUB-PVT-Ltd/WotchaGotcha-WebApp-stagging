@@ -60,7 +60,6 @@ const SportsAndSports = ({ isDashboard = false }) => {
         console.error(error);
       });
   }, []);
-
   useEffect(() => {
     if (!activeCategory) return;
     const fetchTopSports = async () => {
