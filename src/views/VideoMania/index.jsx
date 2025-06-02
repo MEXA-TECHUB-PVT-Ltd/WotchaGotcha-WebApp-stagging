@@ -6,6 +6,7 @@ import { handleSearch } from "../../utils/common/fetchDataHelpers";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getTopVideo,
+  getTopVideoByLikesComments,
   getVideoCategories,
   getVideosByCategory,
   searchVideoMania,
@@ -16,6 +17,7 @@ import { nameElipse } from "../../utils/common/nameElipse";
 import Modal from "../../components/modal/Modal";
 import { AddVideoMania, VideoManiaPlayer } from "../../services/videomania";
 import { useTranslation } from "react-i18next";
+import { data } from "autoprefixer";
 
 const VideoMania = ({ isDashbaord = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -60,11 +62,31 @@ const VideoMania = ({ isDashbaord = false }) => {
   useEffect(() => {
     if (!activeCategory) return;
 
-    dispatch(getTopVideo({ token, id: activeCategory?.id }))
-      .unwrap()
-      .then((data) => {
-        setTopVideo(data?.topVideo[0]);
-      });
+    const fetchTopVideo = async () => {
+      try {
+        const topVideoResult = await dispatch(
+          getTopVideo({ token, id: activeCategory.id })
+        ).unwrap();
+
+        // if (false) {
+        if (topVideoResult?.topVideo?.length > 0) {
+          setTopVideo(topVideoResult.topVideo[0]);
+        } else {
+          // If no top video, fallback to likes/comments based
+          const fallbackResult = await dispatch(
+            getTopVideoByLikesComments({ token, id: activeCategory.id })
+          ).unwrap();
+
+          if (fallbackResult?.data) {
+            setTopVideo(fallbackResult?.data);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching top video:", error);
+      }
+    };
+
+    fetchTopVideo();
   }, [activeCategory]);
 
   useEffect(() => {
@@ -143,7 +165,16 @@ const VideoMania = ({ isDashbaord = false }) => {
                 setVideoModal(true);
               }}
             >
-              <FaPlayCircle className={`w-32 h-32 ${textColor}`} />
+              {topVideo.thumbnail ? (
+                <img
+                  style={{ imageRendering: "-webkit-optimize-contrast" }}
+                  src={topVideo.thumbnail}
+                  alt={"thumbnail"}
+                  className="video-thumbnail-likes"
+                />
+              ) : (
+                <FaPlayCircle className={`w-32 h-32 ${textColor}`} />
+              )}
               <div className="text-lg">{nameElipse(topVideo?.name, 12)}</div>
             </div>
 

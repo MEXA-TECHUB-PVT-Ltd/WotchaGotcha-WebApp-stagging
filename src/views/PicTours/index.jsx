@@ -12,6 +12,7 @@ import {
   getPicTourByCategory,
   getPicTourCategories,
   getTopPicTour,
+  getTopPicTourLikesComments,
   searchPicTour,
 } from "../../app/features/pictours";
 import { AddPicTour, PicTourPreviewer } from "../../services/pictours";
@@ -60,17 +61,35 @@ const PicTours = ({ isDashboard = false }) => {
         console.error(error);
       });
   }, []);
-
   useEffect(() => {
     if (!activeCategory) return;
-    dispatch(getTopPicTour({ token, id: activeCategory?.id }))
-      .unwrap()
-      .then((data) => {
-        setTopPicTour(data?.topTour[0]);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+
+    const fetchTopTour = async () => {
+      try {
+        const result = await dispatch(
+          getTopPicTour({ token, id: activeCategory.id })
+        ).unwrap();
+
+        if (false) {
+          // if (result?.topTour?.length > 0) {
+          setTopPicTour(result.topTour[0]);
+        } else {
+          // fallback if empty
+          const fallback = await dispatch(
+            getTopPicTourLikesComments({ token, id: activeCategory.id })
+          ).unwrap();
+          console.log("fallback>>>", fallback);
+
+          if (fallback?.data) {
+            setTopPicTour(fallback.data);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching top tour:", error);
+      }
+    };
+
+    fetchTopTour();
   }, [activeCategory]);
 
   useEffect(() => {

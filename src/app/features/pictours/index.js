@@ -59,6 +59,25 @@ export const getTopPicTour = createAsyncThunk(
     }
   }
 );
+export const getTopPicTourLikesComments = createAsyncThunk(
+  "/top/app/getTopPicByLikesComments",
+  async ({ token, id }, { rejectWithValue }) => {
+    try {
+      const { data } = await client.get(
+        `/top/app/getTopPicByLikesComments/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error);
+    }
+  }
+);
 
 export const getPicTourByCategory = createAsyncThunk(
   "picTour/getAllPicTourByCategory",

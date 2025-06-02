@@ -155,9 +155,7 @@ const ImagePreviewer = ({
                     ) : (
                       <FaRegHeart className="w-5 h-5" />
                     )}
-                    <span className="hidden md:block text-sm">
-                      {t("like")}ike
-                    </span>
+                    <span className="hidden md:block text-sm">{t("like")}</span>
                   </button>
 
                   {!isEmoji && (
