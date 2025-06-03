@@ -66,7 +66,7 @@ const OpenLetters = ({ isDashboard = false }) => {
     dispatch(getTopLetter({ token }))
       .unwrap()
       .then((data) => {
-        setTopLetter(data?.topitem[0]);
+        setTopLetter(data?.letters);
       })
       .catch((error) => {
         console.error(error);
@@ -145,16 +145,23 @@ const OpenLetters = ({ isDashboard = false }) => {
         {isTopLetterFetching ? (
           <Spinner />
         ) : topLetter ? (
-          <LetterCard
-            userImage={topLetter?.userimage}
-            date={topLetter?.top_added_date}
-            subject={topLetter?.subject_place}
-            address={topLetter?.address}
-            onClick={() => {
-              setCurrentLetter(topLetter);
-              setLetterModal(true);
-            }}
-          />
+          <div className="mb-5">
+            <div className="cards-container">
+              {topLetter?.map((letter) => (
+                <LetterCard
+                  userImage={letter?.userimage}
+                  date={letter?.post_date}
+                  subject={letter?.subject_place}
+                  address={letter?.address}
+                  signImage={letter?.signature_image}
+                  onClick={() => {
+                    setCurrentLetter(letter);
+                    setLetterModal(true);
+                  }}
+                />
+              ))}
+            </div>
+          </div>
         ) : !topLetter && !isFetching ? (
           <div className="flex justify-center text-gray-400">
             {t("noTopLetterFound")}
