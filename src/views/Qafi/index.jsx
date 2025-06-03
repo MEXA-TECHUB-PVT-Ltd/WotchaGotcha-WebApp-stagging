@@ -141,22 +141,21 @@ const Qafi = ({ isDashboard = false }) => {
         {isTopQafiFetching ? (
           <Spinner />
         ) : topQafi ? (
-          <div
-            className="flex justify-center gap-5 items-center"
-            onClick={() => {
-              setCurrentQafi(topQafi);
-              setQafiModal(true);
-            }}
-          >
-            <img
-              style={{ imageRendering: "-webkit-optimize-contrast" }}
-              src={topQafi?.image}
-              alt={"topQafi"}
-              className="video-thumbnail"
-            />
-
-            <div className="long-desc">{topQafi?.description}</div>
-          </div>
+          topQafi?.map((qafi) => (
+            <div className="mb-5" key={qafi?.id}>
+              <div className="cards-container">
+                <ThumbnailCard
+                  key={qafi?.qafi_id}
+                  image={qafi?.image}
+                  title={qafi?.username}
+                  onClick={() => {
+                    setCurrentQafi(qafi);
+                    setQafiModal(true);
+                  }}
+                />
+              </div>
+            </div>
+          ))
         ) : !topQafi && !isFetching ? (
           <div className="flex justify-center text-gray-400">
             {t("noTopQafiFound")}

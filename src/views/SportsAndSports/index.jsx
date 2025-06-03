@@ -61,33 +61,24 @@ const SportsAndSports = ({ isDashboard = false }) => {
       });
   }, []);
   useEffect(() => {
+    console.log(">>>>>>>>>>>>>>>>88888888888888>>>>>>>>>>>>>>>>>>>>>");
     if (!activeCategory) return;
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     const fetchTopSports = async () => {
       try {
         const result = await dispatch(
           getTopSportsAndSports({ token })
         ).unwrap();
-
+        setTopSports(result.data);
+        console.log("object>>", result?.data);
         // if (result?.data?.length > 0) {
-        if (false) {
-          setTopSports(result.data);
-        } else {
-          // Fallback to likes-based data if first is empty
-          const fallback = await dispatch(
-            getTopSportsAndSportsLikes({ token, id: activeCategory?.id })
-          ).unwrap();
-
-          if (fallback?.data) {
-            setTopSports(fallback.data);
-          }
-        }
       } catch (error) {
         console.error("Error fetching top sports:", error);
       }
     };
 
     fetchTopSports();
-  }, []);
+  }, [activeCategory]);
 
   useEffect(() => {
     if (!activeCategory) return;
@@ -160,21 +151,21 @@ const SportsAndSports = ({ isDashboard = false }) => {
         {isTopSportsFetching ? (
           <Spinner />
         ) : topSports ? (
-          <div
-            className="flex justify-center gap-5 items-center"
-            onClick={() => {
-              setCurrentSport(topSports);
-              setSportModal(true);
-            }}
-          >
-            <img
-              style={{ imageRendering: "-webkit-optimize-contrast" }}
-              src={topSports?.image}
-              alt={"topSports"}
-              className="video-thumbnail"
-            />
-
-            <div className="long-desc">{topSports?.description}</div>
+          <div className="cards-container">
+            {topSports?.map((sport) => (
+              <div className="mb-5" key={sport?.id}>
+                <div className="heading">{sport?.sub_category_name}</div>
+                <ThumbnailCard
+                  key={sport?.sports_id}
+                  image={sport?.image}
+                  title={sport?.name}
+                  onClick={() => {
+                    setCurrentSport(sport);
+                    setSportModal(true);
+                  }}
+                />
+              </div>
+            ))}
           </div>
         ) : !topSports && !isFetching ? (
           <div className="flex justify-center text-gray-400">

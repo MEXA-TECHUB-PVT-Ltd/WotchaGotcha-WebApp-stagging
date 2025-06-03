@@ -143,21 +143,23 @@ const OnNews = ({ isDashboard = false }) => {
         {isTopNewsFetching ? (
           <Spinner />
         ) : topNews ? (
-          <div
-            className="flex justify-center gap-5 items-center"
-            onClick={() => {
-              setCurrentNews(topNews);
-              setNewsModal(true);
-            }}
-          >
-            <img
-              style={{ imageRendering: "-webkit-optimize-contrast" }}
-              src={topNews?.image}
-              alt={"topNews"}
-              className="video-thumbnail"
-            />
-
-            <div className="long-desc">{topNews?.description}</div>
+          <div className="cards-container">
+            {topNews?.map((news) => (
+              <div className="mb-5" key={news?.id}>
+                <div className="heading">
+                  {/* {news?.sub_category_name || "Others"} */}
+                </div>
+                <ThumbnailCard
+                  key={news?.news_id}
+                  image={news?.image}
+                  title={news?.username}
+                  onClick={() => {
+                    setCurrentNews(news);
+                    setNewsModal(true);
+                  }}
+                />
+              </div>
+            ))}
           </div>
         ) : !topNews && !isFetching ? (
           <div className="flex justify-center text-gray-400">

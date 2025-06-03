@@ -63,7 +63,7 @@ const LearningAndHobbies = ({ isDashboard = false }) => {
     dispatch(learningHobbiesTopVideo({ token }))
       .unwrap()
       .then((data) => {
-        setTopVideo(data?.data);
+        setTopVideo(data?.topVideos);
       });
   }, []);
 
@@ -127,26 +127,32 @@ const LearningAndHobbies = ({ isDashboard = false }) => {
         </div>
       )}
 
-      {/* Top Video*/}
-      <div className="flex items-center mt-10">
+      {/* Top Videos */}
+      <div className="flex flex-col mt-10">
         {isTopVideoFetching ? (
           <Spinner />
-        ) : topVideo ? (
-          <div className="flex items-center gap-2 max-w-[90vw]">
-            <div
-              className="top-video-card"
-              onClick={() => {
-                setCurrentVideo(topVideo);
-                setVideoModal(true);
-              }}
-            >
-              <FaPlayCircle className={`w-32 h-32 ${textColor}`} />
-              <div className="text-lg">{nameElipse(topVideo?.name, 12)}</div>
-            </div>
-
-            <div className="long-desc">{topVideo?.description}</div>
+        ) : topVideo?.length > 0 ? (
+          <div className="flex flex-wrap gap-4 max-w-[90vw]">
+            {topVideo.map((video) => (
+              <div
+                key={video.video_id}
+                className="top-video-card cursor-pointer flex flex-col items-center"
+                onClick={() => {
+                  setCurrentVideo(video);
+                  setVideoModal(true);
+                }}
+              >
+                <FaPlayCircle className={`w-32 h-32 ${textColor}`} />
+                <div className="text-lg font-medium text-center">
+                  {nameElipse(video.name, 12)}
+                </div>
+                <div className="text-sm text-gray-600 text-center px-2">
+                  {nameElipse(video.description, 20)}
+                </div>
+              </div>
+            ))}
           </div>
-        ) : !topVideo && !isFetching ? (
+        ) : !topVideo?.length && !isTopVideoFetching ? (
           <div className="flex justify-center text-gray-400">
             {t("no-found-videos-top")}
           </div>
